@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+button:focus,
+input:focus {
+  outline: none;
+}
+
+.seating-chart-main {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  height: 100vh;
+}
