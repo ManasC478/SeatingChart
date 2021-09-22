@@ -2,6 +2,10 @@
   --border-radius: 5px;
 }
 
+hr {
+  margin: 20px 0;
+}
+
 .class-bar {
   width: 100%;
   background: #2d3436;
@@ -9,6 +13,7 @@
   padding: 20px 20px;
   overflow: scroll;
   color: #fff;
+  word-break: break-all;
 }
 
 .form-required input,
@@ -87,9 +92,7 @@
 }
 
 .partner-search-results {
-  /* position: absolute;
-  right: -100%;
-  top: 0; */
+  margin: 10px 0;
   color: black;
   border: 1px solid black;
   background: white;
@@ -101,7 +104,8 @@
   overflow-y: scroll;
 }
 
-.partner-search-item {
+.partner-search-item,
+.student-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,10 +113,23 @@
   transition: all 0.3s;
 }
 
-.partner-search-item button {
+.partner-search-item button,
+.student-item button {
   color: #3eadcf;
   background: transparent;
   border: none;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.partner-search-item button:hover,
+.student-item button:hover {
+  background: #006888;
+}
+
+.student-list {
+  font-size: 18px;
 }
 
 #options-btn {

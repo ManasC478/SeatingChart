@@ -5,14 +5,16 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CheckIcon from '@material-ui/icons/Check';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import './style.css';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/Edit';
+import ClearIcon from '@material-ui/icons/Clear';
+import './style.css';
 
 const ClassBar = () => {
     // initialize state variables
     const [studentList, setStudentList] = useState({});
-    const [student, setStudent] = useState({ first_name: '', last_name: '', front: null, preferredPartners: [], notPreferredPartners: [] });
+    const [student, setStudent] = useState({ first_name: '', last_name: '', front: null, preferredPartners: {}, notPreferredPartners: {} });
     const [openOptions, setOpenOptions] = useState(false);
 
     // check for valid student entry
@@ -36,7 +38,7 @@ const ClassBar = () => {
         }
 
         setStudentList({ ...studentList, [studentId]: student });
-        // setStudent({});
+        setStudent({ first_name: '', last_name: '', front: null, preferredPartners: {}, notPreferredPartners: {} });
     }
 
     return (
@@ -50,18 +52,8 @@ const ClassBar = () => {
                     <PartnerForm studentList={studentList} student={student} setStudent={setStudent} />
                 </div>
             </form>
-            <ol className="student-list">
-                {
-                    Object.keys(studentList).map((student, index) => {
-                        const { first_name } = studentList[student]
-                        return (
-                            <li key={index} student="student-item">
-                                {first_name}
-                            </li>
-                        );
-                    })
-                }
-            </ol>
+            <hr />
+            <StudentList studentList={studentList} />
         </section>
     )
 }
@@ -98,11 +90,12 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
     //  set state variables
     const [preferredPartnerList, setPreferredPartnerList] = useState({});
     const [notPreferredPartnerList, setNotPreferredPartnerList] = useState({});
-    // const [preferredPartner, setPreferredPartner] = useState('');
-    // const [notPreferredPartner, setNotPreferredPartner] = useState('');
     const [studentPartnerResults, setStudentPartnerResults] = useState({});
 
     useEffect(() => {
+        setPreferredPartnerList({})
+        setNotPreferredPartnerList({})
+        
         const copyStudentList = () => {
             let tempStudentObj = {};
             Object.keys(studentList).forEach(id => {
@@ -119,14 +112,19 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
         <div className="form-partners">
             {/* preferred partner ui - add, see list, delete */}
             <div className="preferred">
-                <PartnerSearch isPreferredStudents={true} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={preferredPartnerList} setPartnerList={setPreferredPartnerList} />
+                <PartnerSearch isPreferredStudents={true} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={preferredPartnerList} setPartnerList={setPreferredPartnerList} setStudent={setStudent} student={student} studentList={studentList} />
                 <ul className="partner-preferred-list">
                     {
-                        preferredPartnerList.map((partner, index) => {
+                        Object.keys(preferredPartnerList).map((id, index) => {
+                            const { name } = studentPartnerResults[id];
                             return (
-                                <li  key={index} className="partner-item">
-                                    <p>{partner}</p>
-                                    <button type="button"><DeleteForeverIcon fontSize={'inherit'}/></button>
+                                <li key={index} className="partner-item">
+                                    <p>{name}</p>
+                                    <button type="button" onClick={() => {
+                                        delete preferredPartnerList[id];
+                                        setStudentPartnerResults({ ...studentPartnerResults, [id]: { name: name, checked: false } });
+                                        delete student.preferredPartners[id];
+                                    }}><ClearIcon fontSize={'inherit'}/></button>
                                 </li>
                             );
                         })
@@ -135,14 +133,20 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
             </div>
             {/* not preferred partner ui - add, see list , delete */}
             <div className="not-preferred"> 
-                <PartnerSearch isPreferredStudents={false} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={notPreferredPartnerList} setPartnerList={setNotPreferredPartnerList} />
+                <PartnerSearch isPreferredStudents={false} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={notPreferredPartnerList} setPartnerList={setNotPreferredPartnerList} setStudent={setStudent} student={student} studentList={studentList} />
                 <ul className="partner-not-preferred-list">
                     {
-                        notPreferredPartnerList.map((partner, index) => {
+                        Object.keys(notPreferredPartnerList).map((id, index) => {
+                            const { name } = studentPartnerResults[id];
+
                             return (
                                 <li key={index} className="partner-item">
-                                    <p>{partner}</p>
-                                    <button type="button"><DeleteForeverIcon fontSize={'inherit'}/></button>
+                                    <p>{name}</p>
+                                    <button type="button" onClick={() => {
+                                        delete notPreferredPartnerList[id];
+                                        setStudentPartnerResults({ ...studentPartnerResults, [id]: { name: name, checked: false } });
+                                        delete student.notPreferredPartners[id];
+                                    }}><ClearIcon fontSize={'inherit'}/></button>
                                 </li>
                             );
                         })
@@ -153,28 +157,9 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
     ); 
 }
 
-const PartnerSearch = ({ studentPartnerResults, setStudentPartnerResults, isPreferredStudents, partnerList, setPartnerList }) => {
+const PartnerSearch = ({ studentPartnerResults, setStudentPartnerResults, isPreferredStudents, partnerList, setPartnerList, setStudent, student, studentList }) => {
     const [displayResult, setDisplayResults] = useState(false);
     const maxPartners = 2;
-
-    // const handleFilter = (e) => {
-    //     const word = e.target.value;
-    //     setSearchWord(word);
-    //     const filteredList = studentList.filter(student => student.name.toLowerCase().includes(word.toLowerCase()));
-
-    //     if (searchWord === '') {
-    //         setFilteredStudents([]);
-    //     }
-    //     else {
-    //         setFilteredStudents(filteredList);
-    //     }
-    // }
-
-    // console.log(studentPartnerResults, 'jh');
-
-    const handleAddPartner = () => {
-        
-    }
 
     return (
         <div className="partner-search">
@@ -189,29 +174,67 @@ const PartnerSearch = ({ studentPartnerResults, setStudentPartnerResults, isPref
                         :
                         (
                             Object.keys(studentPartnerResults).map((id, index) => {
+                                // const resultStudent = studentList[id];
                                 const { name, checked } = studentPartnerResults[id];
+                                const setStd = isPreferredStudents ? { ...student, preferredPartners: { ...student.preferredPartners, [id]: studentList[id] } } : { ...student, notPreferredPartners: { ...student.notPreferredPartners, [id]: studentList[id] } };
                                 return (
                                     <div key={index} className="partner-search-item" style={checked ? { opacity: 0.6 } : { opacity: 1 }}>
                                         <p>{id} - {name}</p>
                                         <button
                                             type="button"
-                                            disabled={checked}
+                                            disabled={!checked ? Object.keys(partnerList).length >= maxPartners ? true : false : true}
                                             onClick={() => {
-                                                setPartnerList({...partnerList })
-                                                setStudentPartnerResults({...studentPartnerResults, [id]: { name: name, checked: true }})}
-                                            }
+                                                setPartnerList({ ...partnerList, [id]: studentPartnerResults[id] });
+                                                setStudentPartnerResults({ ...studentPartnerResults, [id]: { name: name, checked: true } });
+                                                setStudent(setStd);
+                                            }}
                                         >
                                             {checked ? <CheckIcon /> : <AddIcon />}
                                         </button>
                                     </div>
                                 );
                             })
-
                         )
                 }
             </div>
         </div>
 
+    );
+}
+
+const StudentList = ({ studentList }) => {
+    return (
+        <section className="student-list">
+            <h1>Students</h1>
+            <ol>
+                {
+                    Object.keys(studentList).map((id, index) => {
+                        const { first_name, last_name } = studentList[id]
+                        return (
+                            <li key={index} className="student-item">
+                                <p>{first_name} {last_name}</p>
+                                <button type="button" onClick={() => delete studentList[id]}><MoreVertIcon /></button>
+                            </li>
+                        );
+                    })
+                }
+            </ol>
+        </section>
+    );
+}
+
+const StudentItemMoreOptions = () => {
+    return (
+        <ul className="student-more-options">
+            <li className="student-options-item">
+                <EditIcon />
+                <p>Edit</p>
+            </li>
+            <li className="student-options-item">
+                <DeleteForeverIcon />
+                <p>Delete</p>
+            </li>
+        </ul>
     );
 }
 
