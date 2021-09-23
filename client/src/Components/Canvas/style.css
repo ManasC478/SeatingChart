@@ -16,3 +16,9 @@
   text-align: center;
   margin: 20px 0;
 }
+
+.student-item{
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+}
