@@ -15,12 +15,15 @@ module.exports.assignSeats = (req, res) => {
     // if an error occurs the code will automatically go to the catch
     for (let i = 0; i < studentCount; i++) {
       let frontPref = Math.random();
-      let backPref = false;
-      if(frontPref < 0.75){
+      let backPref;
+      let noPref = false;
+      if(frontPref < 0.5){
         frontPref = true;
+        backPref = false;
       }else if(frontPref < 0.9){
-        frontPref = null;
-        backPref = null;
+        noPref = true;
+        frontPref = "idc";
+        backPref = "idc";
       }else{
         frontPref = false;
         backPref = true;
@@ -29,6 +32,7 @@ module.exports.assignSeats = (req, res) => {
           name: "Bob" + i,
           frontPreference: frontPref,
           backPreference: backPref,
+          noPreference: noPref,
           sitNextTo: new Array(preferenceCount),
           doNotSitNextTo: new Array(preferenceCount),
           happy: "",
@@ -51,7 +55,6 @@ module.exports.assignSeats = (req, res) => {
     const newStudentsAndScore = findOptimalSeatingChart(students);
     const bestSeatingChartScore = newStudentsAndScore[0];
     students = newStudentsAndScore[1];
-    console.log(newStudentsAndScore[1])
     res.status(200).json({ studentList: students, bestSeatingChartScore});
   } catch (error) {
     console.log(error);
@@ -114,8 +117,20 @@ function countSeatingChartScore(students) {
         s.sad += closeName + ", ";
       }
     }
-    if (i < gridWidth && s.frontPreference == true) seatingChartScore += 30;
-    if (students.length - i <= gridWidth && s.backPreference == true) seatingChartScore += 30;
+    if(i < gridWidth){
+      if(s.frontPreference == true){
+        seatingChartScore += 30
+      }else if(s.frontPreference == false){
+        seatingChartScore -= 50
+      }
+    }
+    if(students.length - i <= gridWidth){
+      if(s.backPreference == true){
+        seatingChartScore += 30
+      }else if(s.backPreference == false){
+        seatingChartScore -= 50
+      }
+    }
   }
 }
 function findOptimalSeatingChart(students) {
