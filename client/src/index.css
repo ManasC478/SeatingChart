@@ -1,3 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap");
+
+:root {
+  --border-radius: 5px;
+  --primary-color: #3eadcf;
+  --primary-font-family: "Cormorant Garamond", serif;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,6 +17,11 @@ a {
   cursor: pointer;
 }
 
+button,
+input {
+  font-family: var(--primary-font-family);
+}
+
 button:focus,
 input:focus {
   outline: none;
@@ -16,6 +29,32 @@ input:focus {
 
 .seating-chart-main {
   display: grid;
-  grid-template-columns: 20% 80%;
+  grid-template-columns: 30% 70%;
   height: 100vh;
+  font-family: var(--primary-font-family);
+}
+
+/* notifications */
+.notifications {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  padding: 10px 20px;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  transition: all 2s;
+}
+
+.danger {
+  color: #a94442;
+  background: #f2dede;
+  border: 1px solid #ebccd1;
+}
+
+.okay {
+  color: #3c763d;
+  background: #dff0d8;
+  border: 1px solid #d6e9c6;
 }
