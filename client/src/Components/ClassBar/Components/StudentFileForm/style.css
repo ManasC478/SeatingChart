@@ -1,0 +1,38 @@
+.title-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.upload-csv-info {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
+
+.upload-csv-info svg {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-csv-info-popup {
+  position: absolute;
+  top: 100%;
+  box-shadow: 0 0 10px rgb(225, 225, 225);
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 10px 30px;
+  word-wrap: break-word;
+}
+
+.upload-csv-info-popup ol {
+  list-style-type: decimal;
+}
+
+.upload-csv-info-popup h3 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
