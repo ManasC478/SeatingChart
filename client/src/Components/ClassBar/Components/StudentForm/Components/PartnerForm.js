@@ -13,7 +13,7 @@ import { NotificationsContext } from '../../../../../ContextProviders';
 // import css file
 import './style.css';
 
-const PartnerForm = ({ studentList, student, setStudent }) => {
+const PartnerForm = ({ studentMap, student, setStudent }) => {
     //  set state variables
     const [preferredPartnerList, setPreferredPartnerList] = useState({});
     const [notPreferredPartnerList, setNotPreferredPartnerList] = useState({});
@@ -25,21 +25,21 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
         
         const copyStudentList = () => {
             let tempStudentObj = {};
-            Object.keys(studentList).forEach(id => {
-                const { first_name, last_name } = studentList[id];
+            Object.keys(studentMap).forEach(id => {
+                const { first_name, last_name } = studentMap[id];
                 tempStudentObj[id] = { name: `${first_name} ${last_name.slice(0, 1)}.`, selected: false };
             })
             setStudentPartnerResults(tempStudentObj);
         }
 
         copyStudentList();
-    }, [studentList])
+    }, [studentMap])
 
     return (
         <div className="form-partners">
             {/* preferred partner ui - add, see list, delete */}
             <div className="preferred">
-                <PartnerSearch isPreferredStudents={true} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={preferredPartnerList} setPartnerList={setPreferredPartnerList} setStudent={setStudent} student={student} studentList={studentList} />
+                <PartnerSearch isPreferredStudents={true} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={preferredPartnerList} setPartnerList={setPreferredPartnerList} setStudent={setStudent} student={student} studentMap={studentMap} />
                 <ul className="partner-preferred-list">
                     {
                         Object.keys(preferredPartnerList).map((id, index) => {
@@ -60,7 +60,7 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
             </div>
             {/* not preferred partner ui - add, see list , delete */}
             <div className="not-preferred"> 
-                <PartnerSearch isPreferredStudents={false} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={notPreferredPartnerList} setPartnerList={setNotPreferredPartnerList} setStudent={setStudent} student={student} studentList={studentList} />
+                <PartnerSearch isPreferredStudents={false} studentPartnerResults={studentPartnerResults} setStudentPartnerResults={setStudentPartnerResults} partnerList={notPreferredPartnerList} setPartnerList={setNotPreferredPartnerList} setStudent={setStudent} student={student} studentMap={studentMap} />
                 <ul className="partner-not-preferred-list">
                     {
                         Object.keys(notPreferredPartnerList).map((id, index) => {
@@ -84,7 +84,7 @@ const PartnerForm = ({ studentList, student, setStudent }) => {
     )
 }
 
-const PartnerSearch = ({ studentPartnerResults, setStudentPartnerResults, isPreferredStudents, partnerList, setPartnerList, setStudent, student, studentList }) => {
+const PartnerSearch = ({ studentPartnerResults, setStudentPartnerResults, isPreferredStudents, partnerList, setPartnerList, setStudent, student, studentMap }) => {
     const { setNotifications } = useContext(NotificationsContext);
     const [displayResult, setDisplayResults] = useState(false);
     const maxPartners = 2;

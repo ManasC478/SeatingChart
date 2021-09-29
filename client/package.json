@@ -11,8 +11,10 @@
     "axios": "^0.21.4",
     "fabric": "^4.6.0",
     "fabricjs-react": "^1.0.8",
+    "konva": "^8.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-konva": "^17.0.2-5",
     "react-papaparse": "^3.17.2",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"

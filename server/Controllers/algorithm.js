@@ -8,6 +8,13 @@ const studentCount = gridWidth * gridHeight;
 const preferenceCount = 2;
 let seatingChartScore = 0;
 module.exports.assignSeats = (req, res) => {
+
+  // the student hash from frontend
+  // if you run and click on the button to run your code you will see the hashmap print in the server terminal
+  let studentMap = req.query;
+  console.log(studentMap);
+
+
   try {
     let students = [];
     // put your code in the try

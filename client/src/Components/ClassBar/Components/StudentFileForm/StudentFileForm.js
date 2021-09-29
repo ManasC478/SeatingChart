@@ -9,7 +9,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 // import css file
 import './style.css';
 
-const StudentFileForm = ({ setStudentList }) => {
+const StudentFileForm = ({ setStudentMap }) => {
     const { setNotifications } = useContext(NotificationsContext);
     const [openInfo, setOpenInfo] = useState(false);
 
@@ -29,7 +29,7 @@ const StudentFileForm = ({ setStudentList }) => {
         // console.log(data)
         // console.log('---------------------------')
 
-        setStudentList(studentMap);
+        setStudentMap(studentMap);
         setNotifications({ type: 'okay', message: 'Successfully added students from csv file'})
     }
 

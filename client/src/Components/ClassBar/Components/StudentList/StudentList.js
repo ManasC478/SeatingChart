@@ -6,18 +6,18 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 // import css file
 import './style.css';
 
-const StudentList = ({ studentList }) => {
+const StudentList = ({ studentMap }) => {
     return (
         <section className="student-list">
             <h1>Students</h1>
             <ol>
                 {
-                    Object.keys(studentList).map((id, index) => {
-                        const { first_name, last_name } = studentList[id]
+                    Object.keys(studentMap).map((id, index) => {
+                        const { first_name, last_name } = studentMap[id]
                         return (
                             <li key={index} className="student-item">
                                 <p>{first_name} {last_name}</p>
-                                <button type="button" onClick={() => delete studentList[id]}><MoreVertIcon /></button>
+                                <button type="button" onClick={() => delete studentMap[id]}><MoreVertIcon /></button>
                             </li>
                         );
                     })

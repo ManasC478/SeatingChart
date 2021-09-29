@@ -9,7 +9,7 @@ import { NotificationsContext } from '../../../../ContextProviders';
 // import css file
 import './style.css';
 
-const StudentForm = ({ studentList, setStudentList }) => {
+const StudentForm = ({ studentMap, setStudentMap }) => {
     const { setNotifications } = useContext(NotificationsContext);
     const [student, setStudent] = useState({ first_name: '', last_name: '', front: null, preferredPartners: [], notPreferredPartners: [] });
     const [openOptions, setOpenOptions] = useState(false);
@@ -18,7 +18,7 @@ const StudentForm = ({ studentList, setStudentList }) => {
         e.preventDefault();
 
         // get last student id
-        let studentId = parseInt(Object.keys(studentList)[Object.keys(studentList).length-1]);
+        let studentId = parseInt(Object.keys(studentMap)[Object.keys(studentMap).length-1]);
         
         // check if id is there. if so then add 1 to id, otherwise equal to 1 as first student of class
         if (isNaN(studentId)) {
@@ -28,7 +28,7 @@ const StudentForm = ({ studentList, setStudentList }) => {
             studentId = studentId + 1;
         }
 
-        setStudentList({ ...studentList, [studentId]: student });
+        setStudentMap({ ...studentMap, [studentId]: student });
         setStudent({ first_name: '', last_name: '', front: null, preferredPartners: [], notPreferredPartners: [] });
         setNotifications({ type: 'okay', message: 'Student added successfully' });
     }
@@ -41,7 +41,7 @@ const StudentForm = ({ studentList, setStudentList }) => {
                 <span><button id="options-btn" type="button" onClick={() => setOpenOptions(!openOptions)}>{openOptions ? 'Close' : 'More'} Options</button></span>
                 <div className="form-optional" style={openOptions ? {display: 'block'} : {display: 'none'}}>
                     <LocationForm student={student} setStudent={setStudent} />
-                    <PartnerForm studentList={studentList} student={student} setStudent={setStudent} />
+                    <PartnerForm studentMap={studentMap} student={student} setStudent={setStudent} />
                 </div>
             </form>
         </section>

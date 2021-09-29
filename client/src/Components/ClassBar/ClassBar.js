@@ -11,15 +11,14 @@ import StudentFileForm from './Components/StudentFileForm/StudentFileForm';
 
 import './style.css';
 
-const ClassBar = () => {
+const ClassBar = ({ studentMap, setStudentMap }) => {
     // initialize state variables
-    const [studentList, setStudentList] = useState({});
 
     return (
         <section className="class-bar">
-            <StudentForm studentList={studentList} setStudentList={setStudentList} />
-            <StudentFileForm setStudentList={setStudentList} />
-            <StudentList studentList={studentList} />
+            <StudentForm studentMap={studentMap} setStudentMap={setStudentMap} />
+            <StudentFileForm setStudentMap={setStudentMap} />
+            <StudentList studentMap={studentMap} />
         </section>
     )
 }

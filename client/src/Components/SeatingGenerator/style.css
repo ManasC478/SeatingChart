@@ -1,8 +1,8 @@
-.canvas {
+.seating-generator {
   padding: 100px 100px;
 }
 
-.canvas button {
+.seating-generator button {
   width: 100%;
   padding: 10px 0;
   background: #2d3436;
@@ -17,7 +17,7 @@
   margin: 20px 0;
 }
 
-.student-item{
+.student {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
