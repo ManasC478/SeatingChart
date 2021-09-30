@@ -15,22 +15,31 @@ const StudentFileForm = ({ setStudentMap }) => {
 
     const handleOnDrop = (data) => {
         let studentMap = {};
-
-        data.forEach(({ data, errors }) => {
-            if (errors.length > 0) {
-                console.log(errors);
-            }
-
-            const [id, first_name, last_name, front, preferred1, preferred2, notPreferred1, notPreferred2] = data;
-            studentMap[parseInt(id)] = { first_name, last_name, front: parseInt(front)===1, preferredPartners: [parseInt(preferred1), parseInt(preferred2)], notPreferredPartners: [parseInt(notPreferred1), parseInt(notPreferred2)] }
-        });
-
+        let BreakException = {};
+        try {
+            data.forEach(({ data, errors }) => {
+                if (errors.length > 0) {
+                    throw errors;
+                }
+                if (isNaN(data.id)) {
+                    throw 'Invalid CSV file. Please check for unnecessary spaces or values.';
+                }
+    
+                const [id, first_name, last_name, front, preferred1, preferred2, notPreferred1, notPreferred2] = data;
+                studentMap[parseInt(id)] = { first_name, last_name, front: parseInt(front)===1, preferredPartners: [parseInt(preferred1), parseInt(preferred2)], notPreferredPartners: [parseInt(notPreferred1), parseInt(notPreferred2)] }
+            });
+            
+            setStudentMap(studentMap);
+            setNotifications({ type: 'okay', message: 'Successfully added students from csv file'})
+        } catch (error) {
+            console.log('hi');
+            console.log(error);
+            setNotifications({ type: 'danger', message: error });
+        }
         // console.log('---------------------------')
         // console.log(data)
         // console.log('---------------------------')
 
-        setStudentMap(studentMap);
-        setNotifications({ type: 'okay', message: 'Successfully added students from csv file'})
     }
 
     const handleOnError = (err, file, inputElem, reason) => {
@@ -40,11 +49,11 @@ const StudentFileForm = ({ setStudentMap }) => {
         console.log(err)
     }
 
-    const handleOnRemoveFile = (data) => {
-        console.log('---------------------------')
-        console.log(data)
-        console.log('---------------------------')
-    }
+    // const handleOnRemoveFile = (data) => {
+    //     console.log('---------------------------')
+    //     console.log(data)
+    //     console.log('---------------------------')
+    // }
     return (
         <section className="student-file-form">
             <div className="title-info">
@@ -106,7 +115,7 @@ const StudentFileForm = ({ setStudentMap }) => {
                     onError={handleOnError}
                     addRemoveButton
                     removeButtonColor='#659cef'
-                    onRemoveFile={handleOnRemoveFile}
+                    // onRemoveFile={handleOnRemoveFile}
                 >
                     <span>Drop CSV file here or click to upload.</span>
                 </CSVReader>

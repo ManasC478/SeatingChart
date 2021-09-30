@@ -4,6 +4,7 @@ import { NotificationsContext } from './ContextProviders';
 
 // import material ui icons
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 
 const Notifications = () => {
     const { notifications, setNotifications } = useContext(NotificationsContext);
@@ -24,7 +25,7 @@ const Notifications = () => {
 
     return (
         <div className={`notifications ${notifications.type === 'danger' ? 'danger' : 'okay'}`} style={display ? {opacity: '1'}  : {opacity: '0'}}>
-            <CheckCircleOutlineIcon />
+            {notifications.type === 'danger' ? <ErrorOutlineOutlinedIcon /> : <CheckCircleOutlineIcon />}
             <p>{notifications.message}</p>
         </div>
     )

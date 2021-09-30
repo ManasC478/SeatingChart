@@ -24,6 +24,7 @@ const PartnerForm = ({ studentMap, student, setStudent }) => {
         setNotPreferredPartnerList({})
         
         const copyStudentList = () => {
+            console.log(studentMap);
             let tempStudentObj = {};
             Object.keys(studentMap).forEach(id => {
                 const { first_name, last_name } = studentMap[id];
