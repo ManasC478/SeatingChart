@@ -46,8 +46,8 @@ const SeatingGenerator = ({ studentMap }) => {
                             <p><strong>doNotSitNextTo:</strong> {dontSitNextToStudent1}, {dontSitNextToStudent2}</p> */}
                             <p><strong>Happy With:</strong> {happy}</p>
                             <p><strong>Sad With:</strong> {sad}</p>
-                            <p><strong>Front Pref:</strong> {frontPreference.toString()}</p>
-                            <p><strong>Back Pref:</strong> {backPreference.toString()}</p>
+                            <p><strong>Front Pref:</strong> {frontPreference}</p>
+                            <p><strong>Back Pref:</strong> {backPreference}</p>
                           </div>
                         );
                     })

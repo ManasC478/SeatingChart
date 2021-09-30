@@ -2,8 +2,8 @@
 // if you do:
 // make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
 // and the name in the import in router/algorithm.js
-const gridHeight = 3;
-const gridWidth = 4;
+const gridHeight = 2;
+const gridWidth = 5;
 const studentCount = gridWidth * gridHeight;
 const preferenceCount = 2;
 let seatingChartScore = 0;
@@ -12,48 +12,53 @@ module.exports.assignSeats = (req, res) => {
   // the student hash from frontend
   // if you run and click on the button to run your code you will see the hashmap print in the server terminal
   let studentMap = req.query;
-  console.log(studentMap);
-
-
   try {
     let students = [];
-    // put your code in the try
-    // you can have regular js function outside of the module.exports as helper functions
-    // if an error occurs the code will automatically go to the catch
-    for (let i = 0; i < studentCount; i++) {
-      let frontPref = Math.random();
-      let backPref;
-      let noPref = false;
-      if(frontPref < 0.5){
-        frontPref = true;
-        backPref = false;
-      }else if(frontPref < 0.9){
-        noPref = true;
-        frontPref = "idc";
-        backPref = "idc";
-      }else{
-        frontPref = false;
-        backPref = true;
-      }
-      let student = {
-          name: "Bob" + i,
-          frontPreference: frontPref,
-          backPreference: backPref,
-          noPreference: noPref,
-          sitNextTo: new Array(preferenceCount),
-          doNotSitNextTo: new Array(preferenceCount),
-          happy: "",
-          sad: "",
-      };
-      students.push(student)
-      // students.push(new Student("Bob" + i, sidePreference, !sidePreference, new Array(preferenceCount), new Array(preferenceCount)));
-    }
+    Object.values(studentMap).forEach(studentObj => {
+      students.push(JSON.parse(studentObj))
+    })
+    students.forEach(student => {
+      student.sitNextTo = student.preferredPartners;
+      student.doNotSitNextTo = student.notPreferredPartners;
+      student.name = student.first_name + " " + student.last_name;
+    })
+    console.log(students);
+    console.log("------------------------------------------")
+    // for (let i = 0; i < studentCount; i++) {
+    //   let frontPref = Math.random();
+    //   let backPref;
+    //   let noPref = false;
+    //   if(frontPref < 0.5){
+    //     frontPref = true;
+    //     backPref = false;
+    //   }else if(frontPref < 0.9){
+    //     noPref = true;
+    //     frontPref = "idc";
+    //     backPref = "idc";
+    //   }else{
+    //     frontPref = false;
+    //     backPref = true;
+    //   }
+    //   let student = {
+    //       name: "Bob" + i,
+    //       frontPreference: frontPref,
+    //       backPreference: backPref,
+    //       noPreference: noPref,
+    //       sitNextTo: new Array(preferenceCount),
+    //       doNotSitNextTo: new Array(preferenceCount),
+    //       happy: "",
+    //       sad: "",
+    //   };
+    //   students.push(student)
+    //   // students.push(new Student("Bob" + i, sidePreference, !sidePreference, new Array(preferenceCount), new Array(preferenceCount)));
+    // }
     for (let i = 0; i < studentCount; i++) {
       let student = students[i];
-      let indexes = studentPreferenceIndexes(preferenceCount, i, students);
+      console.log(student.first_name);
+      // let indexes = studentPreferenceIndexes(preferenceCount, i, students);
       for (let j = 0; j < preferenceCount; j++) {
-        student.sitNextTo[j] = students[indexes[j]].name;
-        student.doNotSitNextTo[j] = students[indexes[j + preferenceCount]].name;
+        student.sitNextTo[j] = students[student.sitNextTo[j]].name;
+        student.doNotSitNextTo[j] = students[student.doNotSitNextTo[j]].name;
       }
     }
     // students = Object.values(hashMapStudents);
