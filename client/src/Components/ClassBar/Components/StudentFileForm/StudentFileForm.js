@@ -15,13 +15,14 @@ const StudentFileForm = ({ setStudentMap }) => {
 
     const handleOnDrop = (data) => {
         let studentMap = {};
-        let BreakException = {};
+        console.log(data);
+
         try {
             data.forEach(({ data, errors }) => {
                 if (errors.length > 0) {
                     throw errors;
                 }
-                if (isNaN(data.id)) {
+                if (isNaN(data[0])) {
                     throw 'Invalid CSV file. Please check for unnecessary spaces or values.';
                 }
     
