@@ -15,7 +15,6 @@ const StudentFileForm = ({ setStudentMap }) => {
 
     const handleOnDrop = (data) => {
         let studentMap = {};
-        console.log(data);
 
         try {
             data.forEach(({ data, errors }) => {
@@ -33,8 +32,6 @@ const StudentFileForm = ({ setStudentMap }) => {
             setStudentMap(studentMap);
             setNotifications({ type: 'okay', message: 'Successfully added students from csv file'})
         } catch (error) {
-            console.log('hi');
-            console.log(error);
             setNotifications({ type: 'danger', message: error });
         }
         // console.log('---------------------------')

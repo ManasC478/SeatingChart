@@ -4,6 +4,7 @@
   --border-radius: 5px;
   --primary-color: #3eadcf;
   --primary-font-family: "Cormorant Garamond", serif;
+  --primary-box-shadow: 0 0 10px rgb(221, 221, 221);
 }
 
 * {

@@ -1,5 +1,34 @@
 .seating-generator {
-  padding: 100px 100px;
+  padding: 50px;
+}
+
+.generator {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 80%;
+  column-gap: 4%;
+}
+
+.generator-ui {
+  width: 100%;
+  grid-column: 1 / span 2;
+}
+
+.dynamic-bar,
+.grid-bar {
+  width: 95%;
+  display: grid;
+  grid-template-columns: 49% 1% 50%;
+  box-shadow: var(--primary-box-shadow);
+  padding: 20px 0 20px 30px;
+  border-radius: var(--border-radius);
+  /* margin-left: 20px; */
+}
+
+.dynamic-bar-divider,
+.grid-bar-divider {
+  border: 1px solid black;
+  margin: 0 30px;
 }
 
 .seating-generator button {

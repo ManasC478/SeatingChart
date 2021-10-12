@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // import compnents
-import CanvasType from './Components/CanvasType';
-import DynamicCanvasBar from './Components/DynamicCanvasBar/DynamicCanvasBar';
+import CanvasType from './CanvasType';
+import DynamicCanvasBar from '../DynamicCanvas/DynamicCanvasBar/DynamicCanvasBar';
+import GridCanvasBar from '../GridCanvas/GridCanvasBar/GridCanvasBar';
 
-const OptionsBar = () => {
+// import css file
+import './style.css';
+
+const OptionsBar = ({ barType, setBarType }) => {
+
     return (
-        <section className="options-bar">
-            <CanvasType />
-            <DynamicCanvasBar />
-        </section>
+        <CanvasType setBarType={setBarType} />
     )
 }
 
