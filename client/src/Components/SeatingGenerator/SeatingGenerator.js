@@ -16,7 +16,7 @@ const SeatingGenerator = ({ studentMap }) => {
     const { setNotifications } = useContext(NotificationsContext);
     const [assignedSeats, setAssignedSeats] = useState([]);
     const [seatingChartScore, setSeatingChartScore] = useState(null);
-    const [barType, setBarType] = useState('dynamic');
+    const [barType, setBarType] = useState('grid');
     
     const handleAssignSeats = async () => {
         try {

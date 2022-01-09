@@ -1,0 +1,26 @@
+/* .options-bar {
+  display: flex;
+  justify-content: space-between;
+} */
+
+.canvas-type {
+  width: 100%;
+  border-radius: var(--border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+/* 
+.dynamic-bar,
+.grid-bar {
+  width: 75%;
+  display: grid;
+  grid-template-columns: 49% 1% 50%;
+  box-shadow: var(--primary-box-shadow);
+  padding: 20px 0 20px 30px;
+  border-radius: var(--border-radius);
+}
+
+.dynamic-bar-divider,
+.grid-bar-divider {
+  border: 1px solid black;
+  margin: 0 30px;
+} */
