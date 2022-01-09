@@ -1,34 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import { NotificationsContext } from './ContextProviders';
+import { NotificationsContext } from "./ContextProviders";
 
 // import material ui icons
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 const Notifications = () => {
-    const { notifications, setNotifications } = useContext(NotificationsContext);
-    const [display, setDisplay] = useState(false);
+  const { notifications, setNotifications } = useContext(NotificationsContext);
+  const [display, setDisplay] = useState(false);
 
-    useEffect(() => {
-        if (notifications.message) {
-            setDisplay(true);
-        }
-        const displayTimeout = setTimeout(() => {
-            setDisplay(false);
-        }, 5000);
+  useEffect(() => {
+    if (notifications.message) {
+      setDisplay(true);
+    }
+    const displayTimeout = setTimeout(() => {
+      setDisplay(false);
+    }, 5000);
 
-        return () => {
-            clearTimeout(displayTimeout);
-        }
-    }, [notifications])
+    return () => {
+      clearTimeout(displayTimeout);
+    };
+  }, [notifications]);
 
-    return (
-        <div className={`notifications ${notifications.type === 'danger' ? 'danger' : 'okay'}`} style={display ? {opacity: '1'}  : {opacity: '0'}}>
-            {notifications.type === 'danger' ? <ErrorOutlineOutlinedIcon /> : <CheckCircleOutlineIcon />}
-            <p>{notifications.message}</p>
-        </div>
-    )
-}
+  return (
+    <div
+      className={`notifications ${
+        notifications.type === "danger" ? "danger" : "okay"
+      }`}
+      style={display ? { opacity: "1" } : { opacity: "0" }}
+    >
+      {notifications.type === "danger" ? (
+        <ErrorOutlineIcon />
+      ) : (
+        <CheckCircleIcon />
+      )}
+      <p>{notifications.message}</p>
+    </div>
+  );
+};
 
-export default Notifications
+export default Notifications;

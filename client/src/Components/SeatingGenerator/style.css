@@ -4,9 +4,6 @@
 
 .generator {
   width: 100%;
-  display: grid;
-  grid-template-columns: 20% 80%;
-  column-gap: 4%;
 }
 
 .generator-ui {
@@ -14,19 +11,17 @@
   grid-column: 1 / span 2;
 }
 
-.dynamic-bar,
-.grid-bar {
-  width: 95%;
-  display: grid;
-  grid-template-columns: 49% 1% 50%;
+.dynamic-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
   box-shadow: var(--primary-box-shadow);
   padding: 20px 0 20px 30px;
   border-radius: var(--border-radius);
-  /* margin-left: 20px; */
+  margin-bottom: 50px;
 }
 
-.dynamic-bar-divider,
-.grid-bar-divider {
+.dynamic-bar-divider {
   border: 1px solid black;
   margin: 0 30px;
 }
@@ -50,4 +45,9 @@
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
+}
+
+#add-table {
+  width: 50px;
+  height: 50px;
 }
