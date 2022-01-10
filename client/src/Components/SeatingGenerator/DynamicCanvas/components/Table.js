@@ -1,12 +1,12 @@
 import { Rect } from "react-konva";
 
-const Table = ({ coord, rowIndex, columnIndex }) => {
+const Table = ({ coord, rowIndex, columnIndex, tableSize }) => {
   return (
     <Rect
-      x={coord.x + 50 * columnIndex}
-      y={coord.y + 50 * rowIndex}
-      width={50}
-      height={50}
+      x={coord.x + tableSize * columnIndex}
+      y={coord.y + tableSize * rowIndex}
+      width={tableSize}
+      height={tableSize}
       fill='red'
       stroke='black'
     />

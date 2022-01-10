@@ -5,22 +5,20 @@ import { useTables } from "../../../lib/tableData";
 import TableGroup from "./components/TableGroup";
 
 const DynamicCanvas = () => {
-  const { tableArr } = useTables();
+  const { tableArr, tableSize } = useTables();
 
   return (
-    <>
-      <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
-        className='generator-ui'
-      >
-        <Layer>
-          {tableArr.map((tableInfo, index) => (
-            <TableGroup key={index} tableInfo={tableInfo} />
-          ))}
-        </Layer>
-      </Stage>
-    </>
+    <Stage
+      width={window.innerWidth}
+      height={window.innerHeight}
+      className='generator-ui'
+    >
+      <Layer>
+        {tableArr.map((tableInfo, index) => (
+          <TableGroup key={index} tableSize={tableSize} tableInfo={tableInfo} />
+        ))}
+      </Layer>
+    </Stage>
   );
 };
 

@@ -15,6 +15,7 @@ export const useTables = () => {
 
 function useTableProvider() {
   const [tableArr, setTableArr] = useState([]);
+  const [tableSize, setTableSize] = useState(50);
 
   const validateTable = (tableInfo) => {
     const { rows, columns } = tableInfo;
@@ -33,8 +34,18 @@ function useTableProvider() {
     setTableArr([...tableArr, tableInfo]);
   };
 
+  const changeTableSize = (size) => {
+    if (!size.length || parseInt(size) < 50) {
+      setTableSize(50);
+    } else {
+      setTableSize(parseInt(size));
+    }
+  };
+
   return {
     tableArr,
+    tableSize,
+    changeTableSize,
     addTable,
   };
 }

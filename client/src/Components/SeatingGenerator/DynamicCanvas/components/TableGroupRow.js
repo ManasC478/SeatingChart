@@ -2,7 +2,7 @@ import { Group } from "react-konva";
 
 import Table from "./Table";
 
-const TableGroupRow = ({ coord, columns, rowIndex }) => {
+const TableGroupRow = ({ coord, columns, rowIndex, tableSize }) => {
   const tableColumns = new Array(columns);
   return (
     <Group>
@@ -12,6 +12,7 @@ const TableGroupRow = ({ coord, columns, rowIndex }) => {
           rowIndex={rowIndex}
           columnIndex={index}
           coord={coord}
+          tableSize={tableSize}
         />
       ))}
     </Group>

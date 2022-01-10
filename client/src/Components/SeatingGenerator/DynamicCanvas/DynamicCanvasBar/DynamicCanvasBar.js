@@ -9,11 +9,12 @@ import AddIcon from "@mui/icons-material/Add";
 import "./style.css";
 
 const DynamicCanvasBar = () => {
-  const { addTable } = useTables();
-  const { notifications, setNotifications } = useContext(NotificationsContext);
+  const { addTable, tableSize, changeTableSize } = useTables();
+  const { setNotifications } = useContext(NotificationsContext);
 
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
+  const [size, setSize] = useState("50");
 
   const onAddTable = () => {
     const error = addTable({
@@ -51,6 +52,21 @@ const DynamicCanvasBar = () => {
               onChange={(e) => setTableColumns(parseInt(e.target.value) || "")}
             />{" "}
             Columns
+          </label>
+          <label htmlFor='size'>
+            Size{" "}
+            <input
+              type='number'
+              name='size'
+              id='size'
+              min='50'
+              max='100'
+              value={size}
+              onChange={(e) => {
+                setSize(e.target.value);
+                changeTableSize(e.target.value);
+              }}
+            />
           </label>
         </form>
       </div>
