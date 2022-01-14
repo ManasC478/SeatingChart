@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useStudents } from "../../../../../lib/studentsData";
 
 // import material ui icons
 import AddIcon from "@mui/icons-material/Add";
@@ -13,7 +14,8 @@ import { NotificationsContext } from "../../../../../ContextProviders";
 // import css file
 import "./style.css";
 
-const PartnerForm = ({ studentMap, student, setStudent }) => {
+const PartnerForm = () => {
+  const { student, studentMap } = useStudents();
   //  set state variables
   const [preferredPartnerList, setPreferredPartnerList] = useState({});
   const [notPreferredPartnerList, setNotPreferredPartnerList] = useState({});
@@ -48,9 +50,6 @@ const PartnerForm = ({ studentMap, student, setStudent }) => {
           setStudentPartnerResults={setStudentPartnerResults}
           partnerList={preferredPartnerList}
           setPartnerList={setPreferredPartnerList}
-          setStudent={setStudent}
-          student={student}
-          studentMap={studentMap}
         />
         <ul className='partner-preferred-list'>
           {Object.keys(preferredPartnerList).map((id, index) => {
@@ -84,9 +83,6 @@ const PartnerForm = ({ studentMap, student, setStudent }) => {
           setStudentPartnerResults={setStudentPartnerResults}
           partnerList={notPreferredPartnerList}
           setPartnerList={setNotPreferredPartnerList}
-          setStudent={setStudent}
-          student={student}
-          studentMap={studentMap}
         />
         <ul className='partner-not-preferred-list'>
           {Object.keys(notPreferredPartnerList).map((id, index) => {
@@ -123,10 +119,9 @@ const PartnerSearch = ({
   isPreferredStudents,
   partnerList,
   setPartnerList,
-  setStudent,
-  student,
-  studentMap,
 }) => {
+  const { student, updatePreferredPartners, updateNotPreferredPartners } =
+    useStudents();
   const { setNotifications } = useContext(NotificationsContext);
   const [displayResult, setDisplayResults] = useState(false);
   const maxPartners = 2;
@@ -154,15 +149,18 @@ const PartnerSearch = ({
             // const resultStudent = studentList[id];
             const { name, checked } = studentPartnerResults[id];
             // const setStd = isPreferredStudents ? { ...student, preferredPartners: { ...student.preferredPartners, [id]: studentList[id] } } : { ...student, notPreferredPartners: { ...student.notPreferredPartners, [id]: studentList[id] } };
-            const setStd = isPreferredStudents
-              ? {
-                  ...student,
-                  preferredPartners: [...student.preferredPartners, id],
-                }
-              : {
-                  ...student,
-                  notPreferredPartners: [...student.notPreferredPartners, id],
-                };
+            // const setStd = isPreferredStudents
+            //   ? [...student.preferredPartners, id]
+            //   : [...student.notPreferredPartners, id];
+            // const setStd = isPreferredStudents
+            //   ? {
+            //       ...student,
+            //       preferredPartners: [...student.preferredPartners, id],
+            //     }
+            //   : {
+            //       ...student,
+            //       notPreferredPartners: [...student.notPreferredPartners, id],
+            //     };
             return (
               <div
                 key={index}
@@ -190,7 +188,11 @@ const PartnerSearch = ({
                         ...studentPartnerResults,
                         [id]: { name: name, checked: true },
                       });
-                      setStudent(setStd);
+                      if (isPreferredStudents) {
+                        updatePreferredPartners(id);
+                      } else {
+                        updateNotPreferredPartners(id);
+                      }
                     }
                   }}
                 >

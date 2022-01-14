@@ -11,14 +11,12 @@ import StudentFileForm from "./Components/StudentFileForm/StudentFileForm";
 
 import "./style.css";
 
-const ClassBar = ({ studentMap, setStudentMap }) => {
-  // initialize state variables
-
+const ClassBar = ({ setStudentMap }) => {
   return (
     <section className='class-bar'>
-      <StudentForm studentMap={studentMap} setStudentMap={setStudentMap} />
+      <StudentForm />
       <StudentFileForm setStudentMap={setStudentMap} />
-      <StudentList studentMap={studentMap} />
+      <StudentList />
     </section>
   );
 };

@@ -6,9 +6,8 @@
   width: 100%;
 }
 
-.generator-ui {
-  width: 100%;
-  grid-column: 1 / span 2;
+.konvajs-content {
+  border: 1px solid gray;
 }
 
 .dynamic-bar {

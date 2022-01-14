@@ -1,4 +1,5 @@
 import React from "react";
+import { useStudents } from "../../../../lib/studentsData";
 
 // import material ui icons
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -6,7 +7,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 // import css file
 import "./style.css";
 
-const StudentList = ({ studentMap }) => {
+const StudentList = () => {
+  const { studentMap } = useStudents();
+
   return (
     <section className='student-list'>
       <h1>Students</h1>

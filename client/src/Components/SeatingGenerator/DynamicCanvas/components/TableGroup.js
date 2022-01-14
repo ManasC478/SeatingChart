@@ -1,17 +1,35 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Rect, Group } from "react-konva";
 
 import TableGroupRow from "./TableGroupRow";
+import TableMenu from "./TableMenu";
 
-const TableGroup = ({ tableInfo, tableSize }) => {
-  const [selected, setSelected] = useState(false);
+const TableGroup = ({
+  tableInfo,
+  tableSize,
+  isSelected,
+  onSelect,
+  onPositionChange,
+}) => {
   const [coord, setCoord] = useState({ x: 20, y: 50 });
+  const [showTableMenu, setShowTableMenu] = useState(false);
+  const shapeRef = useRef();
+  const tableRows = new Array(tableInfo.rows);
 
   const changeTableCoord = (e) => {
     setCoord({ x: e.target.x(), y: e.target.y() });
   };
-  console.log(selected);
-  const tableRows = new Array(tableInfo.rows);
+
+  useEffect(() => {
+    console.log("isselected", isSelected);
+    if (isSelected) {
+      shapeRef.current.attrs.stroke = "blue";
+    } else {
+      console.log("not selected");
+      console.log(shapeRef);
+      shapeRef.current.attrs.stroke = "none";
+    }
+  }, [isSelected]);
 
   return (
     <Group>
@@ -24,16 +42,20 @@ const TableGroup = ({ tableInfo, tableSize }) => {
           tableSize={tableSize}
         />
       ))}
+      {/* <TableMenu /> */}
       <Rect
+        ref={shapeRef}
         x={coord.x}
         y={coord.y}
-        stroke={selected ? "blue" : "red"}
         width={tableInfo.columns * tableSize}
         height={tableInfo.rows * tableSize}
         fill='transparent'
+        stroke='none'
         draggable
         onDragMove={changeTableCoord}
-        onClick={() => setSelected(true)}
+        onDragEnd={() => onPositionChange(coord)}
+        onClick={onSelect}
+        onTap={onSelect}
       />
     </Group>
   );

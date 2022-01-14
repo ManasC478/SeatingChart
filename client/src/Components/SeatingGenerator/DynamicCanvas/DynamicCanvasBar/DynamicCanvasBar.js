@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
 import { NotificationsContext } from "../../../../ContextProviders";
 
@@ -18,8 +19,11 @@ const DynamicCanvasBar = () => {
 
   const onAddTable = () => {
     const error = addTable({
+      id: uuid(),
       rows: tableRows,
       columns: tableColumns,
+      vPosition: "front",
+      hPosition: "left",
     });
 
     if (error) {

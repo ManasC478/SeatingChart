@@ -5,6 +5,7 @@ import SeatingGenerator from "./Components/SeatingGenerator/SeatingGenerator";
 import Notifications from "./Notifications";
 import { NotificationsContext } from "./ContextProviders";
 import { TableProvider } from "./lib/tableData";
+import { StudentsProvider } from "./lib/studentsData";
 import { Table } from "@mui/material";
 
 function App() {
@@ -14,13 +15,15 @@ function App() {
   return (
     <main className='seating-chart-main'>
       <TableProvider>
-        <NotificationsContext.Provider
-          value={{ notifications, setNotifications }}
-        >
-          <ClassBar studentMap={studentMap} setStudentMap={setStudentMap} />
-          <SeatingGenerator studentMap={studentMap} />
-          <Notifications />
-        </NotificationsContext.Provider>
+        <StudentsProvider>
+          <NotificationsContext.Provider
+            value={{ notifications, setNotifications }}
+          >
+            <ClassBar setStudentMap={setStudentMap} />
+            <SeatingGenerator />
+            <Notifications />
+          </NotificationsContext.Provider>
+        </StudentsProvider>
       </TableProvider>
     </main>
   );

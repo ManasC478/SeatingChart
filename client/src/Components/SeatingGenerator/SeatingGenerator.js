@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { assignSeats } from "../../api/algorithm";
 import { NotificationsContext } from "../../ContextProviders";
+import { useStudents } from "../../lib/studentsData";
 import { useTables } from "../../lib/tableData";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 // import components
 import DynamicCanvas from "./DynamicCanvas/DynamicCanvas";
@@ -12,7 +11,9 @@ import DynamicCanvasBar from "./DynamicCanvas/DynamicCanvasBar/DynamicCanvasBar"
 // import css file
 import "./style.css";
 
-const SeatingGenerator = ({ studentMap }) => {
+const SeatingGenerator = () => {
+  const { studentMap } = useStudents();
+  const { tableArr } = useTables();
   const { setNotifications } = useContext(NotificationsContext);
   const [assignedSeats, setAssignedSeats] = useState([]);
   const [seatingChartScore, setSeatingChartScore] = useState(null);
@@ -25,7 +26,7 @@ const SeatingGenerator = ({ studentMap }) => {
       }
       const {
         data: { studentList, bestSeatingChartScore },
-      } = await assignSeats(studentMap);
+      } = await assignSeats(studentMap, tableArr);
       console.log(studentList);
       setAssignedSeats(studentList);
       setSeatingChartScore(bestSeatingChartScore);
@@ -38,6 +39,7 @@ const SeatingGenerator = ({ studentMap }) => {
     <main className='seating-generator'>
       <div className='generator'>
         <DynamicCanvasBar />
+        <h1>Front</h1>
         <DynamicCanvas />
       </div>
 
