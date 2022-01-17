@@ -8,7 +8,6 @@ import { useTables } from "../../lib/tableData";
 import DynamicCanvas from "./DynamicCanvas/DynamicCanvas";
 import DynamicCanvasBar from "./DynamicCanvas/DynamicCanvasBar/DynamicCanvasBar";
 
-// import css file
 import "./style.css";
 
 const SeatingGenerator = () => {
@@ -20,18 +19,14 @@ const SeatingGenerator = () => {
 
   const handleAssignSeats = async () => {
     try {
-      console.log(studentMap);
-      if (Object.keys(studentMap).length <= 0) {
-        throw "Please add students before generating the seating chart";
-      }
+      if (Object.keys(studentMap).length <= 0) throw "Please add students before generating the seating chart";
       const {
         data: { studentList, bestSeatingChartScore },
       } = await assignSeats(studentMap, tableArr);
-      console.log(studentList);
       setAssignedSeats(studentList);
       setSeatingChartScore(bestSeatingChartScore);
     } catch (error) {
-      setNotifications({ type: "danger", message: error });
+      // setNotifications({ type: "danger", message: error });
     }
   };
 
@@ -42,7 +37,6 @@ const SeatingGenerator = () => {
         <h1>Front</h1>
         <DynamicCanvas />
       </div>
-
       <button onClick={handleAssignSeats}>Click to Assign Seats</button>
       <h3>{seatingChartScore}</h3>
       <div className='student-grid'>
