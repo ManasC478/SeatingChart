@@ -3,15 +3,13 @@
 // make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
 // and the name in the import in router/algorithm.js
 const preferenceCount = 2;
-let studentCount, seatingChartScore, tables = [];
+let seatingChartScore, tables = [];
 module.exports.assignSeats = (req, res) => {
   let studentMap = req.query.studentList;
   let tableArray = req.query.tableList;
   try {
     let parsedStudents = JSON.parse(studentMap), students = [];
-    Object.values(parsedStudents).forEach((studentObj) => {
-      students.push(studentObj);
-    });
+    Object.values(parsedStudents).forEach((studentObj) => students.push(studentObj));
     students.forEach((student) => {
       student.frontPreference = student.front;
       student.sitNextTo = ["", ""];
@@ -21,27 +19,21 @@ module.exports.assignSeats = (req, res) => {
       student.name = student.first_name + " " + student.last_name;
       student.happy = "";
       student.sad = "";
-      delete student.preferredPartners;
-      delete student.notPreferredPartners
-      delete student.front;
+      delete student.preferredPartners, student.notPreferredPartners, student.front;
     });
     students.forEach((student) => {
-      delete student.first_name;
-      delete student.last_name;
+      delete student.first_name, student.last_name;
     });
-    studentCount = students.length;
-    Object.values(tableArray).forEach((table) => {
-      tables.push(JSON.parse(table));
-    }); 
+    Object.values(tableArray).forEach((table) => tables.push(JSON.parse(table))); 
     console.log("-------SET-UP FINISHED---------------");
     const newStudentsAndScore = findOptimalSeatingChart(students);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
-    printStudents(bestSeatingChart, students);
+    const bestSeatingChartDict = Object.fromEntries(bestSeatingChart.map(([v, k]) => [v, k]));
+    // printStudents(bestSeatingChart, students);
     console.log("-------OPTIMIZATION FINISHED---------------");
-    // students = [].concat.apply([], students);
-    console.log(bestSeatingChart);
-    res.status(200).json({ studentList: bestSeatingChart, bestSeatingChartScore });
+    console.log("Final Table Layout: " + bestSeatingChartDict);
+    res.status(200).json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
@@ -52,10 +44,6 @@ function countSeatingChartScore(students) {
   let studentsInTables = [];
   let studentIndex = 0;
   tables.forEach(table => {
-
-    // for(let i = studentIndex; i < studentIndex+table.rows*table.columns; i++){
-    //   studentsInTable.push(Object.assign({}, students[i]));
-    // }
     let studentsInTable = Array.from({length: table.rows*table.columns}, (_, i) => i + studentIndex);
     studentsInTable.forEach(index => {
       let student = students[index];
@@ -116,6 +104,17 @@ function findOptimalSeatingChart(students) {
   console.log("\nCall to doSomething took " + (t1 - t0) + " milliseconds. \n");
   return [bestSeatingChartScore, bestSeatingChart];
 }
+function shuffle1DStudents(students) {
+  let toShuffle = [];
+  students.forEach(student => toShuffle.push(Object.assign({}, student)));
+  var currentIndex = toShuffle.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [toShuffle[currentIndex], toShuffle[randomIndex]] = [toShuffle[randomIndex], toShuffle[currentIndex]];
+  }
+  return toShuffle;
+}
 function printStudents(bestSeatingChart, students) {
   let names = "",
     happy = "",
@@ -144,14 +143,4 @@ function printStudents(bestSeatingChart, students) {
   // console.log("Sit Next To: " + sitNextTo);
   // console.log("Do Not Sit Next To: " + doNotSitNextTo);
 }
-function shuffle1DStudents(students) {
-  let toShuffle = [];
-  students.forEach(student => toShuffle.push(Object.assign({}, student)));
-  var currentIndex = toShuffle.length, randomIndex;
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [toShuffle[currentIndex], toShuffle[randomIndex]] = [toShuffle[randomIndex], toShuffle[currentIndex]];
-  }
-  return toShuffle;
-}
+
