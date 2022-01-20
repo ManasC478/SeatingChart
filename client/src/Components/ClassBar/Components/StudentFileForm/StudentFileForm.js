@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { CSVReader } from "react-papaparse";
+import { useStudents } from "../../../../lib/studentsData";
 
 import { NotificationsContext } from "../../../../ContextProviders";
 
@@ -10,12 +11,13 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import "./style.css";
 
 const StudentFileForm = ({ setStudentMap }) => {
+  const { addStudentWithCSV } = useStudents();
   const { setNotifications } = useContext(NotificationsContext);
   const [openInfo, setOpenInfo] = useState(false);
 
   const handleOnDrop = (data) => {
     let studentMap = {};
-
+    console.log(data);
     try {
       data.forEach(({ data, errors }) => {
         if (errors.length > 0) {
@@ -29,16 +31,19 @@ const StudentFileForm = ({ setStudentMap }) => {
           id,
           first_name,
           last_name,
-          front,
+          vPosition,
+          hPosition,
           preferred1,
           preferred2,
           notPreferred1,
           notPreferred2,
         ] = data;
+
         studentMap[parseInt(id)] = {
           first_name,
           last_name,
-          front: parseInt(front) === 1,
+          vPosition: vPosition || null,
+          hPosition: hPosition || null,
           preferredPartners: [parseInt(preferred1), parseInt(preferred2)],
           notPreferredPartners: [
             parseInt(notPreferred1),
@@ -47,7 +52,7 @@ const StudentFileForm = ({ setStudentMap }) => {
         };
       });
 
-      setStudentMap(studentMap);
+      addStudentWithCSV(studentMap);
       setNotifications({
         type: "okay",
         message: "Successfully added students from csv file",
@@ -55,9 +60,9 @@ const StudentFileForm = ({ setStudentMap }) => {
     } catch (error) {
       setNotifications({ type: "danger", message: error });
     }
-    // console.log('---------------------------')
-    // console.log(data)
-    // console.log('---------------------------')
+    console.log("---------------------------");
+    console.log(data);
+    console.log("---------------------------");
   };
 
   const handleOnError = (err, file, inputElem, reason) => {

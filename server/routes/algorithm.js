@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 
-const { assignSeats } = require('../Controllers/algorithm.js');
+const { assignSeats } = require("../Controllers/tableSeatingAlg.js");
 
 const router = express.Router();
 
-router.get('/algorithm', assignSeats);
+router.get("/algorithm", assignSeats);
 
 module.exports = router;

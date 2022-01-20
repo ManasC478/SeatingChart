@@ -26,15 +26,6 @@ function useStudentProvider() {
     notPreferredPartners: [],
   });
 
-  const validateTable = (tableInfo) => {
-    const { rows, columns } = tableInfo;
-    if (rows > 2 && columns > 2) {
-      return false;
-    }
-
-    return true;
-  };
-
   const addStudent = (id) => {
     setStudentMap({ ...studentMap, [id]: student });
     setStudent({
@@ -45,6 +36,10 @@ function useStudentProvider() {
       preferredPartners: [],
       notPreferredPartners: [],
     });
+  };
+
+  const addStudentWithCSV = (map) => {
+    setStudentMap(map);
   };
 
   const updateFirstName = (name) => {
@@ -89,6 +84,7 @@ function useStudentProvider() {
     studentMap,
     student,
     addStudent,
+    addStudentWithCSV,
     updateFirstName,
     updateLastName,
     updateVPosition,

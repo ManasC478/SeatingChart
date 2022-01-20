@@ -19,14 +19,14 @@ const SeatingGenerator = () => {
 
   const handleAssignSeats = async () => {
     try {
-      if (Object.keys(studentMap).length <= 0) throw "Please add students before generating the seating chart";
-      const {
-        data: { studentList, bestSeatingChartScore },
-      } = await assignSeats(studentMap, tableArr);
-      setAssignedSeats(studentList);
-      setSeatingChartScore(bestSeatingChartScore);
+      if (Object.keys(studentMap).length <= 0)
+        throw "Please add students before generating the seating chart";
+      const { data } = await assignSeats(studentMap, tableArr);
+      console.log(data);
+      // setAssignedSeats(studentList);
+      // setSeatingChartScore(bestSeatingChartScore);
     } catch (error) {
-      // setNotifications({ type: "danger", message: error });
+      setNotifications({ type: "danger", message: error });
     }
   };
 

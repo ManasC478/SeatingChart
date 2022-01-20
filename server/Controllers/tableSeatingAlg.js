@@ -3,37 +3,55 @@
 // make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
 // and the name in the import in router/algorithm.js
 const preferenceCount = 2;
-let seatingChartScore, tables = [];
+let seatingChartScore,
+  tables = [];
 module.exports.assignSeats = (req, res) => {
   let studentMap = req.query.studentList;
   let tableArray = req.query.tableList;
   try {
-    let parsedStudents = JSON.parse(studentMap), students = [];
-    Object.values(parsedStudents).forEach((studentObj) => students.push(studentObj));
+    let parsedStudents = JSON.parse(studentMap),
+      students = [];
+    Object.values(parsedStudents).forEach((studentObj) =>
+      students.push(studentObj)
+    );
     students.forEach((student) => {
       student.frontPreference = student.front;
       student.sitNextTo = ["", ""];
-      if(student.preferredPartners != []) student.sitNextTo = student.preferredPartners.map(other => other.first_name + " " + other.last_name);
+      if (student.preferredPartners != [])
+        student.sitNextTo = student.preferredPartners.map(
+          (other) => other.first_name + " " + other.last_name
+        );
       student.doNotSitNextTo = ["", ""];
-      if(student.notPreferredPartners.length != []) student.doNotSitNextTo = student.notPreferredPartners.map(other => other.first_name + " " + other.last_name);
+      if (student.notPreferredPartners.length != [])
+        student.doNotSitNextTo = student.notPreferredPartners.map(
+          (other) => other.first_name + " " + other.last_name
+        );
       student.name = student.first_name + " " + student.last_name;
       student.happy = "";
       student.sad = "";
-      delete student.preferredPartners, student.notPreferredPartners, student.front;
+      delete student.preferredPartners,
+        student.notPreferredPartners,
+        student.front;
     });
     students.forEach((student) => {
       delete student.first_name, student.last_name;
     });
-    Object.values(tableArray).forEach((table) => tables.push(JSON.parse(table))); 
+    Object.values(tableArray).forEach((table) =>
+      tables.push(JSON.parse(table))
+    );
     console.log("-------SET-UP FINISHED---------------");
     const newStudentsAndScore = findOptimalSeatingChart(students);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
-    const bestSeatingChartDict = Object.fromEntries(bestSeatingChart.map(([v, k]) => [v, k]));
+    const bestSeatingChartDict = Object.fromEntries(
+      bestSeatingChart.map(([v, k]) => [v, k])
+    );
     // printStudents(bestSeatingChart, students);
     console.log("-------OPTIMIZATION FINISHED---------------");
     console.log("Final Table Layout: " + bestSeatingChartDict);
-    res.status(200).json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
+    res
+      .status(200)
+      .json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
@@ -43,11 +61,14 @@ function countSeatingChartScore(students) {
   seatingChartScore = 0;
   let studentsInTables = [];
   let studentIndex = 0;
-  tables.forEach(table => {
-    let studentsInTable = Array.from({length: table.rows*table.columns}, (_, i) => i + studentIndex);
-    studentsInTable.forEach(index => {
+  tables.forEach((table) => {
+    let studentsInTable = Array.from(
+      { length: table.rows * table.columns },
+      (_, i) => i + studentIndex
+    );
+    studentsInTable.forEach((index) => {
       let student = students[index];
-      let closeNames = studentsInTable.map(i => students[i].name);
+      let closeNames = studentsInTable.map((i) => students[i].name);
       student.happy = "";
       student.sad = "";
       for (let k = 0; k < closeNames.length; k++) {
@@ -60,10 +81,10 @@ function countSeatingChartScore(students) {
           student.sad = student.sad + closeName.split(" ")[0] + ", ";
         }
       }
-      if(table.vPosition == "front") {
+      if (table.vPosition == "front") {
         if (student.frontPreference == true) seatingChartScore += 30;
         else if (student.frontPreference == false) seatingChartScore -= 50;
-      } else if(table.vPosition == "back") {
+      } else if (table.vPosition == "back") {
         if (student.backPreference == true) seatingChartScore += 30;
         else if (student.backPreference == false) seatingChartScore -= 50;
       }
@@ -72,7 +93,7 @@ function countSeatingChartScore(students) {
     tableAndStudents.push(table.id);
     tableAndStudents.push(studentsInTable);
 
-    studentIndex += table.rows*table.columns;
+    studentIndex += table.rows * table.columns;
     studentsInTables.push(tableAndStudents);
   });
   return studentsInTables;
@@ -81,24 +102,28 @@ function findOptimalSeatingChart(students) {
   const { performance } = require("perf_hooks");
   var t0 = performance.now();
   let iterations = 333333;
-  let bestSeatingChart, bestSeatingChartScore = -10000;
+  let bestSeatingChart,
+    bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
-    let currentSeatingChart = countSeatingChartScore(shuffle1DStudents(students));
+    let currentSeatingChart = countSeatingChartScore(
+      shuffle1DStudents(students)
+    );
     if (seatingChartScore > bestSeatingChartScore) {
       bestSeatingChart = currentSeatingChart.map((x) => x);
       bestSeatingChartScore = seatingChartScore;
     }
   }
-  bestSeatingChart.forEach(table => {
+  bestSeatingChart.forEach((table) => {
     let studentsInTable = table[1];
-    studentsInTable.forEach(index => {
+    studentsInTable.forEach((index) => {
       let student = students[index];
       let happy_ = student.happy;
       let sad_ = student.sad;
-      if (happy_.endsWith(", ")) student.happy = happy_.substring(0, happy_.length - 2);
+      if (happy_.endsWith(", "))
+        student.happy = happy_.substring(0, happy_.length - 2);
       if (sad_.endsWith(", ")) student.sad = sad_.substring(0, sad_.length - 2);
       //or more succinctly: student.happy = happy_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
-    })
+    });
   });
   var t1 = performance.now();
   console.log("\nCall to doSomething took " + (t1 - t0) + " milliseconds. \n");
@@ -106,12 +131,16 @@ function findOptimalSeatingChart(students) {
 }
 function shuffle1DStudents(students) {
   let toShuffle = [];
-  students.forEach(student => toShuffle.push(Object.assign({}, student)));
-  var currentIndex = toShuffle.length, randomIndex;
+  students.forEach((student) => toShuffle.push(Object.assign({}, student)));
+  var currentIndex = toShuffle.length,
+    randomIndex;
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
-    [toShuffle[currentIndex], toShuffle[randomIndex]] = [toShuffle[randomIndex], toShuffle[currentIndex]];
+    [toShuffle[currentIndex], toShuffle[randomIndex]] = [
+      toShuffle[randomIndex],
+      toShuffle[currentIndex],
+    ];
   }
   return toShuffle;
 }
@@ -122,9 +151,9 @@ function printStudents(bestSeatingChart, students) {
     backPref = "",
     sitNextTo = "",
     doNotSitNextTo = "";
-  bestSeatingChart.forEach(table => {
+  bestSeatingChart.forEach((table) => {
     let studentsInTable = table[1];
-    studentsInTable.forEach(i => {
+    studentsInTable.forEach((i) => {
       let student = students[i];
       names += student.name + ", ";
       happy += (student.happy.length > 0) + ", ";
@@ -132,7 +161,7 @@ function printStudents(bestSeatingChart, students) {
       backPref += student.backPreference + ", ";
       sitNextTo += student.sitNextTo.toString() + ", ";
       doNotSitNextTo += student.doNotSitNextTo.toString() + ", ";
-    })
+    });
   });
   console.log("PRINTING FINAL STUDENTS: ");
   console.log(names);
@@ -143,4 +172,3 @@ function printStudents(bestSeatingChart, students) {
   // console.log("Sit Next To: " + sitNextTo);
   // console.log("Do Not Sit Next To: " + doNotSitNextTo);
 }
-
