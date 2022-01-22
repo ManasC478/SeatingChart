@@ -3,14 +3,14 @@
 // make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
 // and the name in the import in router/algorithm.js
 const preferenceCount = 2;
-let seatingChartScore,
-  tables = [];
+let seatingChartScore;
 module.exports.assignSeats = (req, res) => {
-  let studentMap = req.query.studentMap;
+  seatingChartScore = -1000;
+  console.log("-------Setting up Students and Tables---------------");
+  let studentList = req.query.studentMap;
   let tableArray = req.query.tableMap;
   try {
-    let parsedStudents = JSON.parse(studentMap),
-      students = [];
+    let parsedStudents = JSON.parse(studentList), students = [];
     Object.values(parsedStudents).forEach((studentObj) =>
       students.push(studentObj)
     );
@@ -36,12 +36,13 @@ module.exports.assignSeats = (req, res) => {
     students.forEach((student) => {
       delete student.first_name, student.last_name;
     });
-    Object.values(tableArray).forEach((table) =>
-      tables.push(JSON.parse(table))
+    let parsedTables = JSON.parse(tableArray), tables = [];
+    Object.values(parsedTables).forEach((tableObj) =>
+      tables.push(tableObj)
     );
     console.log("-------SETUP FINISHED---------------");
     console.log("-------Optimizing Seating...---------------");
-    const newStudentsAndScore = findOptimalSeatingChart(students);
+    const newStudentsAndScore = findOptimalSeatingChart(students, tables);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
     // printStudents(bestSeatingChart, students);
@@ -55,7 +56,7 @@ module.exports.assignSeats = (req, res) => {
     res.status(500).json({ error: "Internal Error" });
   }
 };
-function countSeatingChartScore(students) {
+function countSeatingChartScore(students, tables) {
   seatingChartScore = 0;
   let studentsInTables = [];
   let studentIndex = 0;
@@ -87,20 +88,20 @@ function countSeatingChartScore(students) {
         else if (student.backPreference == false) seatingChartScore -= 50;
       }
     });
-    table.tableStudents = studentsInTable;
+    table.students = studentsInTable;
     studentIndex += table.rows * table.columns;
     studentsInTables.push(table);
   });
   return studentsInTables;
 }
-function findOptimalSeatingChart(students) {
+function findOptimalSeatingChart(students, tables) {
   const { performance } = require("perf_hooks");
   var t0 = performance.now();
   let iterations = 99999;
   let bestSeatingChart, bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
     let currentSeatingChart = countSeatingChartScore(
-      shuffle1DStudents(students)
+      shuffle1DStudents(students), tables
     );
     if (seatingChartScore > bestSeatingChartScore) {
       bestSeatingChart = currentSeatingChart.map((x) => x);
@@ -108,7 +109,7 @@ function findOptimalSeatingChart(students) {
     }
   }
   bestSeatingChart.forEach((table) => {
-    table.tableStudents.forEach((index) => {
+    table.students.forEach((index) => {
       let student = students[index];
       let happy_ = student.happy;
       let sad_ = student.sad;
@@ -119,7 +120,7 @@ function findOptimalSeatingChart(students) {
     });
   });
   var t1 = performance.now();
-  console.log("\nCall to doSomething took " + (t1 - t0) + " milliseconds. \n");
+  console.log("Optimizing seating took " + (t1 - t0)/1000 + " seconds.");
   return [bestSeatingChartScore, bestSeatingChart];
 }
 function shuffle1DStudents(students) {
