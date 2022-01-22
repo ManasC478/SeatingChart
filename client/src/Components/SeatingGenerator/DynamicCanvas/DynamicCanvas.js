@@ -5,7 +5,7 @@ import { useTables } from "../../../lib/tableData";
 import TableGroup from "./components/TableGroup";
 
 const DynamicCanvas = () => {
-  const { tableArr, tableSize } = useTables();
+  const { tableMap, tableSize } = useTables();
   const [selectedId, selectShape] = useState(null);
 
   const checkDeselect = (e) => {
@@ -41,17 +41,18 @@ const DynamicCanvas = () => {
       onTouchStart={checkDeselect}
     >
       <Layer>
-        {tableArr.map((tableInfo, index) => (
+        {Object.keys(tableMap).map((id) => (
           <TableGroup
-            key={index}
+            key={id}
             tableSize={tableSize}
-            tableInfo={tableInfo}
-            isSelected={tableInfo.id === selectedId}
+            tableInfo={tableMap[id]}
+            isSelected={id === selectedId}
             onSelect={() => {
               console.log("selected");
-              selectShape(tableInfo.id);
+              selectShape(id);
             }}
             onPositionChange={({ x, y }) => {
+              const tableInfo = tableMap[id];
               const vThird = checkPosition(200, y + tableSize / 2);
               const hThird = checkPosition(200, x + tableSize / 2);
 
