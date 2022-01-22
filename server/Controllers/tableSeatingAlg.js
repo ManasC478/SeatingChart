@@ -6,8 +6,8 @@ const preferenceCount = 2;
 let seatingChartScore,
   tables = [];
 module.exports.assignSeats = (req, res) => {
-  let studentMap = req.query.studentList;
-  let tableArray = req.query.tableList;
+  let studentMap = req.query.studentMap;
+  let tableArray = req.query.tableMap;
   try {
     let parsedStudents = JSON.parse(studentMap),
       students = [];

@@ -19,18 +19,17 @@ const SeatingGenerator = () => {
 
   const handleAssignSeats = async () => {
     try {
-      console.log(tableMap);
-      // console.log(totalTables);
-      // if (Object.keys(studentMap).length <= 0)
-      //   throw "Please add students before generating the seating chart";
-      // else if (Object.keys(studentMap).length > totalTables) {
-      //   throw "Number of students is more than number of tables. Please add more tables";
-      // }
+      console.log(totalTables);
+      if (Object.keys(studentMap).length <= 0)
+        throw "Please add students before generating the seating chart";
+      else if (Object.keys(studentMap).length > totalTables) {
+        throw "Number of students is more than number of tables. Please add more tables";
+      }
 
-      // const data = await assignSeats(studentMap, tableArr);
-      // console.log(data);
-      // setAssignedSeats(studentList);
-      // setSeatingChartScore(bestSeatingChartScore);
+      const data = await assignSeats(studentMap, tableMap);
+      console.log(data);
+      setAssignedSeats(studentList);
+      setSeatingChartScore(bestSeatingChartScore);
     } catch (error) {
       console.log("error");
       setNotifications({ type: "danger", message: error });
