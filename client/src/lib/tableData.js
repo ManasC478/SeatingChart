@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+  useRef,
+} from "react";
 
 const tableContext = createContext();
 
@@ -14,8 +20,9 @@ export const useTables = () => {
 };
 
 function useTableProvider() {
-  const [tableArr, setTableArr] = useState([]);
+  const [tableMap, setTableMap] = useState({});
   const [tableSize, setTableSize] = useState(50);
+  const totalTables = useRef(0);
 
   const validateTable = (tableInfo) => {
     const { rows, columns } = tableInfo;
@@ -26,12 +33,14 @@ function useTableProvider() {
     return true;
   };
 
-  const addTable = (tableInfo) => {
+  const addTable = (id, tableInfo) => {
     if (!validateTable(tableInfo)) {
       return "Not a valid table";
     }
 
-    setTableArr([...tableArr, tableInfo]);
+    setTableMap({ ...tableMap, [id]: tableInfo });
+    totalTables.current += tableInfo.rows * tableInfo.columns;
+    console.log(totalTables);
   };
 
   const changeTableSize = (size) => {
@@ -43,8 +52,9 @@ function useTableProvider() {
   };
 
   return {
-    tableArr,
+    tableMap,
     tableSize,
+    totalTables: totalTables.current,
     changeTableSize,
     addTable,
   };

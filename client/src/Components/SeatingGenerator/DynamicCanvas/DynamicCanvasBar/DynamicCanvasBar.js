@@ -18,12 +18,12 @@ const DynamicCanvasBar = () => {
   const [size, setSize] = useState("50");
 
   const onAddTable = () => {
-    const error = addTable({
-      id: uuid(),
+    const error = addTable(uuid(), {
       rows: tableRows,
       columns: tableColumns,
       vPosition: "front",
       hPosition: "left",
+      students: [],
     });
 
     if (error) {
