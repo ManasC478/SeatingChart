@@ -6,7 +6,6 @@ import Notifications from "./Notifications";
 import { NotificationsContext } from "./ContextProviders";
 import { TableProvider } from "./lib/tableData";
 import { StudentsProvider } from "./lib/studentsData";
-import { Table } from "@mui/material";
 
 function App() {
   const [notifications, setNotifications] = useState({ type: "", message: "" });
