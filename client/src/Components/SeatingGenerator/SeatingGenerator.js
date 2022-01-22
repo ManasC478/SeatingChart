@@ -28,8 +28,8 @@ const SeatingGenerator = () => {
 
       const data = await assignSeats(studentMap, tableMap);
       console.log(data);
-      setAssignedSeats(studentList);
-      setSeatingChartScore(bestSeatingChartScore);
+      // setAssignedSeats(studentList);
+      // setSeatingChartScore(bestSeatingChartScore);
     } catch (error) {
       console.log("error");
       setNotifications({ type: "danger", message: error });
