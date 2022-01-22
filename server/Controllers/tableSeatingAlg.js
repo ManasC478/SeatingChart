@@ -6,6 +6,7 @@ const preferenceCount = 2;
 let seatingChartScore,
   tables = [];
 module.exports.assignSeats = (req, res) => {
+  console.log("-------Setting Up Students and Tables...---------------");
   let studentMap = req.query.studentList;
   let tableArray = req.query.tableList;
   try {
@@ -39,19 +40,17 @@ module.exports.assignSeats = (req, res) => {
     Object.values(tableArray).forEach((table) =>
       tables.push(JSON.parse(table))
     );
-    console.log("-------SET-UP FINISHED---------------");
+    console.log("-------SETUP FINISHED---------------");
+    console.log("-------Optimizing Seating...---------------");
     const newStudentsAndScore = findOptimalSeatingChart(students);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
-    const bestSeatingChartDict = Object.fromEntries(
-      bestSeatingChart.map(([v, k]) => [v, k])
-    );
     // printStudents(bestSeatingChart, students);
     console.log("-------OPTIMIZATION FINISHED---------------");
-    console.log("Final Table Layout: " + bestSeatingChartDict);
+    console.log(bestSeatingChart);
     res
       .status(200)
-      .json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
+      .json({ studentList: bestSeatingChart, bestSeatingChartScore });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
@@ -89,21 +88,17 @@ function countSeatingChartScore(students) {
         else if (student.backPreference == false) seatingChartScore -= 50;
       }
     });
-    let tableAndStudents = [];
-    tableAndStudents.push(table.id);
-    tableAndStudents.push(studentsInTable);
-
+    table.tableStudents = studentsInTable;
     studentIndex += table.rows * table.columns;
-    studentsInTables.push(tableAndStudents);
+    studentsInTables.push(table);
   });
   return studentsInTables;
 }
 function findOptimalSeatingChart(students) {
   const { performance } = require("perf_hooks");
   var t0 = performance.now();
-  let iterations = 333333;
-  let bestSeatingChart,
-    bestSeatingChartScore = -10000;
+  let iterations = 99999;
+  let bestSeatingChart, bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
     let currentSeatingChart = countSeatingChartScore(
       shuffle1DStudents(students)
@@ -114,8 +109,7 @@ function findOptimalSeatingChart(students) {
     }
   }
   bestSeatingChart.forEach((table) => {
-    let studentsInTable = table[1];
-    studentsInTable.forEach((index) => {
+    table.tableStudents.forEach((index) => {
       let student = students[index];
       let happy_ = student.happy;
       let sad_ = student.sad;
