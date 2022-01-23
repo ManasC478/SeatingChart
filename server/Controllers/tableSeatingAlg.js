@@ -14,120 +14,117 @@ module.exports.assignSeats = (req, res) => {
       students.push(studentObj)
     );
     students.forEach((student) => {
-      student.frontPreference = student.front;
-      student.sitNextTo = ["", ""];
+      student.frontPreference = student.vPosition;
+      student.sidePreference = student.hPosition;
+      student.sitNextTo = [];
       if (student.preferredPartners != [])
-        student.sitNextTo = student.preferredPartners.map(
-          (other) => other.first_name + " " + other.last_name
-        );
-      student.doNotSitNextTo = ["", ""];
+        student.preferredPartners.forEach((otherIndex) => {
+          otherIndex--;
+          student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        });
+      student.doNotSitNextTo = [];
       if (student.notPreferredPartners.length != [])
-        student.doNotSitNextTo = student.notPreferredPartners.map(
-          (other) => other.first_name + " " + other.last_name
-        );
+        student.notPreferredPartners.forEach((otherIndex) => {
+          otherIndex--;
+          student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        });
       student.name = student.first_name + " " + student.last_name;
       student.happy = "";
       student.sad = "";
-      delete student.preferredPartners,
-        student.notPreferredPartners,
-        student.front;
     });
-    students.forEach((student) => {
-      delete student.first_name, student.last_name;
-    });
+    const newStudents = students.map((student) => {
+      const { first_name, last_name, vPosition, hPosition, preferredPartners, notPreferredPartners, ...leftOver } = student;
+      return leftOver
+    })
+    students = newStudents;
     let parsedTables = JSON.parse(tableArray), tables = [];
     for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
-    console.log(tables);
     console.log("-------SETUP FINISHED---------------");
     console.log("-------Optimizing Seating...---------------");
     const newStudentsAndScore = findOptimalSeatingChart(students, tables);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
+    students = newStudentsAndScore[2];
     let bestSeatingChartDict = {};
     bestSeatingChart.forEach(({id, ...table}) => {
       bestSeatingChartDict[id] = table
     });
-    // printStudents(bestSeatingChart, students);
     console.log("-------OPTIMIZATION FINISHED---------------");
     console.log(bestSeatingChartDict);
     console.log(bestSeatingChartScore);
-    res
-      .status(200)
-      .json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
+    res.status(200).json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
   }
 };
 function countSeatingChartScore(students, tables) {
+  let tempStudents = students.map(student => Object.assign({}, student));
   seatingChartScore = 0;
   let studentsInTables = [];
   let studentIndex = 0;
   tables.forEach((table) => {
+    let area = table.rows * table.columns;
+    let studentsLeft = students.length - studentIndex;
+    let count = Math.min(studentsLeft, area);
     let studentsInTable = Array.from(
-      { length: table.rows * table.columns },
+      { length: count},
       (_, i) => i + studentIndex
     );
     studentsInTable.forEach((index) => {
-      let student = students[index];
-      let closeNames = studentsInTable.map((i) => students[i].name);
-      student.happy = "";
-      student.sad = "";
+      let closeNames = studentsInTable.map((i) => tempStudents[i].name);
+      tempStudents[index].happy = "";
+      tempStudents[index].sad = "";
       for (let k = 0; k < closeNames.length; k++) {
         let closeName = closeNames[k];
-        if (student.sitNextTo.includes(closeName)) {
+        if (tempStudents[index].sitNextTo.includes(closeName)) {
           seatingChartScore += 100;
-          student.happy = student.happy + closeName.split(" ")[0] + ", ";
-        } else if (student.doNotSitNextTo.includes(closeName)) {
+          tempStudents[index].happy += closeName.split(" ")[0] + ", ";
+        } else if (tempStudents[index].doNotSitNextTo.includes(closeName)) {
           seatingChartScore -= 200;
-          student.sad = student.sad + closeName.split(" ")[0] + ", ";
+          tempStudents[index].sad += closeName.split(" ")[0] + ", ";
         }
       }
-      if (table.vPosition == "front") {
-        if (student.frontPreference == true) seatingChartScore += 30;
-        else if (student.frontPreference == false) seatingChartScore -= 50;
-      } else if (table.vPosition == "back") {
-        if (student.backPreference == true) seatingChartScore += 30;
-        else if (student.backPreference == false) seatingChartScore -= 50;
-      }
+      seatingChartScore += (table.vPosition == tempStudents[index].frontPreference ? 30 : -50);
+      seatingChartScore += (table.hPosition == tempStudents[index].sidePreference ? 10 : -15);
     });
     table.students = studentsInTable;
     studentIndex += table.rows * table.columns;
     studentsInTables.push(table);
   });
-  return studentsInTables;
+  return [studentsInTables, tempStudents];
 }
 function findOptimalSeatingChart(students, tables) {
   const { performance } = require("perf_hooks");
   var t0 = performance.now();
-  let iterations = 99999;
+  let iterations = 500000;
   let bestSeatingChart, bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
-    let currentSeatingChart = countSeatingChartScore(
-      shuffle1DStudents(students), tables
-    );
+    let currentStudentAndTableChart = countSeatingChartScore(shuffle1D(students), shuffle1D(tables));
+    let currentTableChart = currentStudentAndTableChart[0];
+    let currentStudentChart = currentStudentAndTableChart[1];
     if (seatingChartScore > bestSeatingChartScore) {
-      bestSeatingChart = currentSeatingChart.map((x) => x);
+      bestSeatingChart = currentTableChart.map((x) => x);
       bestSeatingChartScore = seatingChartScore;
+      students = currentStudentChart.map(student => Object.assign({}, student));
     }
   }
   bestSeatingChart.forEach((table) => {
     table.students.forEach((index) => {
       let happy_ = students[index].happy;
       let sad_ = students[index].sad;
-      if (happy_.endsWith(", "))
-      students[index].happy = happy_.substring(0, happy_.length - 2);
+      if (happy_.endsWith(", ")) students[index].happy = happy_.substring(0, happy_.length - 2);
       if (sad_.endsWith(", ")) students[index].sad = sad_.substring(0, sad_.length - 2);
       //or more succinctly: student.happy = happy_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
     });
   });
   var t1 = performance.now();
   console.log("Optimizing seating took " + (t1 - t0)/1000 + " seconds.");
-  return [bestSeatingChartScore, bestSeatingChart];
+  return [bestSeatingChartScore, bestSeatingChart, students];
 }
-function shuffle1DStudents(students) {
+function shuffle1D(array) {
   let toShuffle = [];
-  students.forEach((student) => toShuffle.push(Object.assign({}, student)));
+  array.forEach((val) => toShuffle.push(Object.assign({}, val)));
   var currentIndex = toShuffle.length,
     randomIndex;
   while (currentIndex != 0) {
@@ -139,32 +136,4 @@ function shuffle1DStudents(students) {
     ];
   }
   return toShuffle;
-}
-function printStudents(bestSeatingChart, students) {
-  let names = "",
-    happy = "",
-    frontPref = "",
-    backPref = "",
-    sitNextTo = "",
-    doNotSitNextTo = "";
-  bestSeatingChart.forEach((table) => {
-    let studentsInTable = table[1];
-    studentsInTable.forEach((i) => {
-      let student = students[i];
-      names += student.name + ", ";
-      happy += (student.happy.length > 0) + ", ";
-      frontPref += student.frontPreference + ", ";
-      backPref += student.backPreference + ", ";
-      sitNextTo += student.sitNextTo.toString() + ", ";
-      doNotSitNextTo += student.doNotSitNextTo.toString() + ", ";
-    });
-  });
-  console.log("PRINTING FINAL STUDENTS: ");
-  console.log(names);
-  console.log("----------------------------------");
-  // console.log("Happy: " + happy);
-  // console.log("Front pref: " + frontPref);
-  // console.log("Back pref: " + backPref);
-  // console.log("Sit Next To: " + sitNextTo);
-  // console.log("Do Not Sit Next To: " + doNotSitNextTo);
 }
