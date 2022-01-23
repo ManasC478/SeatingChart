@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
 import { CSVReader } from "react-papaparse";
 import { useStudents } from "../../../../lib/studentsData";
+import { useToast } from "@chakra-ui/react";
 
-import { NotificationsContext } from "../../../../ContextProviders";
+// import { NotificationsContext } from "../../../../ContextProviders";
 
 // material ui icons
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { InfoIcon } from "../../../../styles/icons";
 
 // import css file
 import "./style.css";
 
 const StudentFileForm = ({ setStudentMap }) => {
+  const toast = useToast();
   const { addStudentWithCSV } = useStudents();
-  const { setNotifications } = useContext(NotificationsContext);
+  // const { setNotifications } = useContext(NotificationsContext);
   const [openInfo, setOpenInfo] = useState(false);
 
   const handleOnDrop = (data) => {
@@ -53,12 +55,28 @@ const StudentFileForm = ({ setStudentMap }) => {
       });
 
       addStudentWithCSV(studentMap);
-      setNotifications({
-        type: "okay",
-        message: "Successfully added students from csv file",
+      // setNotifications({
+      //   type: "okay",
+      //   message: "Successfully added students from csv file",
+      // });
+      toast({
+        title: "Uploaded csv file.",
+        description: "Successfully added students from csv file.",
+        status: "success",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
       });
     } catch (error) {
-      setNotifications({ type: "danger", message: error });
+      // setNotifications({ type: "danger", message: error });
+      toast({
+        title: "Error.",
+        description: error,
+        status: "error",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
     }
     console.log("---------------------------");
     console.log(data);
@@ -85,7 +103,7 @@ const StudentFileForm = ({ setStudentMap }) => {
           className='upload-csv-info'
           onClick={() => setOpenInfo(!openInfo)}
         >
-          <InfoOutlinedIcon />
+          <InfoIcon />
         </button>
         <div
           className='upload-csv-info-popup'

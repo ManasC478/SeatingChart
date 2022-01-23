@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 // import icons from material-ui
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
+// import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+// import EditIcon from "@mui/icons-material/Edit";
 
 // import components
 import StudentList from "./Components/StudentList/StudentList";
@@ -21,19 +21,19 @@ const ClassBar = ({ setStudentMap }) => {
   );
 };
 
-const StudentItemMoreOptions = () => {
-  return (
-    <ul className='student-more-options'>
-      <li className='student-options-item'>
-        <EditIcon />
-        <p>Edit</p>
-      </li>
-      <li className='student-options-item'>
-        <DeleteForeverIcon />
-        <p>Delete</p>
-      </li>
-    </ul>
-  );
-};
+// const StudentItemMoreOptions = () => {
+//   return (
+//     <ul className='student-more-options'>
+//       <li className='student-options-item'>
+//         <EditIcon />
+//         <p>Edit</p>
+//       </li>
+//       <li className='student-options-item'>
+//         <DeleteForeverIcon />
+//         <p>Delete</p>
+//       </li>
+//     </ul>
+//   );
+// };
 
 export default ClassBar;

@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
 import { useStudents } from "../../../../lib/studentsData";
+import { useToast } from "@chakra-ui/react";
 
 // import components
 import RequiredForm from "./Components/RequiredForm";
 import LocationForm from "./Components/LocationForm";
 import PartnerForm from "./Components/PartnerForm";
-import { NotificationsContext } from "../../../../ContextProviders";
+// import { NotificationsContext } from "../../../../ContextProviders";
 
 // import css file
 import "./style.css";
 
 const StudentForm = () => {
+  const toast = useToast();
   const { student, studentMap, addStudent } = useStudents();
-  const { setNotifications } = useContext(NotificationsContext);
+  // const { setNotifications } = useContext(NotificationsContext);
   // const [student, setStudent] = useState({ first_name: '', last_name: '', front: null, preferredPartners: [], notPreferredPartners: [] });
   const [openOptions, setOpenOptions] = useState(false);
 
@@ -32,7 +34,14 @@ const StudentForm = () => {
     }
 
     addStudent(studentId);
-    setNotifications({ type: "okay", message: "Student added successfully" });
+    // setNotifications({ type: "okay", message: "Student added successfully" });
+    toast({
+      description: "Student added.",
+      status: "success",
+      position: "bottom-right",
+      duration: 4000,
+      isClosable: true,
+    });
   };
 
   return (

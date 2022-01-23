@@ -1,17 +1,19 @@
 import React, { useState, useContext } from "react";
 import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
-import { NotificationsContext } from "../../../../ContextProviders";
+import { useToast } from "@chakra-ui/react";
+// import { NotificationsContext } from "../../../../ContextProviders";
 
 // import material ui icons
-import AddIcon from "@mui/icons-material/Add";
+import { AddIcon } from "../../../../styles/icons";
 
 // import css file
 import "./style.css";
 
 const DynamicCanvasBar = () => {
+  const toast = useToast();
   const { addTable, tableSize, changeTableSize } = useTables();
-  const { setNotifications } = useContext(NotificationsContext);
+  // const { setNotifications } = useContext(NotificationsContext);
 
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
@@ -27,9 +29,23 @@ const DynamicCanvasBar = () => {
     });
 
     if (error) {
-      setNotifications({ type: "danger", message: error });
+      // setNotifications({ type: "danger", message: error });
+      toast({
+        description: error,
+        status: "error",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
     } else {
-      setNotifications({ type: "okay", message: "Table added" });
+      // setNotifications({ type: "okay", message: "Table added" });
+      toast({
+        description: "Table added.",
+        status: "success",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   };
 

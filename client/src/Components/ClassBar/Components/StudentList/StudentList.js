@@ -2,7 +2,7 @@ import React from "react";
 import { useStudents } from "../../../../lib/studentsData";
 
 // import material ui icons
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { MoreVertIcon } from "../../../../styles/icons";
 
 // import css file
 import "./style.css";

@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useStudents } from "../../../../../lib/studentsData";
+import { useToast } from "@chakra-ui/react";
 
-// import material ui icons
-import AddIcon from "@mui/icons-material/Add";
-import CheckIcon from "@mui/icons-material/Check";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ClearIcon from "@mui/icons-material/Clear";
+// import icons
+import {
+  AddIcon,
+  DownArrowIcon,
+  RightArrowIcon,
+  CheckIcon,
+  ClearIcon,
+} from "../../../../../styles/icons";
 
 // import components
-import { NotificationsContext } from "../../../../../ContextProviders";
+// import { NotificationsContext } from "../../../../../ContextProviders";
 
 // import css file
 import "./style.css";
@@ -120,9 +123,10 @@ const PartnerSearch = ({
   partnerList,
   setPartnerList,
 }) => {
+  const toast = useToast();
   const { student, updatePreferredPartners, updateNotPreferredPartners } =
     useStudents();
-  const { setNotifications } = useContext(NotificationsContext);
+  // const { setNotifications } = useContext(NotificationsContext);
   const [displayResult, setDisplayResults] = useState(false);
   const maxPartners = 2;
 
@@ -132,9 +136,9 @@ const PartnerSearch = ({
         <h3>{isPreferredStudents ? "Preferred" : "Not Preferred"} Students</h3>
         <button type='button' onClick={() => setDisplayResults(!displayResult)}>
           {displayResult ? (
-            <ArrowDropDownIcon fontSize={"inherit"} />
+            <DownArrowIcon fontSize={"inherit"} />
           ) : (
-            <ArrowRightIcon fontSize={"inherit"} />
+            <RightArrowIcon fontSize={"inherit"} />
           )}
         </button>
       </div>
@@ -175,9 +179,16 @@ const PartnerSearch = ({
                   disabled={!checked ? false : true}
                   onClick={() => {
                     if (Object.keys(partnerList).length >= maxPartners) {
-                      setNotifications({
-                        type: "danger",
-                        message: `Max partner preferences is ${maxPartners}`,
+                      // setNotifications({
+                      //   type: "danger",
+                      //   message: `Max partner preferences is ${maxPartners}`,
+                      // });
+                      toast({
+                        description: `Max partner preferences is ${maxPartners}.`,
+                        status: "error",
+                        position: "bottom-right",
+                        duration: 4000,
+                        isClosable: true,
                       });
                     } else {
                       setPartnerList({
