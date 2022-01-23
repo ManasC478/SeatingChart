@@ -16,21 +16,22 @@ module.exports.assignSeats = (req, res) => {
     students.forEach((student) => {
       student.frontPreference = student.vPosition;
       student.sidePreference = student.hPosition;
+
       student.sitNextTo = [];
-      if (student.preferredPartners != [])
-        student.preferredPartners.forEach((otherIndex) => {
-          otherIndex--;
-          student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
-        });
+      student.preferredPartners.forEach((otherIndex) => {
+        otherIndex--;
+        student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+      });
+
       student.doNotSitNextTo = [];
-      if (student.notPreferredPartners.length != [])
-        student.notPreferredPartners.forEach((otherIndex) => {
-          otherIndex--;
-          student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
-        });
+      student.notPreferredPartners.forEach((otherIndex) => {
+        otherIndex--;
+        student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+      }); 
+
       student.name = student.first_name + " " + student.last_name;
-      student.happy = "";
-      student.sad = "";
+      student.happyWith = "";
+      student.sadWith = "";
     });
     const newStudents = students.map((student) => {
       const { first_name, last_name, vPosition, hPosition, preferredPartners, notPreferredPartners, ...leftOver } = student;
@@ -59,70 +60,74 @@ module.exports.assignSeats = (req, res) => {
   }
 };
 function countSeatingChartScore(students, tables) {
-  let tempStudents = students.map(student => Object.assign({}, student));
   seatingChartScore = 0;
   let studentsInTables = [];
   let studentIndex = 0;
+  let shuffledIds = shuffle1D([...Array(students.length).keys()]);
   tables.forEach((table) => {
-    let area = table.rows * table.columns;
+    let seatingCapacity = table.rows * table.columns;
     let studentsLeft = students.length - studentIndex;
-    let count = Math.min(studentsLeft, area);
+    let seatingCount = Math.min(studentsLeft, seatingCapacity);
     let studentsInTable = Array.from(
-      { length: count},
-      (_, i) => i + studentIndex
+      { length: seatingCount},
+      (_, i) => shuffledIds[i + studentIndex]
     );
+    studentIndex += seatingCount;
     studentsInTable.forEach((index) => {
-      let closeNames = studentsInTable.map((i) => tempStudents[i].name);
-      tempStudents[index].happy = "";
-      tempStudents[index].sad = "";
-      for (let k = 0; k < closeNames.length; k++) {
-        let closeName = closeNames[k];
-        if (tempStudents[index].sitNextTo.includes(closeName)) {
+      let student = students[index];
+      let tableGroup = studentsInTable.map((i) => students[i].name);
+      for (let k = 0; k < tableGroup.length; k++) {
+        let nextTo = tableGroup[k];
+        if (student.sitNextTo.includes(nextTo)) {
           seatingChartScore += 100;
-          tempStudents[index].happy += closeName.split(" ")[0] + ", ";
-        } else if (tempStudents[index].doNotSitNextTo.includes(closeName)) {
+        } else if (student.doNotSitNextTo.includes(nextTo)) {
           seatingChartScore -= 200;
-          tempStudents[index].sad += closeName.split(" ")[0] + ", ";
         }
       }
-      seatingChartScore += (table.vPosition == tempStudents[index].frontPreference ? 30 : -50);
-      seatingChartScore += (table.hPosition == tempStudents[index].sidePreference ? 10 : -15);
+      seatingChartScore += (table.vPosition == student.frontPreference ? 30 : -50);
+      seatingChartScore += (table.hPosition == student.sidePreference ? 10 : -15);
     });
     table.students = studentsInTable;
-    studentIndex += table.rows * table.columns;
     studentsInTables.push(table);
   });
-  return [studentsInTables, tempStudents];
+  return studentsInTables;
 }
 function findOptimalSeatingChart(students, tables) {
   const { performance } = require("perf_hooks");
-  var t0 = performance.now();
-  let iterations = 500000;
+  let start = performance.now();
+  let iterations = 999999;
   let bestSeatingChart, bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
-    let currentStudentAndTableChart = countSeatingChartScore(shuffle1D(students), shuffle1D(tables));
-    let currentTableChart = currentStudentAndTableChart[0];
-    let currentStudentChart = currentStudentAndTableChart[1];
+    let seatingChart = countSeatingChartScore(students, shuffle1DObjects(tables));
     if (seatingChartScore > bestSeatingChartScore) {
-      bestSeatingChart = currentTableChart.map((x) => x);
+      bestSeatingChart = seatingChart.map((x) => x);
       bestSeatingChartScore = seatingChartScore;
-      students = currentStudentChart.map(student => Object.assign({}, student));
     }
   }
   bestSeatingChart.forEach((table) => {
     table.students.forEach((index) => {
-      let happy_ = students[index].happy;
-      let sad_ = students[index].sad;
-      if (happy_.endsWith(", ")) students[index].happy = happy_.substring(0, happy_.length - 2);
-      if (sad_.endsWith(", ")) students[index].sad = sad_.substring(0, sad_.length - 2);
-      //or more succinctly: student.happy = happy_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
+      let closeNames = table.students.map((i) => students[i].name);
+      closeNames.forEach(closeName => {
+        let more = closeName.split(" ")[0] + ", ";
+        if (students[index].sitNextTo.includes(closeName)) {
+          students[index].happyWith += more;
+        } else if (students[index].doNotSitNextTo.includes(closeName)) {
+          students[index].sadWith += more;
+        }
+      });
+
+      let happyWith_ = students[index].happyWith;
+      let sadWith_ = students[index].sadWith;
+      if (happyWith_.endsWith(", ")) students[index].happyWith = happyWith_.substring(0, happyWith_.length - 2);
+      if (sadWith_.endsWith(", ")) students[index].sadWith = sadWith_.substring(0, sadWith_.length - 2);
+      //or more succinctly: student.happyWith = happyWith_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
     });
   });
-  var t1 = performance.now();
-  console.log("Optimizing seating took " + (t1 - t0)/1000 + " seconds.");
+  let end = performance.now();
+  console.log("Optimizing seating took " + (end - start)/1000 + " seconds.");
   return [bestSeatingChartScore, bestSeatingChart, students];
 }
-function shuffle1D(array) {
+function shuffle1DObjects(array) {
   let toShuffle = [];
   array.forEach((val) => toShuffle.push(Object.assign({}, val)));
   var currentIndex = toShuffle.length,
@@ -136,4 +141,14 @@ function shuffle1D(array) {
     ];
   }
   return toShuffle;
+}
+function shuffle1D(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
 }
