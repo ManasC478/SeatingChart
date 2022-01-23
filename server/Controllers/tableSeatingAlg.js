@@ -5,7 +5,6 @@
 const preferenceCount = 2;
 let seatingChartScore;
 module.exports.assignSeats = (req, res) => {
-  seatingChartScore = -1000;
   console.log("-------Setting up Students and Tables---------------");
   let studentList = req.query.studentMap;
   let tableArray = req.query.tableMap;
@@ -37,20 +36,24 @@ module.exports.assignSeats = (req, res) => {
       delete student.first_name, student.last_name;
     });
     let parsedTables = JSON.parse(tableArray), tables = [];
-    Object.values(parsedTables).forEach((tableObj) =>
-      tables.push(tableObj)
-    );
+    for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
+    console.log(tables);
     console.log("-------SETUP FINISHED---------------");
     console.log("-------Optimizing Seating...---------------");
     const newStudentsAndScore = findOptimalSeatingChart(students, tables);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
+    let bestSeatingChartDict = {};
+    bestSeatingChart.forEach(({id, ...table}) => {
+      bestSeatingChartDict[id] = table
+    });
     // printStudents(bestSeatingChart, students);
     console.log("-------OPTIMIZATION FINISHED---------------");
-    console.log(bestSeatingChart);
+    console.log(bestSeatingChartDict);
+    console.log(bestSeatingChartScore);
     res
       .status(200)
-      .json({ studentList: bestSeatingChart, bestSeatingChartScore });
+      .json({ studentList: bestSeatingChartDict, bestSeatingChartScore });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
@@ -110,12 +113,11 @@ function findOptimalSeatingChart(students, tables) {
   }
   bestSeatingChart.forEach((table) => {
     table.students.forEach((index) => {
-      let student = students[index];
-      let happy_ = student.happy;
-      let sad_ = student.sad;
+      let happy_ = students[index].happy;
+      let sad_ = students[index].sad;
       if (happy_.endsWith(", "))
-        student.happy = happy_.substring(0, happy_.length - 2);
-      if (sad_.endsWith(", ")) student.sad = sad_.substring(0, sad_.length - 2);
+      students[index].happy = happy_.substring(0, happy_.length - 2);
+      if (sad_.endsWith(", ")) students[index].sad = sad_.substring(0, sad_.length - 2);
       //or more succinctly: student.happy = happy_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
     });
   });
