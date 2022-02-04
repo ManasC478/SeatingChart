@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Rect, Group } from "react-konva";
+import { studentMap } from "../../../../lib/studentsData";
 
 import TableGroupRow from "./TableGroupRow";
 import TableMenu from "./TableMenu";
@@ -15,10 +16,15 @@ const TableGroup = ({
   const [showTableMenu, setShowTableMenu] = useState(false);
   const shapeRef = useRef();
   const tableRows = new Array(tableInfo.rows);
+  let studentsArr = getStudents();
 
   const changeTableCoord = (e) => {
     setCoord({ x: e.target.x(), y: e.target.y() });
   };
+
+  const getStudent = (i) => {
+    
+  }
 
   useEffect(() => {
     console.log("isselected", isSelected);
@@ -40,6 +46,7 @@ const TableGroup = ({
           rowIndex={index}
           columns={tableInfo.columns}
           tableSize={tableSize}
+          students={getStudent(index+1)}
         />
       ))}
       {/* <TableMenu /> */}

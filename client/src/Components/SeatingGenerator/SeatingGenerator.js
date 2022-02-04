@@ -13,8 +13,8 @@ import "./style.css";
 
 const SeatingGenerator = () => {
   const toast = useToast();
-  const { studentMap, setTables } = useStudents();
-  const { tableMap, totalTables } = useTables();
+  const { studentMap } = useStudents();
+  const { tableMap, totalTables, setTables } = useTables();
   // const { setNotifications } = useContext(NotificationsContext);
   const [assignedSeats, setAssignedSeats] = useState([]);
   const [seatingChartScore, setSeatingChartScore] = useState(null);
