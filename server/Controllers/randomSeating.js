@@ -1,85 +1,133 @@
-let tables = [];
+// you can change the name of this function "assignSeats"
+// if you do:
+// make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
+// and the name in the import in router/algorithm.js
+const preferenceCount = 2;
+let seatingChartScore;
 module.exports.assignSeats = (req, res) => {
-  let studentMap = req.query.studentList;
-  let tableArray = req.query.tableList;
+  console.log("-------Setting up Students and Tables---------------");
+  let studentList = req.query.studentMap;
+  let tableArray = req.query.tableMap;
   try {
-    let parsedStudents = JSON.parse(studentMap), students = [];
-    Object.values(parsedStudents).forEach((studentObj) => students.push(studentObj));
+    let parsedStudents = JSON.parse(studentList), students = [];
+    Object.values(parsedStudents).forEach((studentObj) =>
+      students.push(studentObj)
+    );
     students.forEach((student) => {
-      student.frontPreference = student.front;
-      student.sitNextTo = ["", ""];
-      if(student.preferredPartners != []) student.sitNextTo = student.preferredPartners.map(other => other.first_name + " " + other.last_name);
-      student.doNotSitNextTo = ["", ""];
-      if(student.notPreferredPartners.length != []) student.doNotSitNextTo = student.notPreferredPartners.map(other => other.first_name + " " + other.last_name);
+      student.frontPreference = student.vPosition;
+      student.sidePreference = student.hPosition;
+
+      student.sitNextTo = [];
+      student.preferredPartners.forEach((otherIndex) => {
+        otherIndex--;
+        student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+      });
+
+      student.doNotSitNextTo = [];
+      student.notPreferredPartners.forEach((otherIndex) => {
+        otherIndex--;
+        student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+      }); 
+
       student.name = student.first_name + " " + student.last_name;
-      student.happy = "";
-      student.sad = "";
-      delete student.preferredPartners, student.notPreferredPartners, student.front;
+      student.happyWith = "";
+      student.sadWith = "";
     });
-    students.forEach((student) => {
-      delete student.first_name, student.last_name;
+    const newStudents = students.map((student) => {
+      const { first_name, last_name, vPosition, hPosition, preferredPartners, notPreferredPartners, ...leftOver } = student;
+      return leftOver
+    })
+    students = newStudents;
+    let parsedTables = JSON.parse(tableArray), tables = [];
+    for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
+    console.log("-------SETUP FINISHED---------------");
+    console.log("-------Optimizing Seating...---------------");
+    const seatingChart = createRandomSeatingChart(students, shuffle1DObjects(tables));
+    const randomSeating = addHappySad(seatingChart, students);
+    const randomSeatingChart = randomSeating[0];
+    students = randomSeating[1];
+    let randomSeatingChartDict = {};
+    randomSeatingChart.forEach(({id, ...table}) => {
+        randomSeatingChartDict[id] = table
     });
-    Object.values(tableArray).forEach((table) => tables.push(JSON.parse(table))); 
-    const seatingChartDict = Object.fromEntries(findRandomSeatingChart(students).map(([v, k]) => [v, k]));
-    console.log("Final (Randomized) Table Layout: " + bestSeatingChartDict);
-    res.status(200).json({ studentList: seatingChartDict, bestSeatingChartScore });
+    console.log("-------OPTIMIZATION FINISHED---------------");
+    console.log(randomSeatingChartDict);
+    const score = 0;
+    res.status(200).json({ studentList: randomSeatingChartDict, score });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Error" });
   }
 };
-function filterStudentsIntoTables(students) {
-    seatingChartScore = 0;
-    let studentsInTables = [];
-    let studentIndex = 0;
-    tables.forEach(table => {
-      let studentsInTable = Array.from({length: table.rows*table.columns}, (_, i) => i + studentIndex);
-      studentsInTable.forEach(index => {
-        let student = students[index];
-        let closeNames = studentsInTable.map(i => students[i].name);
-        student.happy = "";
-        student.sad = "";
-        for (let k = 0; k < closeNames.length; k++) {
-          let closeName = closeNames[k];
-          if (student.sitNextTo.includes(closeName)) {
-            student.happy = student.happy + closeName.split(" ")[0] + ", ";
-          } else if (student.doNotSitNextTo.includes(closeName)) {
-            student.sad = student.sad + closeName.split(" ")[0] + ", ";
+function createRandomSeatingChart(students, tables) {
+  seatingChartScore = 0;
+  let studentsInTables = [];
+  let studentIndex = 0;
+  let shuffledIds = shuffle1D([...Array(students.length).keys()]);
+  tables.forEach((table) => {
+    let seatingCapacity = table.rows * table.columns;
+    let studentsLeft = students.length - studentIndex;
+    let seatingCount = Math.min(studentsLeft, seatingCapacity);
+    let studentsInTable = Array.from(
+      { length: seatingCount},
+      (_, i) => shuffledIds[i + studentIndex]
+    );
+    for(let i = 0; i < seatingCapacity - seatingCount; i++) {
+        studentsInTable = studentsInTable.concat([null]);
+    }
+    studentIndex += seatingCount;
+    table.students = studentsInTable;
+    studentsInTables.push(table);
+  });
+  return studentsInTables;
+}
+function addHappySad(seatingChart, students) {
+  let randomSeatingChart = seatingChart.map((x) => x);
+  randomSeatingChart.forEach((table) => {
+    table.students.forEach((index) => {
+      if(index != null){
+        let closeNames = table.students.map((i) => i == null ? "" : students[i].name);
+        closeNames.forEach(closeName => {
+          let more = closeName.split(" ")[0] + ", ";
+          if (students[index].sitNextTo.includes(closeName)) {
+            students[index].happyWith += more;
+          } else if (students[index].doNotSitNextTo.includes(closeName)) {
+            students[index].sadWith += more;
           }
-        }
-      });
-      let tableAndStudents = [];
-      tableAndStudents.push(table.id);
-      tableAndStudents.push(studentsInTable);
-  
-      studentIndex += table.rows*table.columns;
-      studentsInTables.push(tableAndStudents);
-    });
-    return studentsInTables;
+        });
+
+        let happyWith_ = students[index].happyWith;
+        let sadWith_ = students[index].sadWith;
+        if (happyWith_.endsWith(", ")) students[index].happyWith = happyWith_.substring(0, happyWith_.length - 2);
+        if (sadWith_.endsWith(", ")) students[index].sadWith = sadWith_.substring(0, sadWith_.length - 2);
+        //or more succinctly: student.happyWith = happyWith_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
+      }
+    }); 
+  });
+  return [randomSeatingChart, students];
 }
-function findRandomSeatingChart(students) {
-  let seatingChart = filterStudentsIntoTables(shuffle1DStudents(students)).map((x) => x);
-//   bestSeatingChart.forEach(table => {
-//     let studentsInTable = table[1];
-//     studentsInTable.forEach(index => {
-//       let student = students[index];
-//       let happy_ = student.happy;
-//       let sad_ = student.sad;
-//       if (happy_.endsWith(", ")) student.happy = happy_.substring(0, happy_.length - 2);
-//       if (sad_.endsWith(", ")) student.sad = sad_.substring(0, sad_.length - 2);
-//       //or more succinctly: student.happy = happy_.replace(/(^[,\s]+)|([,\s]+$)/g, '');
-//     })
-//   });
-  return seatingChart;
-}
-function shuffle1DStudents(students) {
+function shuffle1DObjects(array) {
   let toShuffle = [];
-  students.forEach(student => toShuffle.push(Object.assign({}, student)));
-  var currentIndex = toShuffle.length, randomIndex;
+  array.forEach((val) => toShuffle.push(Object.assign({}, val)));
+  var currentIndex = toShuffle.length,
+    randomIndex;
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
-    [toShuffle[currentIndex], toShuffle[randomIndex]] = [toShuffle[randomIndex], toShuffle[currentIndex]];
+    [toShuffle[currentIndex], toShuffle[randomIndex]] = [
+      toShuffle[randomIndex],
+      toShuffle[currentIndex],
+    ];
   }
   return toShuffle;
+}
+function shuffle1D(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
 }
