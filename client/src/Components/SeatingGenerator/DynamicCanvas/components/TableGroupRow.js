@@ -1,8 +1,10 @@
 import { Group } from "react-konva";
+import { useStudents } from "../../../../lib/studentsData";
+import { useTables } from "../../../../lib/tableData";
 
 import Table from "./Table";
 
-const TableGroupRow = ({ coord, columns, rowIndex, tableSize }) => {
+const TableGroupRow = ({ coord, columns, rowIndex, tableSize, students }) => {
   const tableColumns = new Array(columns);
   return (
     <Group>
@@ -13,6 +15,7 @@ const TableGroupRow = ({ coord, columns, rowIndex, tableSize }) => {
           columnIndex={index}
           coord={coord}
           tableSize={tableSize}
+          studentId={students.length > 0 ? students[index] : null}
         />
       ))}
     </Group>

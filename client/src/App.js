@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Grid } from "@chakra-ui/react";
 
 import ClassBar from "./Components/ClassBar/ClassBar";
 import SeatingGenerator from "./Components/SeatingGenerator/SeatingGenerator";
@@ -9,22 +10,21 @@ import { StudentsProvider } from "./lib/studentsData";
 
 function App() {
   const [notifications, setNotifications] = useState({ type: "", message: "" });
-  const [studentMap, setStudentMap] = useState({});
 
   return (
-    <main className='seating-chart-main'>
+    <Grid templateColumns={"400px 1fr"} maxW={1200} mx={"auto"}>
       <TableProvider>
         <StudentsProvider>
           <NotificationsContext.Provider
             value={{ notifications, setNotifications }}
           >
-            <ClassBar setStudentMap={setStudentMap} />
+            <ClassBar />
             <SeatingGenerator />
             <Notifications />
           </NotificationsContext.Provider>
         </StudentsProvider>
       </TableProvider>
-    </main>
+    </Grid>
   );
 }
 

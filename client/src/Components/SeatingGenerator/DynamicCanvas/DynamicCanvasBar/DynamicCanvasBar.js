@@ -1,8 +1,24 @@
 import React, { useState, useContext } from "react";
+import {
+  Flex,
+  Box,
+  Text,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Stack,
+  Divider,
+  Button,
+  SimpleGrid,
+  Grid,
+  Switch,
+  useToast,
+} from "@chakra-ui/react";
 import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
-import { useToast } from "@chakra-ui/react";
-// import { NotificationsContext } from "../../../../ContextProviders";
+// import { useToast } from "@chakra-ui/react";
 
 // import material ui icons
 import { AddIcon } from "../../../../styles/icons";
@@ -17,7 +33,7 @@ const DynamicCanvasBar = () => {
 
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
-  const [size, setSize] = useState("50");
+  // const [size, setSize] = useState("50");
 
   const onAddTable = () => {
     const error = addTable(uuid(), {
@@ -50,56 +66,113 @@ const DynamicCanvasBar = () => {
   };
 
   return (
-    <section className='dynamic-bar'>
-      <div className='insert-table'>
-        <form>
-          <label htmlFor='table-rows'>
-            <input
-              type='number'
-              min='1'
-              max='10'
+    <Flex
+      as={"section"}
+      justify={"space-between"}
+      align={"center"}
+      w={"full"}
+      boxShadow={"sm"}
+      py={5}
+      px={8}
+      borderRadius={"5px"}
+      mb={"50px"}
+      border={"1px solid"}
+      borderColor={"gray.100"}
+    >
+      <Box>
+        <Text as={"h2"} fontWeight={"extrabold"} fontSize={"18px"} mb={5}>
+          Table Dimensions
+        </Text>
+        <Stack spacing={2}>
+          <Stack isInline spacing={5} align={"center"}>
+            <NumberInput
+              w={"100px"}
+              defaultValue={1}
+              max={5}
+              min={1}
               value={tableRows}
-              onChange={(e) => setTableRows(parseInt(e.target.value) || "")}
-            />{" "}
-            Rows
-          </label>
-          <label htmlFor='table-columns'>
-            <input
-              type='number'
-              min='1'
-              max='10'
-              value={tableColumns}
-              onChange={(e) => setTableColumns(parseInt(e.target.value) || "")}
-            />{" "}
-            Columns
-          </label>
-          <label htmlFor='size'>
-            Size{" "}
-            <input
-              type='number'
-              name='size'
-              id='size'
-              min='50'
-              max='100'
-              value={size}
-              onChange={(e) => {
-                setSize(e.target.value);
-                changeTableSize(e.target.value);
+              onChange={(value) => {
+                setTableRows(parseInt(value) || "");
               }}
-            />
-          </label>
-        </form>
-      </div>
-      <div className='dynamic-bar-divider'></div>
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text>Rows</Text>
+          </Stack>
+          <Stack isInline spacing={5} align={"center"}>
+            <NumberInput
+              w={"100px"}
+              defaultValue={1}
+              max={5}
+              min={1}
+              value={tableColumns}
+              onChange={(value) => setTableColumns(parseInt(value) || "")}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text>Columns</Text>
+          </Stack>
+        </Stack>
+      </Box>
+      <Divider
+        height={100}
+        borderColor={"blackAlpha.500"}
+        orientation={"vertical"}
+        mx={5}
+      />
+      <Stack spacing={5} align={"center"} justify={"center"}>
+        <Stack isInline spacing={5} align={"center"}>
+          <NumberInput
+            w={"100px"}
+            defaultValue={50}
+            max={100}
+            min={50}
+            value={tableSize}
+            onChange={(value) => changeTableSize(value)}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+          <Text>Table Size</Text>
+        </Stack>
+
+        <Button
+          leftIcon={<AddIcon fontSize={20} />}
+          variant={"solid"}
+          size={"md"}
+          onClick={onAddTable}
+          _hover={{ bg: "gray.600" }}
+        >
+          Add Table
+        </Button>
+      </Stack>
+      <Divider
+        height={100}
+        borderColor={"blackAlpha.500"}
+        orientation={"vertical"}
+        ml={5}
+      />
       <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
-      <button id='add-table' onClick={onAddTable}>
-        <AddIcon />
-      </button>
-    </section>
+      {/* <Stack spacing={10} isInline alignItems={"center"}>
+      </Stack> */}
+    </Flex>
   );
 };
 
 const TablePreview = ({ tableRows, tableColumns }) => {
+  const [showPreview, setShowPreview] = useState(false);
+
   let tableArr;
   if (!tableRows || !tableColumns) {
     tableArr = [];
@@ -108,24 +181,33 @@ const TablePreview = ({ tableRows, tableColumns }) => {
   }
 
   return (
-    <div className='table-preview'>
-      <h2>Table Preview</h2>
-      <div
-        className='table-display'
-        style={{
-          display: "grid",
-          gridTemplateRows: "1fr ".repeat(tableRows),
-          gridTemplateColumns: "1fr ".repeat(tableColumns),
-        }}
-      >
-        {[...tableArr].map((cell, index) => {
-          return <span key={index}></span>;
-        })}
-      </div>
-      <p style={{ display: tableArr.length ? "block" : "none" }}>
-        {tableRows} x {tableColumns}
-      </p>
-    </div>
+    <Stack spacing={5} align={"center"} w={"200px"} py={5}>
+      <Stack isInline spacing={2} align={"center"}>
+        <Switch
+          defaultIsChecked={showPreview}
+          onChange={() => setShowPreview(!showPreview)}
+          size={"lg"}
+        />
+        <Text>Table Preview</Text>
+      </Stack>
+      <Stack d={showPreview ? "flex" : "none"} spacing={1} align={"center"}>
+        <SimpleGrid columns={tableColumns}>
+          {[...tableArr].map((cell, index) => {
+            return (
+              <Box
+                border={"1px solid black"}
+                w={"40px"}
+                h={"40px"}
+                key={index}
+              ></Box>
+            );
+          })}
+        </SimpleGrid>
+        <Text d={tableArr.length ? "block" : "none"}>
+          {tableRows} x {tableColumns}
+        </Text>
+      </Stack>
+    </Stack>
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Box } from "@chakra-ui/react";
 
 // import icons from material-ui
 // import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -11,13 +12,22 @@ import StudentFileForm from "./Components/StudentFileForm/StudentFileForm";
 
 import "./style.css";
 
-const ClassBar = ({ setStudentMap }) => {
+const ClassBar = () => {
   return (
-    <section className='class-bar'>
+    <Box
+      w={"full"}
+      overflowY={"scroll"}
+      sx={{
+        "&::-webkit-scrollbar": {
+          width: "0",
+        },
+        "&::-webkit-scrollbar-thumb": {},
+      }}
+    >
       <StudentForm />
-      <StudentFileForm setStudentMap={setStudentMap} />
+      <StudentFileForm />
       <StudentList />
-    </section>
+    </Box>
   );
 };
 

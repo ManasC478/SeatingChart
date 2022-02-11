@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { CSVReader } from "react-papaparse";
 import { useStudents } from "../../../../lib/studentsData";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Box, Text, IconButton } from "@chakra-ui/react";
 
 // import { NotificationsContext } from "../../../../ContextProviders";
 
@@ -11,7 +11,7 @@ import { InfoIcon } from "../../../../styles/icons";
 // import css file
 import "./style.css";
 
-const StudentFileForm = ({ setStudentMap }) => {
+const StudentFileForm = () => {
   const toast = useToast();
   const { addStudentWithCSV } = useStudents();
   // const { setNotifications } = useContext(NotificationsContext);

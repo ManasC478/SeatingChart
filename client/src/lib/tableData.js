@@ -40,7 +40,6 @@ function useTableProvider() {
 
     setTableMap({ ...tableMap, [id]: tableInfo });
     totalTables.current += tableInfo.rows * tableInfo.columns;
-    console.log(totalTables);
   };
 
   const changeTableSize = (size) => {

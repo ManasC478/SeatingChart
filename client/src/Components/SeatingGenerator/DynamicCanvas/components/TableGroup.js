@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Rect, Group } from "react-konva";
-import { studentMap } from "../../../../lib/studentsData";
+import { useStudents } from "../../../../lib/studentsData";
+import { useTables } from "../../../../lib/tableData";
+import { randomFunc } from "../../../../utils";
 
 import TableGroupRow from "./TableGroupRow";
 import TableMenu from "./TableMenu";
@@ -13,29 +15,32 @@ const TableGroup = ({
   onPositionChange,
 }) => {
   const [coord, setCoord] = useState({ x: 20, y: 50 });
-  const [showTableMenu, setShowTableMenu] = useState(false);
-  const shapeRef = useRef();
+  // const [showTableMenu, setShowTableMenu] = useState(false);
+  // const shapeRef = useRef();
   const tableRows = new Array(tableInfo.rows);
-  let studentsArr = getStudents();
 
   const changeTableCoord = (e) => {
     setCoord({ x: e.target.x(), y: e.target.y() });
   };
 
-  const getStudent = (i) => {
-    
-  }
-
-  useEffect(() => {
-    console.log("isselected", isSelected);
-    if (isSelected) {
-      shapeRef.current.attrs.stroke = "blue";
-    } else {
-      console.log("not selected");
-      console.log(shapeRef);
-      shapeRef.current.attrs.stroke = "none";
+  const getStudents = (i) => {
+    if (tableInfo.students.length <= 0) {
+      return [];
     }
-  }, [isSelected]);
+    const row = i * tableInfo.columns;
+    return tableInfo.students.slice(row, row + tableInfo.columns);
+  };
+
+  // useEffect(() => {
+  //   // console.log("isselected", isSelected);
+  //   if (isSelected) {
+  //     shapeRef.current.attrs.stroke = "blue";
+  //   } else {
+  //     // console.log("not selected");
+  //     // console.log(shapeRef);
+  //     shapeRef.current.attrs.stroke = "none";
+  //   }
+  // }, [isSelected]);
 
   return (
     <Group>
@@ -46,23 +51,22 @@ const TableGroup = ({
           rowIndex={index}
           columns={tableInfo.columns}
           tableSize={tableSize}
-          students={getStudent(index+1)}
+          students={getStudents(index)}
         />
       ))}
       {/* <TableMenu /> */}
       <Rect
-        ref={shapeRef}
+        // ref={shapeRef}
         x={coord.x}
         y={coord.y}
         width={tableInfo.columns * tableSize}
         height={tableInfo.rows * tableSize}
         fill='transparent'
-        stroke='none'
         draggable
         onDragMove={changeTableCoord}
         onDragEnd={() => onPositionChange(coord)}
-        onClick={onSelect}
-        onTap={onSelect}
+        // onClick={onSelect}
+        // onTap={onSelect}
       />
     </Group>
   );

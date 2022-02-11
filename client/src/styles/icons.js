@@ -6,6 +6,8 @@ import {
   MdOutlineClear,
   MdOutlineInfo,
   MdOutlineMoreVert,
+  MdOutlineModeEditOutline,
+  MdOutlineDeleteForever,
 } from "react-icons/md";
 import { Icon } from "@chakra-ui/icons";
 
@@ -21,4 +23,10 @@ export const ClearIcon = (props) => <Icon {...props} as={MdOutlineClear} />;
 export const InfoIcon = (props) => <Icon {...props} as={MdOutlineInfo} />;
 export const MoreVertIcon = (props) => (
   <Icon {...props} as={MdOutlineMoreVert} />
+);
+export const EditIcon = (props) => (
+  <Icon {...props} as={MdOutlineModeEditOutline} />
+);
+export const DeleteIcon = (props) => (
+  <Icon {...props} as={MdOutlineDeleteForever} />
 );

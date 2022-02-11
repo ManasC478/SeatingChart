@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Stack, Box, Heading, Center } from "@chakra-ui/react";
 import { assignSeats } from "../../api/algorithm";
 // import { NotificationsContext } from "../../ContextProviders";
 import { useStudents } from "../../lib/studentsData";
@@ -59,54 +60,30 @@ const SeatingGenerator = () => {
     <main className='seating-generator'>
       <div className='generator'>
         <DynamicCanvasBar />
-        <h1>Front</h1>
-        <DynamicCanvas />
+        <Stack spacing={3}>
+          <Center
+            w={"full"}
+            py={5}
+            boxShadow={"md"}
+            border={"1px solid"}
+            borderColor={"gray.100"}
+            borderRadius={"5px"}
+          >
+            <Heading>Front</Heading>
+          </Center>
+          <Box
+            id='canvas-container'
+            boxShadow={"md"}
+            w={"full"}
+            border={"1px solid"}
+            borderColor={"gray.100"}
+            borderRadius={"5px"}
+          >
+            <DynamicCanvas />
+          </Box>
+        </Stack>
       </div>
       <button onClick={handleAssignSeats}>Click to Assign Seats</button>
-      <h3>{seatingChartScore}</h3>
-      <div className='student-grid'>
-        {assignedSeats.map((student, index) => {
-          const {
-            name,
-            sitNextTo,
-            doNotSitNextTo,
-            happy,
-            sad,
-            frontPreference,
-            backPreference,
-          } = student;
-          const [sitNextToStudent1, sitNextToStudent2] = sitNextTo;
-          const [dontSitNextToStudent1, dontSitNextToStudent2] = doNotSitNextTo;
-          return (
-            <div key={index} className='student'>
-              <p>
-                <strong>Name:</strong> {name}
-              </p>{" "}
-              <br></br>
-              <p>
-                <strong>sitNextTo:</strong> {sitNextToStudent1},{" "}
-                {sitNextToStudent2}
-              </p>
-              <p>
-                <strong>doNotSitNextTo:</strong> {dontSitNextToStudent1},{" "}
-                {dontSitNextToStudent2}
-              </p>
-              <p>
-                <strong>Happy With:</strong> {happy}
-              </p>
-              <p>
-                <strong>Sad With:</strong> {sad}
-              </p>
-              <p>
-                <strong>Front Pref:</strong> {frontPreference}
-              </p>
-              <p>
-                <strong>Back Pref:</strong> {backPreference}
-              </p>
-            </div>
-          );
-        })}
-      </div>
     </main>
   );
 };

@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useStudents } from "../../../../../lib/studentsData";
-import { useToast } from "@chakra-ui/react";
+import {
+  Text,
+  IconButton,
+  Flex,
+  Stack,
+  useToast,
+  Box,
+  Button,
+} from "@chakra-ui/react";
 
 // import icons
 import {
@@ -15,10 +23,11 @@ import {
 // import { NotificationsContext } from "../../../../../ContextProviders";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
-const PartnerForm = () => {
-  const { student, studentMap } = useStudents();
+const PartnerForm = ({ student, setStudent }) => {
+  const { studentMap } = useStudents();
+  // const { student, studentMap } = useStudents();
   //  set state variables
   const [preferredPartnerList, setPreferredPartnerList] = useState({});
   const [notPreferredPartnerList, setNotPreferredPartnerList] = useState({});
@@ -44,24 +53,31 @@ const PartnerForm = () => {
   }, [studentMap]);
 
   return (
-    <div className='form-partners'>
+    <Stack>
       {/* preferred partner ui - add, see list, delete */}
-      <div className='preferred'>
+      <Stack spacing={1}>
         <PartnerSearch
+          student={student}
+          setStudent={setStudent}
           isPreferredStudents={true}
           studentPartnerResults={studentPartnerResults}
           setStudentPartnerResults={setStudentPartnerResults}
           partnerList={preferredPartnerList}
           setPartnerList={setPreferredPartnerList}
         />
-        <ul className='partner-preferred-list'>
+        <Box>
           {Object.keys(preferredPartnerList).map((id, index) => {
             const { name } = studentPartnerResults[id];
             return (
-              <li key={index} className='partner-item'>
-                <p>{name}</p>
-                <button
-                  type='button'
+              <Flex key={index} justify={"space-between"} align={"center"}>
+                <Text>
+                  {id} - {name}
+                </Text>
+                <IconButton
+                  variant={"ghost"}
+                  borderRadius={"full"}
+                  color={"red.400"}
+                  icon={<ClearIcon fontSize={"lg"} />}
                   onClick={() => {
                     delete preferredPartnerList[id];
                     setStudentPartnerResults({
@@ -70,32 +86,37 @@ const PartnerForm = () => {
                     });
                     delete student.preferredPartners[id];
                   }}
-                >
-                  <ClearIcon fontSize={"inherit"} />
-                </button>
-              </li>
+                />
+              </Flex>
             );
           })}
-        </ul>
-      </div>
+        </Box>
+      </Stack>
       {/* not preferred partner ui - add, see list , delete */}
-      <div className='not-preferred'>
+      <Stack spacing={1}>
         <PartnerSearch
+          student={student}
+          setStudent={setStudent}
           isPreferredStudents={false}
           studentPartnerResults={studentPartnerResults}
           setStudentPartnerResults={setStudentPartnerResults}
           partnerList={notPreferredPartnerList}
           setPartnerList={setNotPreferredPartnerList}
         />
-        <ul className='partner-not-preferred-list'>
+        <Box>
           {Object.keys(notPreferredPartnerList).map((id, index) => {
             const { name } = studentPartnerResults[id];
 
             return (
-              <li key={index} className='partner-item'>
-                <p>{name}</p>
-                <button
-                  type='button'
+              <Flex key={index} justify={"space-between"} align={"center"}>
+                <Text>
+                  {id} - {name}
+                </Text>
+                <IconButton
+                  variant={"ghost"}
+                  borderRadius={"full"}
+                  color={"red.400"}
+                  icon={<ClearIcon fontSize={"lg"} />}
                   onClick={() => {
                     delete notPreferredPartnerList[id];
                     setStudentPartnerResults({
@@ -104,19 +125,19 @@ const PartnerForm = () => {
                     });
                     delete student.notPreferredPartners[id];
                   }}
-                >
-                  <ClearIcon fontSize={"inherit"} />
-                </button>
-              </li>
+                />
+              </Flex>
             );
           })}
-        </ul>
-      </div>
-    </div>
+        </Box>
+      </Stack>
+    </Stack>
   );
 };
 
 const PartnerSearch = ({
+  student,
+  setStudent,
   studentPartnerResults,
   setStudentPartnerResults,
   isPreferredStudents,
@@ -124,30 +145,42 @@ const PartnerSearch = ({
   setPartnerList,
 }) => {
   const toast = useToast();
-  const { student, updatePreferredPartners, updateNotPreferredPartners } =
-    useStudents();
+  // const { student, updatePreferredPartners, updateNotPreferredPartners } = useStudents();
+  const { updatePreferredPartners, updateNotPreferredPartners } = useStudents();
   // const { setNotifications } = useContext(NotificationsContext);
   const [displayResult, setDisplayResults] = useState(false);
   const maxPartners = 2;
 
   return (
-    <div className='partner-search'>
-      <div className='partner-input'>
-        <h3>{isPreferredStudents ? "Preferred" : "Not Preferred"} Students</h3>
-        <button type='button' onClick={() => setDisplayResults(!displayResult)}>
-          {displayResult ? (
-            <DownArrowIcon fontSize={"inherit"} />
-          ) : (
-            <RightArrowIcon fontSize={"inherit"} />
-          )}
-        </button>
-      </div>
-      <div
-        className='partner-search-results'
-        style={displayResult ? { display: "block" } : { display: "none" }}
+    <Stack spacing={2}>
+      <Flex justify={"space-between"} align={"center"}>
+        <Text as={"h3"}>
+          {isPreferredStudents ? "Preferred" : "Not Preferred"} Students
+        </Text>
+        <IconButton
+          variant={"ghost"}
+          borderRadius={"full"}
+          onClick={() => setDisplayResults(!displayResult)}
+          icon={
+            displayResult ? (
+              <DownArrowIcon fontSize={"xl"} />
+            ) : (
+              <RightArrowIcon fontSize={"xl"} />
+            )
+          }
+        />
+      </Flex>
+      <Box
+        boxShadow={"inner"}
+        border={"1px solid"}
+        borderColor={"gray.100"}
+        p={1}
+        borderRadius={"5px"}
+        // spacing={1}
+        d={displayResult ? "block" : "none"}
       >
         {Object.keys(studentPartnerResults).length === 0 ? (
-          <p>No Student Added</p>
+          <Text>No Student Added</Text>
         ) : (
           Object.keys(studentPartnerResults).map((id, index) => {
             // const resultStudent = studentList[id];
@@ -166,16 +199,24 @@ const PartnerSearch = ({
             //       notPreferredPartners: [...student.notPreferredPartners, id],
             //     };
             return (
-              <div
+              <Flex
+                justify={"space-between"}
+                align={"center"}
+                py={1}
+                px={3}
                 key={index}
-                className='partner-search-item'
                 style={checked ? { opacity: 0.6 } : { opacity: 1 }}
+                borderRadius={"5px"}
+                _hover={{ bg: "gray.100" }}
               >
-                <p>
+                <Text>
                   {id} - {name}
-                </p>
-                <button
-                  type='button'
+                </Text>
+                <IconButton
+                  variant={"ghost"}
+                  _hover={{ bg: "gray.300" }}
+                  borderRadius={"full"}
+                  fontSize={"lg"}
                   disabled={!checked ? false : true}
                   onClick={() => {
                     if (Object.keys(partnerList).length >= maxPartners) {
@@ -200,21 +241,31 @@ const PartnerSearch = ({
                         [id]: { name: name, checked: true },
                       });
                       if (isPreferredStudents) {
-                        updatePreferredPartners(id);
+                        // updatePreferredPartners(id);
+                        setStudent({
+                          ...student,
+                          preferredPartners: [...student.preferredPartners, id],
+                        });
                       } else {
-                        updateNotPreferredPartners(id);
+                        // updateNotPreferredPartners(id);
+                        setStudent({
+                          ...student,
+                          notPreferredPartners: [
+                            ...student.notPreferredPartners,
+                            id,
+                          ],
+                        });
                       }
                     }
                   }}
-                >
-                  {checked ? <CheckIcon /> : <AddIcon />}
-                </button>
-              </div>
+                  icon={checked ? <CheckIcon /> : <AddIcon />}
+                />
+              </Flex>
             );
           })
         )}
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 };
 

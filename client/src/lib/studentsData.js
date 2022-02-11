@@ -17,81 +17,105 @@ export const useStudents = () => {
 
 function useStudentProvider() {
   const [studentMap, setStudentMap] = useState({});
-  const [student, setStudent] = useState({
-    first_name: "",
-    last_name: "",
-    vPosition: null,
-    hPosition: null,
-    preferredPartners: [],
-    notPreferredPartners: [],
-  });
+  // const [student, setStudent] = useState({
+  //   first_name: "",
+  //   last_name: "",
+  //   vPosition: null,
+  //   hPosition: null,
+  //   preferredPartners: [],
+  //   notPreferredPartners: [],
+  // });
 
-  const addStudent = (id) => {
+  const addStudent = (id, student) => {
     setStudentMap({ ...studentMap, [id]: student });
-    setStudent({
-      first_name: "",
-      last_name: "",
-      vPosition: null,
-      hPosition: null,
-      preferredPartners: [],
-      notPreferredPartners: [],
-    });
+    // setStudent({
+    //   first_name: "",
+    //   last_name: "",
+    //   vPosition: null,
+    //   hPosition: null,
+    //   preferredPartners: [],
+    //   notPreferredPartners: [],
+    // });
   };
 
   const addStudentWithCSV = (map) => {
     setStudentMap(map);
   };
 
-  const updateFirstName = (name) => {
-    setStudent({ ...student, first_name: name });
+  // const updateFirstName = (name) => {
+  //   setStudent({ ...student, first_name: name });
+  // };
+
+  // const updateLastName = (name) => {
+  //   setStudent({ ...student, last_name: name });
+  // };
+
+  // const updateVPosition = (position) => {
+  //   setStudent({ ...student, vPosition: position });
+  // };
+
+  // const clearVPosition = () => {
+  //   setStudent({ ...student, vPosition: null });
+  // };
+
+  // const updateHPosition = (position) => {
+  //   setStudent({ ...student, hPosition: position });
+  // };
+
+  // const clearHPosition = () => {
+  //   setStudent({ ...student, hPosition: null });
+  // };
+
+  // const updatePreferredPartners = (id) => {
+  //   setStudent({
+  //     ...student,
+  //     preferredPartners: [...student.preferredPartners, id],
+  //   });
+  // };
+
+  // const updateNotPreferredPartners = (id) => {
+  //   setStudent({
+  //     ...student,
+  //     notPreferredPartners: [...student.notPreferredPartners, id],
+  //   });
+  // };
+
+  const updateStudent = (id, data) => {
+    setStudentMap({ ...studentMap, [id]: data });
   };
 
-  const updateLastName = (name) => {
-    setStudent({ ...student, last_name: name });
-  };
+  // handle delete where all the student's id in other students preferences become
+  // const deleteStudent = (id, data) => {
+  //   setStudentMap({ ...studentMap, [id]: data });
+  // };
 
-  const updateVPosition = (position) => {
-    setStudent({ ...student, vPosition: position });
-  };
-
-  const clearVPosition = () => {
-    setStudent({ ...student, vPosition: null });
-  };
-
-  const updateHPosition = (position) => {
-    setStudent({ ...student, hPosition: position });
-  };
-
-  const clearHPosition = () => {
-    setStudent({ ...student, hPosition: null });
-  };
-
-  const updatePreferredPartners = (id) => {
-    setStudent({
-      ...student,
-      preferredPartners: [...student.preferredPartners, student],
-    });
-  };
-
-  const updateNotPreferredPartners = (id) => {
-    setStudent({
-      ...student,
-      notPreferredPartners: [...student.notPreferredPartners, id],
-    });
+  const getStudentName = (id) => {
+    return id
+      ? `${studentMap[id].first_name} ${studentMap[id].last_name.charAt(0)}`
+      : "";
   };
 
   return {
     studentMap,
-    student,
     addStudent,
     addStudentWithCSV,
-    updateFirstName,
-    updateLastName,
-    updateVPosition,
-    clearHPosition,
-    clearVPosition,
-    updateHPosition,
-    updatePreferredPartners,
-    updateNotPreferredPartners,
+    updateStudent,
+    getStudentName,
   };
+  // return {
+  //   studentMap,
+  //   student,
+  //   addStudent,
+  //   addStudentWithCSV,
+  //   updateFirstName,
+  //   updateLastName,
+  //   updateVPosition,
+  //   clearHPosition,
+  //   clearVPosition,
+  //   updateHPosition,
+  //   updatePreferredPartners,
+  //   updateNotPreferredPartners,
+  //   updateStudent,
+  //   getStudentName,
+  // };
 }

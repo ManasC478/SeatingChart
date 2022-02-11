@@ -2,14 +2,6 @@
   padding: 50px;
 }
 
-.generator {
-  width: 100%;
-}
-
-.konvajs-content {
-  border: 1px solid gray;
-}
-
 .dynamic-bar {
   display: flex;
   align-items: center;

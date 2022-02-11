@@ -1,55 +1,108 @@
 import React from "react";
+import { Radio, RadioGroup, Stack, Text, Button } from "@chakra-ui/react";
 import { useStudents } from "../../../../../lib/studentsData";
 
 // import css file
 import "./style.css";
 
-const LocationForm = () => {
-  const { student, updateVPosition, clearVPosition } = useStudents();
+const LocationForm = ({ student, setStudent }) => {
+  // const { student, updateVPosition, clearVPosition } = useStudents();
   return (
-    <div className='form-seat-location'>
-      <h3>Location Preference</h3>
-      <div className='seat-location-option'>
-        <input
-          type='radio'
-          name='front'
-          id='front'
-          value='front'
-          checked={student.vPosition === "front"}
-          onChange={(e) => updateVPosition("front")}
-        />
-        <label htmlFor='front'>Front of class</label>
-      </div>
-      <div className='seat-location-option'>
-        <input
-          type='radio'
-          name='middle'
-          id='middle'
-          value='middle'
-          checked={student.vPosition === "middle"}
-          onChange={(e) => updateVPosition("middle")}
-        />
-        <label htmlFor='middle'>Middle of class</label>
-      </div>
-      <div className='seat-location-option'>
-        <input
-          type='radio'
-          name='back'
-          id='back'
-          value='back'
-          checked={student.vPosition === "back"}
-          onChange={(e) => updateVPosition("back")}
-        />
-        <label htmlFor='back'>Back of class</label>
-      </div>
-      <button
-        id='clear-location'
-        type='button'
-        onClick={() => clearVPosition()}
-      >
-        Clear
-      </button>
-    </div>
+    <Stack>
+      <Text as={"h3"}>Location Preference</Text>
+      <Stack spacing={2}>
+        <Stack>
+          <RadioGroup>
+            {console.log(null === "hi")}
+            <Stack spacing={2}>
+              <Radio
+                name='front'
+                id='front'
+                value='front'
+                isChecked={student.vPosition === "front"}
+                onChange={() => setStudent({ ...student, vPosition: "front" })}
+              >
+                Front
+              </Radio>
+              <Radio
+                name='middle'
+                id='middle'
+                value='middle'
+                isChecked={student.vPosition === "middle"}
+                onChange={() => setStudent({ ...student, vPosition: "middle" })}
+              >
+                Middle
+              </Radio>
+              <Radio
+                name='back'
+                id='back'
+                value='back'
+                isChecked={student.vPosition === "back"}
+                onChange={() => setStudent({ ...student, vPosition: "back" })}
+              >
+                Back
+              </Radio>
+            </Stack>
+          </RadioGroup>
+          <Button
+            type='button'
+            w={"50%"}
+            bg={"black"}
+            color={"white"}
+            _hover={{ bg: "gray.600" }}
+            fontSize={"sm"}
+            onClick={() => setStudent({ ...student, vPosition: null })}
+          >
+            Clear
+          </Button>
+        </Stack>
+
+        <Stack spacing={2}>
+          <RadioGroup>
+            <Stack spacing={2}>
+              <Radio
+                name='left'
+                id='left'
+                value='left'
+                isChecked={student.hPosition === "left"}
+                onChange={() => setStudent({ ...student, hPosition: "left" })}
+              >
+                Left
+              </Radio>
+              <Radio
+                name='middle'
+                id='middle'
+                value='middle'
+                isChecked={student.hPosition === "middle"}
+                onChange={() => setStudent({ ...student, hPosition: "middle" })}
+              >
+                Middle
+              </Radio>
+              <Radio
+                name='right'
+                id='right'
+                value='right'
+                isChecked={student.hPosition === "right"}
+                onChange={() => setStudent({ ...student, hPosition: "right" })}
+              >
+                Right
+              </Radio>
+            </Stack>
+          </RadioGroup>
+          <Button
+            type='button'
+            w={"50%"}
+            bg={"black"}
+            color={"white"}
+            _hover={{ bg: "gray.600" }}
+            fontSize={"sm"}
+            onClick={() => setStudent({ ...student, hPosition: null })}
+          >
+            Clear
+          </Button>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 };
 
