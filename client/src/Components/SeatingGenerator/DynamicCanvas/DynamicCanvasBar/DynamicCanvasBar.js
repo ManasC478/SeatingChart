@@ -3,6 +3,7 @@ import {
   Flex,
   Box,
   Text,
+  Heading,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -18,13 +19,16 @@ import {
 } from "@chakra-ui/react";
 import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
-// import { useToast } from "@chakra-ui/react";
 
 // import material ui icons
 import { AddIcon } from "../../../../styles/icons";
 
+// import components
+import RandomizeButton from "./RandomizeButton";
+import OptimizeButton from "./OptimizeButton";
+
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const DynamicCanvasBar = () => {
   const toast = useToast();
@@ -79,74 +83,72 @@ const DynamicCanvasBar = () => {
       border={"1px solid"}
       borderColor={"gray.100"}
     >
-      <Box>
-        <Text as={"h2"} fontWeight={"extrabold"} fontSize={"18px"} mb={5}>
-          Table Dimensions
-        </Text>
-        <Stack spacing={2}>
-          <Stack isInline spacing={5} align={"center"}>
-            <NumberInput
-              w={"100px"}
-              defaultValue={1}
-              max={5}
-              min={1}
-              value={tableRows}
-              onChange={(value) => {
-                setTableRows(parseInt(value) || "");
-              }}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <Text>Rows</Text>
+      <Stack spacing={2}>
+        <Box>
+          <Heading textAlign={"center"} as={"h2"} fontWeight={"thin"} mb={2}>
+            Menu
+          </Heading>
+          <Stack isInline spacing={2}>
+            <Stack spacing={0}>
+              <Text>Rows</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={1}
+                max={5}
+                min={1}
+                value={tableRows}
+                onChange={(value) => {
+                  setTableRows(parseInt(value) || "");
+                }}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+            <Stack spacing={0}>
+              <Text>Columns</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={1}
+                max={5}
+                min={1}
+                value={tableColumns}
+                onChange={(value) => setTableColumns(parseInt(value) || "")}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+            <Stack spacing={0}>
+              <Text>Table Size</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={50}
+                max={100}
+                min={50}
+                value={tableSize}
+                onChange={(value) => changeTableSize(value)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
           </Stack>
-          <Stack isInline spacing={5} align={"center"}>
-            <NumberInput
-              w={"100px"}
-              defaultValue={1}
-              max={5}
-              min={1}
-              value={tableColumns}
-              onChange={(value) => setTableColumns(parseInt(value) || "")}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <Text>Columns</Text>
-          </Stack>
-        </Stack>
-      </Box>
-      <Divider
+        </Box>
+        {/* <Divider
         height={100}
         borderColor={"blackAlpha.500"}
         orientation={"vertical"}
-        mx={5}
-      />
-      <Stack spacing={5} align={"center"} justify={"center"}>
-        <Stack isInline spacing={5} align={"center"}>
-          <NumberInput
-            w={"100px"}
-            defaultValue={50}
-            max={100}
-            min={50}
-            value={tableSize}
-            onChange={(value) => changeTableSize(value)}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-          <Text>Table Size</Text>
-        </Stack>
-
+      /> */}
         <Button
           leftIcon={<AddIcon fontSize={20} />}
           variant={"solid"}
@@ -156,16 +158,17 @@ const DynamicCanvasBar = () => {
         >
           Add Table
         </Button>
+        <Stack isInline spacing={1} align={"center"} justify={"center"}>
+          <OptimizeButton />
+          <RandomizeButton />
+        </Stack>
       </Stack>
-      <Divider
+      {/* <Divider
         height={100}
         borderColor={"blackAlpha.500"}
         orientation={"vertical"}
-        ml={5}
-      />
+      /> */}
       <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
-      {/* <Stack spacing={10} isInline alignItems={"center"}>
-      </Stack> */}
     </Flex>
   );
 };

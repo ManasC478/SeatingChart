@@ -9,7 +9,7 @@ import PartnerForm from "./Components/PartnerForm";
 // import { NotificationsContext } from "../../../../ContextProviders";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const StudentForm = () => {
   const toast = useToast();
@@ -91,7 +91,6 @@ const StudentForm = () => {
           </Stack>
           <Stack
             spacing={5}
-            className='form-optional'
             style={openOptions ? { display: "block" } : { display: "none" }}
           >
             <LocationForm student={student} setStudent={setStudent} />
