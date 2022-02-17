@@ -1,10 +1,5 @@
-// you can change the name of this function "assignSeats"
-// if you do:
-// make sure to change router.get('/algorithm', assignSeats) in routes/algorithm.js to router.get('/algorithm', newName)
-// and the name in the import in router/algorithm.js
-const preferenceCount = 2;
 let seatingChartScore;
-module.exports.assignSeats = (req, res) => {
+module.exports.assignRandomSeats = (req, res) => {
   console.log("-------Setting up Students and Tables---------------");
   let studentList = req.query.studentMap;
   let tableArray = req.query.tableMap;
