@@ -1,19 +1,27 @@
 import React, { useState, useContext } from "react";
 import { useStudents } from "../../../../lib/studentsData";
+import { Heading, Box, Stack, Switch, useToast, Text } from "@chakra-ui/react";
 
 // import components
 import RequiredForm from "./Components/RequiredForm";
 import LocationForm from "./Components/LocationForm";
 import PartnerForm from "./Components/PartnerForm";
-import { NotificationsContext } from "../../../../ContextProviders";
+// import { NotificationsContext } from "../../../../ContextProviders";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const StudentForm = () => {
-  const { student, studentMap, addStudent } = useStudents();
-  const { setNotifications } = useContext(NotificationsContext);
-  // const [student, setStudent] = useState({ first_name: '', last_name: '', front: null, preferredPartners: [], notPreferredPartners: [] });
+  const toast = useToast();
+  const { studentMap, addStudent } = useStudents();
+  // const { setNotifications } = useContext(NotificationsContext);
+  const [student, setStudent] = useState({
+    first_name: "",
+    last_name: "",
+    front: null,
+    preferredPartners: [],
+    notPreferredPartners: [],
+  });
   const [openOptions, setOpenOptions] = useState(false);
 
   const handleSubmit = (e) => {
@@ -31,33 +39,66 @@ const StudentForm = () => {
       studentId = studentId + 1;
     }
 
-    addStudent(studentId);
-    setNotifications({ type: "okay", message: "Student added successfully" });
+    addStudent(studentId, student);
+    setStudent({
+      first_name: "",
+      last_name: "",
+      vPosition: null,
+      hPosition: null,
+      preferredPartners: [],
+      notPreferredPartners: [],
+    });
+    // setNotifications({ type: "okay", message: "Student added successfully" });
+    toast({
+      description: "Student added.",
+      status: "success",
+      position: "bottom-right",
+      duration: 4000,
+      isClosable: true,
+    });
+    console.log(studentMap);
   };
 
   return (
-    <section className='student-form'>
-      <h1>Add Students</h1>
+    <Box
+      boxShadow={"md"}
+      border={"1px solid"}
+      borderColor={"gray.100"}
+      borderRadius={"5px"}
+      mx={"50px"}
+      my={"50px"}
+      py={"10px"}
+      px={"20px"}
+    >
+      <Heading fontWeight={"thin"} mb={5}>
+        Add Students
+      </Heading>
       <form onSubmit={handleSubmit}>
-        <RequiredForm />
-        <span>
-          <button
-            id='options-btn'
-            type='button'
-            onClick={() => setOpenOptions(!openOptions)}
+        <Stack spacing={5}>
+          <Stack spacing={4}>
+            <RequiredForm student={student} setStudent={setStudent} />
+            {/* <Button type='button' variant= onClick={() => setOpenOptions(!openOptions)}>
+              {openOptions ? "Close" : "More"} Options
+            </Button> */}
+            <Stack isInline spacing={2} align={"center"}>
+              <Switch
+                size={"md"}
+                defaultIsChecked={openOptions}
+                onChange={() => setOpenOptions(!openOptions)}
+              />
+              <Text>More Options</Text>
+            </Stack>
+          </Stack>
+          <Stack
+            spacing={5}
+            style={openOptions ? { display: "block" } : { display: "none" }}
           >
-            {openOptions ? "Close" : "More"} Options
-          </button>
-        </span>
-        <div
-          className='form-optional'
-          style={openOptions ? { display: "block" } : { display: "none" }}
-        >
-          <LocationForm />
-          <PartnerForm />
-        </div>
+            <LocationForm student={student} setStudent={setStudent} />
+            <PartnerForm student={student} setStudent={setStudent} />
+          </Stack>
+        </Stack>
       </form>
-    </section>
+    </Box>
   );
 };
 

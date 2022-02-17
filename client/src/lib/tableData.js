@@ -35,12 +35,11 @@ function useTableProvider() {
 
   const addTable = (id, tableInfo) => {
     if (!validateTable(tableInfo)) {
-      return "Not a valid table";
+      return "Not a valid table.";
     }
 
     setTableMap({ ...tableMap, [id]: tableInfo });
     totalTables.current += tableInfo.rows * tableInfo.columns;
-    console.log(totalTables);
   };
 
   const changeTableSize = (size) => {
@@ -51,11 +50,16 @@ function useTableProvider() {
     }
   };
 
+  const setTables = (tables) => {
+    setTableMap(tables);
+  };
+
   return {
     tableMap,
     tableSize,
     totalTables: totalTables.current,
     changeTableSize,
     addTable,
+    setTables,
   };
 }

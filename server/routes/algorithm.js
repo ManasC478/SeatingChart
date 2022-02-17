@@ -5,7 +5,8 @@ const { assignTableSeats } = require("../Controllers/tableSeatingAlg.js");
 
 const router = express.Router();
 
-router.get("/algorithm", assignTableSeats);
-// router.get("/algorithm", assignRandomSeats);
+// rename the functions and import them here
+router.get("/randomize", assignSeats);
+router.get("/optimize", assignSeats);
 
 module.exports = router;

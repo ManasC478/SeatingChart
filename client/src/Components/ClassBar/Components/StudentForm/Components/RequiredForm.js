@@ -1,31 +1,57 @@
 import React from "react";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Button,
+  Stack,
+} from "@chakra-ui/react";
 import { useStudents } from "../../../../../lib/studentsData";
 
 // import css file
 import "./style.css";
 
-const RequiredForm = () => {
-  const { student, updateFirstName, updateLastName } = useStudents();
+const RequiredForm = ({ student, setStudent }) => {
+  // const { student, updateFirstName, updateLastName } = useStudents();
   return (
-    <div className='form-required'>
-      <input
-        type='text'
-        value={student.first_name}
-        onChange={(e) => updateFirstName(e.target.value)}
-        placeholder='First Name'
-        required
-      />
-      <input
-        type='text'
-        value={student.last_name}
-        onChange={(e) => updateLastName(e.target.value)}
-        placeholder='Last Name'
-        required
-      />
-      <button id='add-student' type='submit'>
+    <Stack spacing={4}>
+      <FormControl>
+        <Stack spacing={2}>
+          <Input
+            type='text'
+            variant={"filled"}
+            value={student.first_name}
+            onChange={(e) =>
+              setStudent({ ...student, first_name: e.target.value })
+            }
+            placeholder='First Name'
+            isRequired
+          />
+          <Input
+            type='text'
+            variant={"filled"}
+            value={student.last_name}
+            onChange={(e) =>
+              setStudent({ ...student, last_name: e.target.value })
+            }
+            placeholder='Last Name'
+            isRequired
+          />
+          {/* <FormErrorMessage>Email is required.</FormErrorMessage> */}
+        </Stack>
+      </FormControl>
+      <Button
+        type='submit'
+        bg={"black"}
+        color={"white"}
+        _hover={{ bg: "gray.600" }}
+      >
         Add Student
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 };
 

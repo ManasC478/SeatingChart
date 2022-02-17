@@ -1,21 +1,43 @@
 import React, { useState, useContext } from "react";
+import {
+  Flex,
+  Box,
+  Text,
+  Heading,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Stack,
+  Divider,
+  Button,
+  SimpleGrid,
+  Grid,
+  Switch,
+  useToast,
+} from "@chakra-ui/react";
 import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
-import { NotificationsContext } from "../../../../ContextProviders";
 
 // import material ui icons
-import AddIcon from "@mui/icons-material/Add";
+import { AddIcon } from "../../../../styles/icons";
+
+// import components
+import RandomizeButton from "./RandomizeButton";
+import OptimizeButton from "./OptimizeButton";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const DynamicCanvasBar = () => {
+  const toast = useToast();
   const { addTable, tableSize, changeTableSize } = useTables();
-  const { setNotifications } = useContext(NotificationsContext);
+  // const { setNotifications } = useContext(NotificationsContext);
 
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
-  const [size, setSize] = useState("50");
+  // const [size, setSize] = useState("50");
 
   const onAddTable = () => {
     const error = addTable(uuid(), {
@@ -27,63 +49,133 @@ const DynamicCanvasBar = () => {
     });
 
     if (error) {
-      setNotifications({ type: "danger", message: error });
+      // setNotifications({ type: "danger", message: error });
+      toast({
+        description: error,
+        status: "error",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
     } else {
-      setNotifications({ type: "okay", message: "Table added" });
+      // setNotifications({ type: "okay", message: "Table added" });
+      toast({
+        description: "Table added.",
+        status: "success",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   };
 
   return (
-    <section className='dynamic-bar'>
-      <div className='insert-table'>
-        <form>
-          <label htmlFor='table-rows'>
-            <input
-              type='number'
-              min='1'
-              max='10'
-              value={tableRows}
-              onChange={(e) => setTableRows(parseInt(e.target.value) || "")}
-            />{" "}
-            Rows
-          </label>
-          <label htmlFor='table-columns'>
-            <input
-              type='number'
-              min='1'
-              max='10'
-              value={tableColumns}
-              onChange={(e) => setTableColumns(parseInt(e.target.value) || "")}
-            />{" "}
-            Columns
-          </label>
-          <label htmlFor='size'>
-            Size{" "}
-            <input
-              type='number'
-              name='size'
-              id='size'
-              min='50'
-              max='100'
-              value={size}
-              onChange={(e) => {
-                setSize(e.target.value);
-                changeTableSize(e.target.value);
-              }}
-            />
-          </label>
-        </form>
-      </div>
-      <div className='dynamic-bar-divider'></div>
+    <Flex
+      as={"section"}
+      justify={"space-between"}
+      align={"center"}
+      w={"full"}
+      boxShadow={"sm"}
+      py={5}
+      px={8}
+      borderRadius={"5px"}
+      mb={"50px"}
+      border={"1px solid"}
+      borderColor={"gray.100"}
+    >
+      <Stack spacing={2}>
+        <Box>
+          <Heading textAlign={"center"} as={"h2"} fontWeight={"thin"} mb={2}>
+            Menu
+          </Heading>
+          <Stack isInline spacing={2}>
+            <Stack spacing={0}>
+              <Text>Rows</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={1}
+                max={5}
+                min={1}
+                value={tableRows}
+                onChange={(value) => {
+                  setTableRows(parseInt(value) || "");
+                }}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+            <Stack spacing={0}>
+              <Text>Columns</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={1}
+                max={5}
+                min={1}
+                value={tableColumns}
+                onChange={(value) => setTableColumns(parseInt(value) || "")}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+            <Stack spacing={0}>
+              <Text>Table Size</Text>
+              <NumberInput
+                w={"100px"}
+                defaultValue={50}
+                max={100}
+                min={50}
+                value={tableSize}
+                onChange={(value) => changeTableSize(value)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+          </Stack>
+        </Box>
+        {/* <Divider
+        height={100}
+        borderColor={"blackAlpha.500"}
+        orientation={"vertical"}
+      /> */}
+        <Button
+          leftIcon={<AddIcon fontSize={20} />}
+          variant={"solid"}
+          size={"md"}
+          onClick={onAddTable}
+          _hover={{ bg: "gray.600" }}
+        >
+          Add Table
+        </Button>
+        <Stack isInline spacing={1} align={"center"} justify={"center"}>
+          <OptimizeButton />
+          <RandomizeButton />
+        </Stack>
+      </Stack>
+      {/* <Divider
+        height={100}
+        borderColor={"blackAlpha.500"}
+        orientation={"vertical"}
+      /> */}
       <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
-      <button id='add-table' onClick={onAddTable}>
-        <AddIcon />
-      </button>
-    </section>
+    </Flex>
   );
 };
 
 const TablePreview = ({ tableRows, tableColumns }) => {
+  const [showPreview, setShowPreview] = useState(false);
+
   let tableArr;
   if (!tableRows || !tableColumns) {
     tableArr = [];
@@ -92,24 +184,33 @@ const TablePreview = ({ tableRows, tableColumns }) => {
   }
 
   return (
-    <div className='table-preview'>
-      <h2>Table Preview</h2>
-      <div
-        className='table-display'
-        style={{
-          display: "grid",
-          gridTemplateRows: "1fr ".repeat(tableRows),
-          gridTemplateColumns: "1fr ".repeat(tableColumns),
-        }}
-      >
-        {[...tableArr].map((cell, index) => {
-          return <span key={index}></span>;
-        })}
-      </div>
-      <p style={{ display: tableArr.length ? "block" : "none" }}>
-        {tableRows} x {tableColumns}
-      </p>
-    </div>
+    <Stack spacing={5} align={"center"} w={"200px"} py={5}>
+      <Stack isInline spacing={2} align={"center"}>
+        <Switch
+          defaultIsChecked={showPreview}
+          onChange={() => setShowPreview(!showPreview)}
+          size={"lg"}
+        />
+        <Text>Table Preview</Text>
+      </Stack>
+      <Stack d={showPreview ? "flex" : "none"} spacing={1} align={"center"}>
+        <SimpleGrid columns={tableColumns}>
+          {[...tableArr].map((cell, index) => {
+            return (
+              <Box
+                border={"1px solid black"}
+                w={"40px"}
+                h={"40px"}
+                key={index}
+              ></Box>
+            );
+          })}
+        </SimpleGrid>
+        <Text d={tableArr.length ? "block" : "none"}>
+          {tableRows} x {tableColumns}
+        </Text>
+      </Stack>
+    </Stack>
   );
 };
 
