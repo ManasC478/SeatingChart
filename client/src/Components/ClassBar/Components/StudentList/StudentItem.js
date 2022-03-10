@@ -30,6 +30,7 @@ import {
   Stack,
   Select,
   useToast,
+  Tooltip,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { useStudents } from "../../../../lib/studentsData";
@@ -41,11 +42,14 @@ import {
   DeleteIcon,
   ClearIcon,
   DownArrowIcon,
+  DismissIcon,
 } from "../../../../styles/icons";
 
 const StudentItem = ({ id }) => {
   const { studentMap } = useStudents();
   const student = studentMap[id];
+  // const [dismissed, setDismissed] = useState(student.dismissed);
+  // console.log(dismissed);
 
   return (
     <Box>
@@ -53,14 +57,34 @@ const StudentItem = ({ id }) => {
         <Text>
           {student.first_name} {student.last_name}
         </Text>
-        <Stack isInline spacing={1}>
+        <Stack isInline spacing={0}>
+          {/* <DismissButton setDismiss={() => setDismissed(!dismissed)} /> */}
           <EditButton student={student} id={id} />
-          <DeleteButton />
+          <DeleteButton id={id} />
         </Stack>
       </Flex>
+      {/* <Box
+        pos={"absolute"}
+        w={"full"}
+        h={"full"}
+        bg={dismissed && "rgba(0,0,0,0.5"}
+      ></Box> */}
     </Box>
   );
 };
+
+// const DismissButton = ({ setDismiss }) => {
+//   return (
+//     <Tooltip label='Dismiss student. This student will be dismissed from the seating chart.'>
+//       <IconButton
+//         onClick={setDismiss}
+//         variant={"ghost"}
+//         isRound
+//         icon={<DismissIcon fontSize={"xl"} />}
+//       />
+//     </Tooltip>
+//   );
+// };
 
 const EditButton = ({ student, id }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -70,7 +94,6 @@ const EditButton = ({ student, id }) => {
       onOpen={onOpen}
       onClose={onClose}
       placement='right'
-      closeOnBlur={false}
     >
       <PopoverTrigger>
         <IconButton
@@ -85,53 +108,6 @@ const EditButton = ({ student, id }) => {
         <EditForm student={student} id={id} onClose={onClose} />
       </PopoverContent>
     </Popover>
-  );
-};
-
-const DeleteButton = () => {
-  const toast = useToast();
-  const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
-
-  const handleDelete = () => {
-    toast({
-      description: "Deleted student.",
-      status: "success",
-      position: "bottom-right",
-      duration: 4000,
-      isClosable: true,
-    });
-
-    onClose();
-  };
-
-  return (
-    <Box>
-      <IconButton
-        variant={"ghost"}
-        borderRadius={"full"}
-        icon={<DeleteIcon fontSize={"xl"} />}
-        onClick={() => setIsOpen(true)}
-      />
-      <AlertDialog isOpen={isOpen} onClose={onClose}>
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Delete Student
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button colorScheme='red' onClick={handleDelete} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </Box>
   );
 };
 
@@ -185,7 +161,7 @@ const EditForm = ({ student, id, onClose }) => {
             onChange={(e) =>
               setEditData({ ...editData, vPosition: e.target.value })
             }
-            value={editData.vPosition}
+            value={editData.vPosition || ""}
             size='md'
           >
             <option value='front'>Front</option>
@@ -198,7 +174,7 @@ const EditForm = ({ student, id, onClose }) => {
             onChange={(e) =>
               setEditData({ ...editData, hPosition: e.target.value })
             }
-            value={editData.hPosition}
+            value={editData.hPosition || ""}
             size='md'
           >
             <option value='left'>Left</option>
@@ -223,6 +199,55 @@ const EditForm = ({ student, id, onClose }) => {
         </Button>
       </ButtonGroup>
     </Stack>
+  );
+};
+
+const DeleteButton = ({ id }) => {
+  const toast = useToast();
+  const { deleteStudent } = useStudents();
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+
+  const handleDelete = () => {
+    deleteStudent(id);
+    toast({
+      description: "Deleted student.",
+      status: "success",
+      position: "bottom-right",
+      duration: 4000,
+      isClosable: true,
+    });
+
+    onClose();
+  };
+
+  return (
+    <Box>
+      <IconButton
+        variant={"ghost"}
+        borderRadius={"full"}
+        icon={<DeleteIcon fontSize={"xl"} />}
+        onClick={() => setIsOpen(true)}
+      />
+      <AlertDialog isOpen={isOpen} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Delete Student
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button colorScheme='red' onClick={handleDelete} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </Box>
   );
 };
 

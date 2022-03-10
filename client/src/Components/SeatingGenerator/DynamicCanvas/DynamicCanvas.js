@@ -7,18 +7,8 @@ import { CanvasStudentsContext } from "../../../ContextProviders";
 import TableGroup from "./components/TableGroup";
 
 const DynamicCanvas = () => {
-  const { tableMap, tableSize } = useTables();
+  const { tableMap, tableSize, setTablePosition } = useTables();
   const { studentMap } = useStudents();
-  const [selectedId, selectShape] = useState(null);
-
-  // const checkDeselect = (e) => {
-  //   // deselect when clicked on empty area
-  //   const clickedOnEmpty = e.target === e.target.getStage();
-  //   console.log(clickedOnEmpty);
-  //   if (clickedOnEmpty) {
-  //     selectShape(null);
-  //   }
-  // };
 
   const checkPosition = (third, position) => {
     if (position < third) {
@@ -32,7 +22,6 @@ const DynamicCanvas = () => {
 
   const getCanvasWidth = () => {
     const canvasContainer = document.querySelector("#canvas-container");
-    console.log(parseInt(canvasContainer?.offsetWidth));
     return parseInt(canvasContainer?.offsetWidth);
   };
 
@@ -43,8 +32,6 @@ const DynamicCanvas = () => {
       style={{
         borderRadius: "5px",
       }}
-      // onMouseDown={checkDeselect}
-      // onTouchStart={checkDeselect}
     >
       <Layer>
         <CanvasStudentsContext.Provider value={studentMap}>
@@ -53,22 +40,22 @@ const DynamicCanvas = () => {
               key={id}
               tableSize={tableSize}
               tableInfo={tableMap[id]}
-              isSelected={id === selectedId}
-              // onSelect={() => {
-              //   console.log("selected");
-              //   selectShape(id);
-              // }}
-              onPositionChange={({ x, y }) => {
-                const tableInfo = tableMap[id];
-                const vThird = checkPosition(200, y + tableSize / 2);
-                const hThird = checkPosition(200, x + tableSize / 2);
+              onPositionChange={(info) => {
+                const vThird = checkPosition(
+                  200,
+                  info.position.y + tableSize / 2
+                );
+                const hThird = checkPosition(
+                  getCanvasWidth() / 3,
+                  info.position.x + tableSize / 2
+                );
 
-                tableInfo.vPosition =
+                info.vPosition =
                   vThird === 1 ? "front" : vThird === 2 ? "middle" : "back";
-                tableInfo.hPosition =
+                info.hPosition =
                   hThird === 1 ? "left" : hThird === 2 ? "middle" : "right";
 
-                // console.log(tableInfo);
+                setTablePosition(id, info);
               }}
             />
           ))}

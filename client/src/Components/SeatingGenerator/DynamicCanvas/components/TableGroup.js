@@ -7,16 +7,12 @@ import { randomFunc } from "../../../../utils";
 import TableGroupRow from "./TableGroupRow";
 import TableMenu from "./TableMenu";
 
-const TableGroup = ({
-  tableInfo,
-  tableSize,
-  isSelected,
-  onSelect,
-  onPositionChange,
-}) => {
-  const [coord, setCoord] = useState({ x: 20, y: 50 });
-  // const [showTableMenu, setShowTableMenu] = useState(false);
-  // const shapeRef = useRef();
+const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
+  const [coord, setCoord] = useState({
+    x: tableInfo.position.x,
+    y: tableInfo.position.y,
+  });
+
   const tableRows = new Array(tableInfo.rows);
 
   const changeTableCoord = (e) => {
@@ -30,17 +26,6 @@ const TableGroup = ({
     const row = i * tableInfo.columns;
     return tableInfo.students.slice(row, row + tableInfo.columns);
   };
-
-  // useEffect(() => {
-  //   // console.log("isselected", isSelected);
-  //   if (isSelected) {
-  //     shapeRef.current.attrs.stroke = "blue";
-  //   } else {
-  //     // console.log("not selected");
-  //     // console.log(shapeRef);
-  //     shapeRef.current.attrs.stroke = "none";
-  //   }
-  // }, [isSelected]);
 
   return (
     <Group>
@@ -56,7 +41,6 @@ const TableGroup = ({
       ))}
       {/* <TableMenu /> */}
       <Rect
-        // ref={shapeRef}
         x={coord.x}
         y={coord.y}
         width={tableInfo.columns * tableSize}
@@ -64,9 +48,27 @@ const TableGroup = ({
         fill='transparent'
         draggable
         onDragMove={changeTableCoord}
-        onDragEnd={() => onPositionChange(coord)}
-        // onClick={onSelect}
-        // onTap={onSelect}
+        onDragEnd={() => {
+          const width = parseInt(
+            document.querySelector("#canvas-container")?.offsetWidth
+          );
+          const height = 600;
+          const x =
+            coord.x + tableSize * tableInfo.columns > width
+              ? width - tableSize * tableInfo.columns
+              : coord.x < 0
+              ? 0
+              : coord.x;
+          const y =
+            coord.y + tableSize * tableInfo.rows > height
+              ? height - tableSize * tableInfo.rows
+              : coord.y < 0
+              ? 0
+              : coord.y;
+          console.log(x, y);
+          setCoord({ x, y });
+          onPositionChange({ ...tableInfo, position: { x, y } });
+        }}
       />
     </Group>
   );

@@ -12,7 +12,7 @@ import {
 import { useStudents } from "../../../../../lib/studentsData";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const RequiredForm = ({ student, setStudent }) => {
   // const { student, updateFirstName, updateLastName } = useStudents();

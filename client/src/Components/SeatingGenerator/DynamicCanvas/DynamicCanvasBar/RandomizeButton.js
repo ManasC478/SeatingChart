@@ -5,7 +5,7 @@ import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 import { randomizeSeats } from "../../../../api/algorithm";
 
-const RandomizeButton = () => {
+const RandomizeButton = ({ ...rest }) => {
   const { studentMap } = useStudents();
   const { tableMap, totalTables, setTables } = useTables();
   const toast = useToast();
@@ -30,7 +30,6 @@ const RandomizeButton = () => {
       console.log(
         `/components/SeatingGenerator/DynamicCanvas/DynamicCanvasBar/RandomizeButton: ${error.message}`
       );
-      console.log(error);
       if (error.status >= 500) {
         toast({
           title: "500 server error",
@@ -57,9 +56,12 @@ const RandomizeButton = () => {
       variant={"ghost"}
       size={"md"}
       onClick={handleRandomizeSeats}
-      bg={"purple.500"}
       isLoading={loading}
+      w={"full"}
+      bg={"black"}
+      color={"white"}
       _hover={{ bg: "gray.600" }}
+      {...rest}
     >
       Randomize
     </Button>

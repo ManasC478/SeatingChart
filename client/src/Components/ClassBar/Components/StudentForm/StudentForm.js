@@ -18,7 +18,9 @@ const StudentForm = () => {
   const [student, setStudent] = useState({
     first_name: "",
     last_name: "",
-    front: null,
+    vPosition: null,
+    hPosition: null,
+    dismissed: false,
     preferredPartners: [],
     notPreferredPartners: [],
   });
@@ -45,6 +47,7 @@ const StudentForm = () => {
       last_name: "",
       vPosition: null,
       hPosition: null,
+      dismissed: false,
       preferredPartners: [],
       notPreferredPartners: [],
     });
@@ -65,8 +68,6 @@ const StudentForm = () => {
       border={"1px solid"}
       borderColor={"gray.100"}
       borderRadius={"5px"}
-      mx={"50px"}
-      my={"50px"}
       py={"10px"}
       px={"20px"}
     >
@@ -77,9 +78,6 @@ const StudentForm = () => {
         <Stack spacing={5}>
           <Stack spacing={4}>
             <RequiredForm student={student} setStudent={setStudent} />
-            {/* <Button type='button' variant= onClick={() => setOpenOptions(!openOptions)}>
-              {openOptions ? "Close" : "More"} Options
-            </Button> */}
             <Stack isInline spacing={2} align={"center"}>
               <Switch
                 size={"md"}

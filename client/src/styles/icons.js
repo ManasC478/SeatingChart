@@ -8,10 +8,14 @@ import {
   MdOutlineMoreVert,
   MdOutlineModeEditOutline,
   MdOutlineDeleteForever,
+  MdOutlineNoAccounts,
+  MdOutlineFileUpload,
+  MdOutlineAdd,
+  MdOutlineStickyNote2,
 } from "react-icons/md";
 import { Icon } from "@chakra-ui/icons";
 
-export const AddIcon = (props) => <Icon {...props} as={MdAddCircleOutline} />;
+export const AddIcon = (props) => <Icon {...props} as={MdOutlineAdd} />;
 export const DownArrowIcon = (props) => (
   <Icon {...props} as={MdKeyboardArrowDown} />
 );
@@ -29,4 +33,13 @@ export const EditIcon = (props) => (
 );
 export const DeleteIcon = (props) => (
   <Icon {...props} as={MdOutlineDeleteForever} />
+);
+export const DismissIcon = (props) => (
+  <Icon {...props} as={MdOutlineNoAccounts} />
+);
+export const FileUploadIcon = (props) => (
+  <Icon {...props} as={MdOutlineFileUpload} />
+);
+export const OpenDirectionsIcon = (props) => (
+  <Icon {...props} as={MdOutlineStickyNote2} />
 );

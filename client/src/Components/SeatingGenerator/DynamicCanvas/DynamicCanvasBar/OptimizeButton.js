@@ -5,7 +5,7 @@ import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 import { optimizeSeats } from "../../../../api/algorithm";
 
-const RandomizeButton = () => {
+const RandomizeButton = ({ ...rest }) => {
   const { studentMap } = useStudents();
   const { tableMap, totalTables, setTables } = useTables();
   const toast = useToast();
@@ -57,9 +57,12 @@ const RandomizeButton = () => {
       variant={"ghost"}
       size={"md"}
       onClick={handleOptimizeSeats}
-      bg={"purple.500"}
       isLoading={loading}
+      w={"full"}
+      bg={"black"}
+      color={"white"}
       _hover={{ bg: "gray.600" }}
+      {...rest}
     >
       Optimize
     </Button>

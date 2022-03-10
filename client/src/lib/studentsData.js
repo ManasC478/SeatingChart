@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
+import _ from "lodash";
 
 const studentContext = createContext();
 
@@ -16,78 +17,50 @@ export const useStudents = () => {
 };
 
 function useStudentProvider() {
-  const [studentMap, setStudentMap] = useState({});
-  // const [student, setStudent] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   vPosition: null,
-  //   hPosition: null,
-  //   preferredPartners: [],
-  //   notPreferredPartners: [],
-  // });
+  const [studentMap, setStudentMap] = useState(getCachedStudents());
 
   const addStudent = (id, student) => {
-    setStudentMap({ ...studentMap, [id]: student });
-    // setStudent({
-    //   first_name: "",
-    //   last_name: "",
-    //   vPosition: null,
-    //   hPosition: null,
-    //   preferredPartners: [],
-    //   notPreferredPartners: [],
-    // });
+    setStudentMap(updateStudentCache({ ...studentMap, [id]: student }));
   };
 
   const addStudentWithCSV = (map) => {
-    setStudentMap(map);
+    setStudentMap(updateStudentCache(map));
   };
-
-  // const updateFirstName = (name) => {
-  //   setStudent({ ...student, first_name: name });
-  // };
-
-  // const updateLastName = (name) => {
-  //   setStudent({ ...student, last_name: name });
-  // };
-
-  // const updateVPosition = (position) => {
-  //   setStudent({ ...student, vPosition: position });
-  // };
-
-  // const clearVPosition = () => {
-  //   setStudent({ ...student, vPosition: null });
-  // };
-
-  // const updateHPosition = (position) => {
-  //   setStudent({ ...student, hPosition: position });
-  // };
-
-  // const clearHPosition = () => {
-  //   setStudent({ ...student, hPosition: null });
-  // };
-
-  // const updatePreferredPartners = (id) => {
-  //   setStudent({
-  //     ...student,
-  //     preferredPartners: [...student.preferredPartners, id],
-  //   });
-  // };
-
-  // const updateNotPreferredPartners = (id) => {
-  //   setStudent({
-  //     ...student,
-  //     notPreferredPartners: [...student.notPreferredPartners, id],
-  //   });
-  // };
 
   const updateStudent = (id, data) => {
-    setStudentMap({ ...studentMap, [id]: data });
+    setStudentMap(updateStudentCache({ ...studentMap, [id]: data }));
   };
 
-  // handle delete where all the student's id in other students preferences become
-  // const deleteStudent = (id, data) => {
-  //   setStudentMap({ ...studentMap, [id]: data });
-  // };
+  const deleteStudent = (id) => {
+    delete studentMap[id];
+    const updatedStudentMap = {};
+    Object.keys(studentMap).forEach((studentId) => {
+      const student = studentMap[studentId];
+      const filteredPreferred = _.remove(
+        student.preferredPartners,
+        (n) => n !== parseInt(id)
+      );
+
+      const filteredNotPreferred = _.remove(
+        student.notPreferredPartners,
+        (n) => {
+          return n !== parseInt(id);
+        }
+      );
+
+      updatedStudentMap[studentId] = {
+        ...student,
+        preferredPartners: filteredPreferred,
+        notPreferredPartners: filteredNotPreferred,
+      };
+    });
+
+    setStudentMap(updateStudentCache(updatedStudentMap));
+  };
+
+  const deleteAllStudents = () => {
+    setStudentMap(updateStudentCache({}));
+  };
 
   const getStudentName = (id) => {
     return id
@@ -101,21 +74,23 @@ function useStudentProvider() {
     addStudentWithCSV,
     updateStudent,
     getStudentName,
+    deleteStudent,
+    deleteAllStudents,
   };
-  // return {
-  //   studentMap,
-  //   student,
-  //   addStudent,
-  //   addStudentWithCSV,
-  //   updateFirstName,
-  //   updateLastName,
-  //   updateVPosition,
-  //   clearHPosition,
-  //   clearVPosition,
-  //   updateHPosition,
-  //   updatePreferredPartners,
-  //   updateNotPreferredPartners,
-  //   updateStudent,
-  //   getStudentName,
-  // };
 }
+
+const updateStudentCache = (students) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-students",
+    JSON.stringify(students)
+  );
+  return getCachedStudents();
+};
+
+const getCachedStudents = () => {
+  const res =
+    JSON.parse(
+      window.localStorage.getItem("seating-chart-generator-students")
+    ) || {};
+  return res;
+};

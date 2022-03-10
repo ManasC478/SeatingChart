@@ -20,9 +20,10 @@ export const useTables = () => {
 };
 
 function useTableProvider() {
-  const [tableMap, setTableMap] = useState({});
-  const [tableSize, setTableSize] = useState(50);
-  const totalTables = useRef(0);
+  const [tableMap, setTableMap] = useState(getCachedTables());
+  const [tableSize, setTableSize] = useState(getCachedTableSize());
+  const studentsAdded = useRef(getCachedStudentsAdded(false));
+  const totalTables = useRef(getCachedTotalTables(0));
 
   const validateTable = (tableInfo) => {
     const { rows, columns } = tableInfo;
@@ -38,20 +39,47 @@ function useTableProvider() {
       return "Not a valid table.";
     }
 
-    setTableMap({ ...tableMap, [id]: tableInfo });
-    totalTables.current += tableInfo.rows * tableInfo.columns;
+    setTableMap(updateTableCache({ ...tableMap, [id]: tableInfo }));
+    totalTables.current += updateTotalTablesCache(
+      tableInfo.rows * tableInfo.columns
+    );
   };
 
   const changeTableSize = (size) => {
     if (!size.length || parseInt(size) < 50) {
-      setTableSize(50);
+      setTableSize(updateTableSizeCache(50));
     } else {
-      setTableSize(parseInt(size));
+      setTableSize(updateTableSizeCache(parseInt(size)));
     }
   };
 
   const setTables = (tables) => {
-    setTableMap(tables);
+    setTableMap(updateTableCache(tables));
+    studentsAdded.current = updateStudentsAddedCache(true);
+  };
+
+  const clearTableStudents = () => {
+    if (!studentsAdded) {
+      return;
+    }
+
+    const clearedTableMap = {};
+
+    Object.keys(tableMap).forEach((tableId) => {
+      clearedTableMap[tableId] = { ...tableMap[tableId], students: [] };
+    });
+
+    setTableMap(updateTableCache(clearedTableMap));
+    studentsAdded.current = updateStudentsAddedCache(false);
+  };
+
+  const clearTables = () => {
+    setTableMap(updateTableCache({}));
+    studentsAdded.current = updateStudentsAddedCache(false);
+  };
+
+  const setTablePosition = (id, tableInfo) => {
+    setTableMap(updateTableCache({ ...tableMap, [id]: tableInfo }));
   };
 
   return {
@@ -61,5 +89,71 @@ function useTableProvider() {
     changeTableSize,
     addTable,
     setTables,
+    clearTableStudents,
+    clearTables,
+    setTablePosition,
   };
 }
+
+const updateTableCache = (tables) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-tables",
+    JSON.stringify(tables)
+  );
+  return getCachedTables();
+};
+
+const getCachedTables = () => {
+  const res =
+    JSON.parse(window.localStorage.getItem("seating-chart-generator-tables")) ||
+    {};
+  return res;
+};
+
+const updateTableSizeCache = (size) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-tables-size",
+    JSON.stringify(size)
+  );
+  return getCachedTableSize();
+};
+
+const getCachedTableSize = () => {
+  const res =
+    JSON.parse(
+      window.localStorage.getItem("seating-chart-generator-tables-size")
+    ) || 50;
+  return res;
+};
+
+const updateStudentsAddedCache = (added) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-students-added",
+    JSON.stringify(added)
+  );
+  return getCachedStudentsAdded();
+};
+
+const getCachedStudentsAdded = () => {
+  const res =
+    JSON.parse(
+      window.localStorage.getItem("seating-chart-generator-students-added")
+    ) || false;
+  return res;
+};
+
+const updateTotalTablesCache = (added) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-total-tables",
+    JSON.stringify(added)
+  );
+  return getCachedTotalTables();
+};
+
+const getCachedTotalTables = () => {
+  const res =
+    JSON.parse(
+      window.localStorage.getItem("seating-chart-generator-total-tables")
+    ) || false;
+  return res;
+};

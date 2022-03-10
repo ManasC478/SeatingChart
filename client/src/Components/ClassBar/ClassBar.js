@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 
 // import icons from material-ui
 // import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -14,7 +14,8 @@ import "./style.css";
 
 const ClassBar = () => {
   return (
-    <Box
+    <Stack
+      spacing={10}
       w={"full"}
       overflowY={"scroll"}
       sx={{
@@ -27,7 +28,7 @@ const ClassBar = () => {
       <StudentForm />
       <StudentFileForm />
       <StudentList />
-    </Box>
+    </Stack>
   );
 };
 

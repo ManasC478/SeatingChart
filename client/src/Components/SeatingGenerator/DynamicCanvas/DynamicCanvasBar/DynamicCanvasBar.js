@@ -16,64 +16,31 @@ import {
   Grid,
   Switch,
   useToast,
+  Center,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
-import uuid from "react-uuid";
 import { useTables } from "../../../../lib/tableData";
 
-// import material ui icons
 import { AddIcon } from "../../../../styles/icons";
 
 // import components
 import RandomizeButton from "./RandomizeButton";
 import OptimizeButton from "./OptimizeButton";
-
-// import css file
-// import "./style.css";
+import ClearButton from "./ClearButton";
+import ClearTablesButton from "./ClearTablesButton";
+import AddButton from "./AddButton";
+import TablePreview from "./TablePreview";
 
 const DynamicCanvasBar = () => {
-  const toast = useToast();
-  const { addTable, tableSize, changeTableSize } = useTables();
-  // const { setNotifications } = useContext(NotificationsContext);
+  const { tableSize, changeTableSize } = useTables();
 
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
-  // const [size, setSize] = useState("50");
-
-  const onAddTable = () => {
-    const error = addTable(uuid(), {
-      rows: tableRows,
-      columns: tableColumns,
-      vPosition: "front",
-      hPosition: "left",
-      students: [],
-    });
-
-    if (error) {
-      // setNotifications({ type: "danger", message: error });
-      toast({
-        description: error,
-        status: "error",
-        position: "bottom-right",
-        duration: 4000,
-        isClosable: true,
-      });
-    } else {
-      // setNotifications({ type: "okay", message: "Table added" });
-      toast({
-        description: "Table added.",
-        status: "success",
-        position: "bottom-right",
-        duration: 4000,
-        isClosable: true,
-      });
-    }
-  };
 
   return (
-    <Flex
+    <Box
       as={"section"}
-      justify={"space-between"}
-      align={"center"}
       w={"full"}
       boxShadow={"sm"}
       py={5}
@@ -84,134 +51,143 @@ const DynamicCanvasBar = () => {
       borderColor={"gray.100"}
     >
       <Stack spacing={2}>
-        <Box>
+        <Center>
           <Heading textAlign={"center"} as={"h2"} fontWeight={"thin"} mb={2}>
             Menu
           </Heading>
-          <Stack isInline spacing={2}>
-            <Stack spacing={0}>
-              <Text>Rows</Text>
-              <NumberInput
-                w={"100px"}
-                defaultValue={1}
-                max={5}
-                min={1}
-                value={tableRows}
-                onChange={(value) => {
-                  setTableRows(parseInt(value) || "");
-                }}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </Stack>
-            <Stack spacing={0}>
-              <Text>Columns</Text>
-              <NumberInput
-                w={"100px"}
-                defaultValue={1}
-                max={5}
-                min={1}
-                value={tableColumns}
-                onChange={(value) => setTableColumns(parseInt(value) || "")}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </Stack>
-            <Stack spacing={0}>
-              <Text>Table Size</Text>
-              <NumberInput
-                w={"100px"}
-                defaultValue={50}
-                max={100}
-                min={50}
-                value={tableSize}
-                onChange={(value) => changeTableSize(value)}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </Stack>
+        </Center>
+        <Grid gridTemplateColumns={"50% 50%"} gridColumnGap={0}>
+          <Stack spacing={3}>
+            <Wrap isInline spacing={2}>
+              <Stack spacing={0}>
+                <Text>Rows</Text>
+                <NumberInput
+                  w={"100px"}
+                  defaultValue={1}
+                  max={5}
+                  min={1}
+                  value={tableRows}
+                  onChange={(value) => {
+                    setTableRows(parseInt(value) || "");
+                  }}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Stack>
+              <Stack spacing={0}>
+                <Text>Columns</Text>
+                <NumberInput
+                  w={"100px"}
+                  defaultValue={1}
+                  max={5}
+                  min={1}
+                  value={tableColumns}
+                  onChange={(value) => setTableColumns(parseInt(value) || "")}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Stack>
+              <Stack spacing={0}>
+                <Text>Table Size</Text>
+                <NumberInput
+                  w={"100px"}
+                  defaultValue={50}
+                  max={100}
+                  min={50}
+                  value={tableSize}
+                  onChange={(value) => changeTableSize(value)}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Stack>
+            </Wrap>
+            <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
           </Stack>
-        </Box>
-        {/* <Divider
-        height={100}
-        borderColor={"blackAlpha.500"}
-        orientation={"vertical"}
-      /> */}
-        <Button
-          leftIcon={<AddIcon fontSize={20} />}
-          variant={"solid"}
-          size={"md"}
-          onClick={onAddTable}
-          _hover={{ bg: "gray.600" }}
-        >
-          Add Table
-        </Button>
-        <Stack isInline spacing={1} align={"center"} justify={"center"}>
-          <OptimizeButton />
-          <RandomizeButton />
-        </Stack>
+          <Stack>
+            <Wrap justify={"center"} align={"center"}>
+              <WrapItem>
+                <AddButton
+                  w={"full"}
+                  fontSize={"sm"}
+                  py={2}
+                  px={4}
+                  tableRows={tableRows}
+                  tableColumns={tableColumns}
+                />
+              </WrapItem>
+              <WrapItem>
+                <OptimizeButton w={"full"} fontSize={"sm"} py={2} px={4} />
+              </WrapItem>
+              <WrapItem>
+                <RandomizeButton w={"full"} fontSize={"sm"} py={2} px={4} />
+              </WrapItem>
+              <WrapItem>
+                <ClearButton w={"full"} fontSize={"sm"} py={2} px={4} />
+              </WrapItem>
+              <WrapItem>
+                <ClearTablesButton w={"full"} fontSize={"sm"} py={2} px={4} />
+              </WrapItem>
+            </Wrap>
+            <Stack isInline spacing={1}></Stack>
+            <Stack isInline spacing={1}></Stack>
+          </Stack>
+        </Grid>
       </Stack>
-      {/* <Divider
-        height={100}
-        borderColor={"blackAlpha.500"}
-        orientation={"vertical"}
-      /> */}
-      <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
-    </Flex>
+    </Box>
   );
 };
 
-const TablePreview = ({ tableRows, tableColumns }) => {
-  const [showPreview, setShowPreview] = useState(false);
+// const TablePreview = ({ tableRows, tableColumns }) => {
+//   const [showPreview, setShowPreview] = useState(false);
 
-  let tableArr;
-  if (!tableRows || !tableColumns) {
-    tableArr = [];
-  } else {
-    tableArr = Array(tableRows * tableColumns);
-  }
+//   let tableArr;
+//   if (!tableRows || !tableColumns) {
+//     tableArr = [];
+//   } else {
+//     tableArr = Array(tableRows * tableColumns);
+//   }
 
-  return (
-    <Stack spacing={5} align={"center"} w={"200px"} py={5}>
-      <Stack isInline spacing={2} align={"center"}>
-        <Switch
-          defaultIsChecked={showPreview}
-          onChange={() => setShowPreview(!showPreview)}
-          size={"lg"}
-        />
-        <Text>Table Preview</Text>
-      </Stack>
-      <Stack d={showPreview ? "flex" : "none"} spacing={1} align={"center"}>
-        <SimpleGrid columns={tableColumns}>
-          {[...tableArr].map((cell, index) => {
-            return (
-              <Box
-                border={"1px solid black"}
-                w={"40px"}
-                h={"40px"}
-                key={index}
-              ></Box>
-            );
-          })}
-        </SimpleGrid>
-        <Text d={tableArr.length ? "block" : "none"}>
-          {tableRows} x {tableColumns}
-        </Text>
-      </Stack>
-    </Stack>
-  );
-};
+//   return (
+//     <Stack spacing={5} align={"center"} w={"200px"} py={5}>
+//       <Stack isInline spacing={2} align={"center"}>
+//         <Switch
+//           defaultIsChecked={showPreview}
+//           onChange={() => setShowPreview(!showPreview)}
+//           size={"lg"}
+//         />
+//         <Text>Table Preview</Text>
+//       </Stack>
+//       <Stack d={showPreview ? "flex" : "none"} spacing={1} align={"center"}>
+//         <SimpleGrid columns={tableColumns}>
+//           {[...tableArr].map((cell, index) => {
+//             return (
+//               <Box
+//                 border={"1px solid black"}
+//                 w={"40px"}
+//                 h={"40px"}
+//                 key={index}
+//               ></Box>
+//             );
+//           })}
+//         </SimpleGrid>
+//         <Text d={tableArr.length ? "block" : "none"}>
+//           {tableRows} x {tableColumns}
+//         </Text>
+//       </Stack>
+//     </Stack>
+//   );
+// };
 
 export default DynamicCanvasBar;

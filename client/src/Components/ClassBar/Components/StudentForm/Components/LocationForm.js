@@ -3,7 +3,7 @@ import { Radio, RadioGroup, Stack, Text, Button } from "@chakra-ui/react";
 import { useStudents } from "../../../../../lib/studentsData";
 
 // import css file
-import "./style.css";
+// import "./style.css";
 
 const LocationForm = ({ student, setStudent }) => {
   // const { student, updateVPosition, clearVPosition } = useStudents();

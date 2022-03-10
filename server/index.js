@@ -6,7 +6,12 @@ const algorithmRouter = require("./routes/algorithm.js");
 const app = express();
 
 const corsOption = {
-  origin: ["http://localhost:3000", "http://localhost:3001"],
+  origin: [
+    process.env.APP_URL,
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
+  ],
   credentials: true,
   methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
 };
