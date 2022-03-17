@@ -20,9 +20,11 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
 } from "@chakra-ui/react";
-
-// import { NotificationsContext } from "../../../../ContextProviders";
 
 // material ui icons
 import { InfoIcon, FileUploadIcon } from "../../../../styles/icons";
@@ -33,16 +35,13 @@ import "./style.css";
 const StudentFileForm = () => {
   const toast = useToast();
   const { addStudentWithCSV } = useStudents();
-  // const { setNotifications } = useContext(NotificationsContext);
-  const [openInfo, setOpenInfo] = useState(false);
 
   const handleOnDrop = (data) => {
     let studentMap = {};
-    console.log(data);
-    try {
-      data.forEach(({ data, errors }) => {
+    data.forEach(({ data, errors }) => {
+      try {
         if (errors.length > 0) {
-          throw errors;
+          throw errors[0];
         }
         if (isNaN(data[0])) {
           throw "Invalid CSV file. Please check for unnecessary spaces or values.";
@@ -54,147 +53,69 @@ const StudentFileForm = () => {
           last_name,
           vPosition,
           hPosition,
-          preferred1,
-          preferred2,
-          notPreferred1,
-          notPreferred2,
+          preferred,
+          notPreferred,
         ] = data;
+
+        if (!id) return;
+
+        const preferredPartners = preferred
+          .substring(1, preferred.length - 1)
+          .split(" ")
+          .map((ele) => parseInt(ele));
+
+        const notPreferredPartners = notPreferred
+          .substring(1, notPreferred.length - 1)
+          .split(" ")
+          .map((ele) => parseInt(ele));
 
         studentMap[parseInt(id)] = {
           first_name,
           last_name,
-          vPosition: vPosition || null,
-          hPosition: hPosition || null,
-          preferredPartners: [parseInt(preferred1), parseInt(preferred2)],
-          notPreferredPartners: [
-            parseInt(notPreferred1),
-            parseInt(notPreferred2),
-          ],
+          vPosition: vPosition || "",
+          hPosition: hPosition || "",
+          preferredPartners,
+          notPreferredPartners,
         };
-      });
+      } catch (error) {
+        toast({
+          title: "Error.",
+          description: error,
+          status: "error",
+          position: "bottom-right",
+          duration: 4000,
+          isClosable: true,
+        });
 
-      addStudentWithCSV(studentMap);
-      // setNotifications({
-      //   type: "okay",
-      //   message: "Successfully added students from csv file",
-      // });
-      toast({
-        title: "Uploaded csv file.",
-        description: "Successfully added students from csv file.",
-        status: "success",
-        position: "bottom-right",
-        duration: 4000,
-        isClosable: true,
-      });
-    } catch (error) {
-      // setNotifications({ type: "danger", message: error });
-      toast({
-        title: "Error.",
-        description: error,
-        status: "error",
-        position: "bottom-right",
-        duration: 4000,
-        isClosable: true,
-      });
-    }
-    console.log("---------------------------");
-    console.log(data);
-    console.log("---------------------------");
+        return;
+      }
+    });
+
+    console.log(studentMap);
+
+    addStudentWithCSV(studentMap);
+    toast({
+      title: "Uploaded csv file.",
+      description: "Successfully added students from csv file.",
+      status: "success",
+      position: "bottom-right",
+      duration: 4000,
+      isClosable: true,
+    });
   };
 
   const handleOnError = (err, file, inputElem, reason) => {
-    console.log(file);
-    console.log(inputElem);
-    console.log(reason);
-    console.log(err);
+    toast({
+      title: "Error.",
+      description: err,
+      status: "error",
+      position: "bottom-right",
+      duration: 4000,
+      isClosable: true,
+    });
   };
 
-  // const handleOnRemoveFile = (data) => {
-  //     console.log('---------------------------')
-  //     console.log(data)
-  //     console.log('---------------------------')
-  // }
   return (
-    // <section className='student-file-form'>
-    //   <div className='title-info'>
-    //     <h1>Add CSV File</h1>
-    //     <button
-    //       className='upload-csv-info'
-    //       onClick={() => setOpenInfo(!openInfo)}
-    //     >
-    //       <InfoIcon />
-    //     </button>
-    //     <div
-    //       className='upload-csv-info-popup'
-    //       style={openInfo ? { display: "block" } : { display: "none" }}
-    //     >
-    //       <h3>Valid CSV File</h3>
-    //       <div>
-    //         <h4>Column Names</h4>
-    //         <ol>
-    //           <li>
-    //             <h5>Student ID</h5>
-    //             <ul>
-    //               <li>A unique number for the student</li>
-    //             </ul>
-    //           </li>
-    //           <li>
-    //             <h5>First Name</h5>
-    //             <ul>
-    //               <li>Student's first name</li>
-    //               <li>If student has middle, then add the middle initial</li>
-    //             </ul>
-    //           </li>
-    //           <li>
-    //             <h5>Last Name</h5>
-    //             <ul>
-    //               <li>Student's last name</li>
-    //             </ul>
-    //           </li>
-    //           <li>
-    //             <h5>Location</h5>
-    //             <ul>
-    //               <li>Students seating preference: front or back</li>
-    //               <li>Front = 1</li>
-    //               <li>Back = 0</li>
-    //             </ul>
-    //           </li>
-    //           <li>
-    //             <h5>Preferred</h5>
-    //             <ul>
-    //               <li>Students the student wants to sit next to</li>
-    //               <li>
-    //                 Add a list with the student's unique ID. e.g. [2, 3] with 2
-    //                 and 3 being the IDs
-    //               </li>
-    //             </ul>
-    //           </li>
-    //           <li>
-    //             <h5>Not Preferred</h5>
-    //             <ul>
-    //               <li>Students the student does not want to sit next to</li>
-    //               <li>
-    //                 Add a list with the student's unique ID. e.g. [2, 3] with 2
-    //                 and 3 being the IDs
-    //               </li>
-    //             </ul>
-    //           </li>
-    //         </ol>
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div className='file-drop-box'>
-    //     <CSVReader
-    //       onDrop={handleOnDrop}
-    //       onError={handleOnError}
-    //       addRemoveButton
-    //       removeButtonColor='#659cef'
-    //       // onRemoveFile={handleOnRemoveFile}
-    //     >
-    //       <span>Drop CSV file here or click to upload.</span>
-    //     </CSVReader>
-    //   </div>
-    // </section>
     <Box
       boxShadow={"md"}
       border={"1px solid"}
@@ -239,11 +160,47 @@ const StudentFileForm = () => {
 };
 
 const InfoButton = ({ children }) => (
-  <Popover>
+  <Popover placement={"right"}>
     <PopoverTrigger>{children}</PopoverTrigger>
-    <PopoverContent>
+    <PopoverContent p={5} w={"600px"}>
       <PopoverArrow />
-      <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+      <PopoverBody>
+        <Box>
+          <OrderedList spacing={3}>
+            <ListItem>
+              <Text>
+                To create a CSV file, simply use Excel, Google Spreadsheets, or
+                some other spreadsheet software. Then, add only the required
+                information in each cell (ID, name, position, etc).
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text>Using each student as a row in the CSV file</Text>
+              <UnorderedList ml={5}>
+                <ListItem>
+                  Column A: ID, starting from 1 to the number of students
+                </ListItem>
+                <ListItem>Column B: First name</ListItem>
+                <ListItem>Column C: Last name</ListItem>
+                <ListItem>Column D: front/middle/back preference</ListItem>
+                <ListItem>Column E: left/middle/right preference</ListItem>
+                <ListItem>
+                  Column G*: list of students (using IDs) to not sit with
+                </ListItem>
+                <ListItem>Formatting for * columns:</ListItem>
+                <UnorderedList ml={5}>
+                  <ListItem>If no students, state “NA”</ListItem>
+                  <ListItem>Maximum of 3 students</ListItem>
+                  <ListItem>
+                    Format as a list with [ ] as the starting/closing, with
+                    space in between. Example: [2 1 6].
+                  </ListItem>
+                </UnorderedList>
+              </UnorderedList>
+            </ListItem>
+          </OrderedList>
+        </Box>
+      </PopoverBody>
     </PopoverContent>
   </Popover>
 );

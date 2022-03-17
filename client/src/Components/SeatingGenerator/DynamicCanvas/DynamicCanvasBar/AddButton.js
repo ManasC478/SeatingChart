@@ -1,5 +1,4 @@
 import { Button, useToast } from "@chakra-ui/react";
-import { AddIcon } from "../../../../styles/icons";
 import { useTables } from "../../../../lib/tableData";
 import uuid from "react-uuid";
 
@@ -45,7 +44,6 @@ const AddButton = ({ tableRows, tableColumns, ...rest }) => {
   };
   return (
     <Button
-      // leftIcon={<AddIcon fontSize={20} />}
       variant={"solid"}
       size={"md"}
       onClick={onAddTable}

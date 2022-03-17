@@ -12,91 +12,60 @@ const LocationForm = ({ student, setStudent }) => {
       <Text as={"h3"}>Location Preference</Text>
       <Stack spacing={2}>
         <Stack>
-          <RadioGroup>
-            {console.log(null === "hi")}
-            <Stack spacing={2}>
-              <Radio
-                name='front'
-                id='front'
-                value='front'
-                isChecked={student.vPosition === "front"}
-                onChange={() => setStudent({ ...student, vPosition: "front" })}
-              >
+          <RadioGroup
+            onChange={(value) => setStudent({ ...student, vPosition: value })}
+            value={student.vPosition}
+          >
+            <Stack isInline spacing={4}>
+              <Radio name='front' id='front' value='front'>
                 Front
               </Radio>
-              <Radio
-                name='middle'
-                id='middle'
-                value='middle'
-                isChecked={student.vPosition === "middle"}
-                onChange={() => setStudent({ ...student, vPosition: "middle" })}
-              >
+              <Radio name='middle' id='middle' value='middle'>
                 Middle
               </Radio>
-              <Radio
-                name='back'
-                id='back'
-                value='back'
-                isChecked={student.vPosition === "back"}
-                onChange={() => setStudent({ ...student, vPosition: "back" })}
-              >
+              <Radio name='back' id='back' value='back'>
                 Back
               </Radio>
             </Stack>
           </RadioGroup>
           <Button
-            type='button'
-            w={"50%"}
-            bg={"black"}
-            color={"white"}
-            _hover={{ bg: "gray.600" }}
-            fontSize={"sm"}
-            onClick={() => setStudent({ ...student, vPosition: null })}
+            variant={"outline"}
+            size={"sm"}
+            w={"25%"}
+            // bg={"black"}
+            // color={"white"}
+            // _hover={{ bg: "gray.600" }}
+            onClick={() => setStudent({ ...student, vPosition: "" })}
           >
             Clear
           </Button>
         </Stack>
 
         <Stack spacing={2}>
-          <RadioGroup>
-            <Stack spacing={2}>
-              <Radio
-                name='left'
-                id='left'
-                value='left'
-                isChecked={student.hPosition === "left"}
-                onChange={() => setStudent({ ...student, hPosition: "left" })}
-              >
+          <RadioGroup
+            onChange={(value) => setStudent({ ...student, hPosition: value })}
+            value={student.hPosition}
+          >
+            <Stack isInline spacing={4}>
+              <Radio name='left' id='left' value='left'>
                 Left
               </Radio>
-              <Radio
-                name='middle'
-                id='middle'
-                value='middle'
-                isChecked={student.hPosition === "middle"}
-                onChange={() => setStudent({ ...student, hPosition: "middle" })}
-              >
+              <Radio name='middle' id='middle' value='middle'>
                 Middle
               </Radio>
-              <Radio
-                name='right'
-                id='right'
-                value='right'
-                isChecked={student.hPosition === "right"}
-                onChange={() => setStudent({ ...student, hPosition: "right" })}
-              >
+              <Radio name='right' id='right' value='right'>
                 Right
               </Radio>
             </Stack>
           </RadioGroup>
           <Button
-            type='button'
-            w={"50%"}
-            bg={"black"}
-            color={"white"}
-            _hover={{ bg: "gray.600" }}
-            fontSize={"sm"}
-            onClick={() => setStudent({ ...student, hPosition: null })}
+            variant={"outline"}
+            size={"sm"}
+            w={"25%"}
+            // bg={"black"}
+            // color={"white"}
+            // _hover={{ bg: "gray.600" }}
+            onClick={() => setStudent({ ...student, hPosition: "" })}
           >
             Clear
           </Button>

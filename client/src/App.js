@@ -46,7 +46,7 @@ function App() {
         </Center>
         <Center>
           <Box w={"600px"}>
-            <Text>
+            <Text textAlign={"center"}>
               A collaboration between{" "}
               <Link
                 color='blue.400'

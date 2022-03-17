@@ -2,7 +2,7 @@ import { Button, useToast } from "@chakra-ui/react";
 import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 
-const ClearButton = ({ ...rest }) => {
+const ClearStudentsButton = ({ ...rest }) => {
   const { clearTableStudents } = useTables();
   const handleClearSeats = () => {
     clearTableStudents();
@@ -22,4 +22,4 @@ const ClearButton = ({ ...rest }) => {
   );
 };
 
-export default ClearButton;
+export default ClearStudentsButton;

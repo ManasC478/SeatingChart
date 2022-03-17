@@ -28,42 +28,11 @@ const TablePreview = ({ tableRows, tableColumns }) => {
   }
 
   return (
-    // <Stack spacing={5} align={"center"} w={"200px"} py={5}>
-    //   <Stack isInline spacing={2} align={"center"}>
-    //     {/* <Switch
-    //       defaultIsChecked={showPreview}
-    //       onChange={() => setShowPreview(!showPreview)}
-    //       size={"lg"}
-    //     />
-    //     <Text>Table Preview</Text> */}
-    //     <Checkbox
-    //       isChecked={showPreview}
-    //       onChange={(e) => setShowPreview(e.target.checked)}
-    //     >
-    //       Table Preview
-    //     </Checkbox>
-    //   </Stack>
-    //   <Stack d={showPreview ? "flex" : "none"} spacing={1} align={"center"}>
-    //     <SimpleGrid columns={tableColumns}>
-    //       {[...tableArr].map((cell, index) => {
-    //         return (
-    //           <Box
-    //             border={"1px solid black"}
-    //             w={"40px"}
-    //             h={"40px"}
-    //             key={index}
-    //           ></Box>
-    //         );
-    //       })}
-    //     </SimpleGrid>
-    //     <Text d={tableArr.length ? "block" : "none"}>
-    //       {tableRows} x {tableColumns}
-    //     </Text>
-    //   </Stack>
     <Popover
       isOpen={showPreview}
       //   onClose={() => setShowPreview(false)}
       placement='bottom'
+      closeOnBlur={false}
     >
       <PopoverTrigger>
         <Checkbox

@@ -23,10 +23,10 @@ const AppInfo = ({ onClose, isOpen }) => {
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
-      <ModalContent p={5}>
+      <ModalContent p={5} w={"600px"}>
         <ModalHeader>
           <Center>
-            <Heading fontSize={"3xl"}>Directions</Heading>
+            <Heading fontSize={"3xl"}>Instructions</Heading>
           </Center>
         </ModalHeader>
         <ModalBody>

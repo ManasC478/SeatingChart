@@ -25,16 +25,11 @@ import { useTables } from "../../../../lib/tableData";
 import { AddIcon } from "../../../../styles/icons";
 
 // import components
-import RandomizeButton from "./RandomizeButton";
-import OptimizeButton from "./OptimizeButton";
-import ClearButton from "./ClearButton";
-import ClearTablesButton from "./ClearTablesButton";
-import AddButton from "./AddButton";
+import Buttons from "./Buttons";
 import TablePreview from "./TablePreview";
+import TableInput from "./TableInput";
 
 const DynamicCanvasBar = () => {
-  const { tableSize, changeTableSize } = useTables();
-
   const [tableRows, setTableRows] = useState(1);
   const [tableColumns, setTableColumns] = useState(1);
 
@@ -56,93 +51,17 @@ const DynamicCanvasBar = () => {
             Menu
           </Heading>
         </Center>
-        <Grid gridTemplateColumns={"50% 50%"} gridColumnGap={0}>
+        <Grid gridTemplateColumns={"50% 50%"} gridColumnGap={5}>
           <Stack spacing={3}>
-            <Wrap isInline spacing={2}>
-              <Stack spacing={0}>
-                <Text>Rows</Text>
-                <NumberInput
-                  w={"100px"}
-                  defaultValue={1}
-                  max={5}
-                  min={1}
-                  value={tableRows}
-                  onChange={(value) => {
-                    setTableRows(parseInt(value) || "");
-                  }}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </Stack>
-              <Stack spacing={0}>
-                <Text>Columns</Text>
-                <NumberInput
-                  w={"100px"}
-                  defaultValue={1}
-                  max={5}
-                  min={1}
-                  value={tableColumns}
-                  onChange={(value) => setTableColumns(parseInt(value) || "")}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </Stack>
-              <Stack spacing={0}>
-                <Text>Table Size</Text>
-                <NumberInput
-                  w={"100px"}
-                  defaultValue={50}
-                  max={100}
-                  min={50}
-                  value={tableSize}
-                  onChange={(value) => changeTableSize(value)}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </Stack>
-            </Wrap>
+            <TableInput
+              tableRows={tableRows}
+              tableColumns={tableColumns}
+              setTableRows={setTableRows}
+              setTableColumns={setTableColumns}
+            />
             <TablePreview tableRows={tableRows} tableColumns={tableColumns} />
           </Stack>
-          <Stack>
-            <Wrap justify={"center"} align={"center"}>
-              <WrapItem>
-                <AddButton
-                  w={"full"}
-                  fontSize={"sm"}
-                  py={2}
-                  px={4}
-                  tableRows={tableRows}
-                  tableColumns={tableColumns}
-                />
-              </WrapItem>
-              <WrapItem>
-                <OptimizeButton w={"full"} fontSize={"sm"} py={2} px={4} />
-              </WrapItem>
-              <WrapItem>
-                <RandomizeButton w={"full"} fontSize={"sm"} py={2} px={4} />
-              </WrapItem>
-              <WrapItem>
-                <ClearButton w={"full"} fontSize={"sm"} py={2} px={4} />
-              </WrapItem>
-              <WrapItem>
-                <ClearTablesButton w={"full"} fontSize={"sm"} py={2} px={4} />
-              </WrapItem>
-            </Wrap>
-            <Stack isInline spacing={1}></Stack>
-            <Stack isInline spacing={1}></Stack>
-          </Stack>
+          <Buttons tableRows={tableRows} tableColumns={tableColumns} />
         </Grid>
       </Stack>
     </Box>
