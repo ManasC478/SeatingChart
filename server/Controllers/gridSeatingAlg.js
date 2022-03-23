@@ -1,4 +1,4 @@
-const gridWidth = 4, preferenceCount = 2;
+const gridWidth = 4;
 let studentCount, gridHeight;
 let seatingChartScore = 0;
 module.exports.assignGridSeats = (req, res) => {
@@ -32,15 +32,14 @@ module.exports.assignGridSeats = (req, res) => {
     for (let i = 0; i < students.length; i++) {
       for (let j = 0; j < students[i].length; j++) {
         let student = students[i][j];
-        // let indexes = studentPreferenceIndexes(preferenceCount, i, students);
-        for (let k = 0; k < preferenceCount; k++) {
+        for (let k = 0; k < student.sitNextTo.length; k++) {
           if (student.sitNextTo[k] != null)
             student.sitNextTo[k] = students1D[student.sitNextTo[k] - 1].name;
           else student.sitNextTo[k] = "";
-
+        }
+        for (let k = 0; k < student.doNotSitNextTo.length; k++) {
           if (student.doNotSitNextTo[k] != null)
-            student.doNotSitNextTo[k] =
-              students1D[student.doNotSitNextTo[k] - 1].name;
+            student.doNotSitNextTo[k] = students1D[student.doNotSitNextTo[k] - 1].name;
           else student.doNotSitNextTo[k] = "";
         }
       }
@@ -52,6 +51,7 @@ module.exports.assignGridSeats = (req, res) => {
     students = newStudentsAndScore[1];
     printStudents(students);
     console.log("-------OPTIMIZATION FINISHED---------------");
+    for(const student in students) console.log(student);
     students = [].concat.apply([], students);
     res.status(200).json({ studentList: students, bestSeatingChartScore });
   } catch (error) {
