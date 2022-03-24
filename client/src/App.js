@@ -80,15 +80,17 @@ function App() {
       </Grid>
       <Tooltip label='Open directions'>
         <IconButton
-          variant='outline'
-          colorScheme='blackAlpha'
           aria-label='Open directions'
+          variant='outline'
+          bg={"yellow.600"}
+          color={"white"}
           pos={"fixed"}
           bottom={5}
           right={5}
           icon={<OpenDirectionsIcon />}
           isRound
           onClick={onOpen}
+          _hover={{ bg: "yellow.700" }}
         />
       </Tooltip>
     </Stack>

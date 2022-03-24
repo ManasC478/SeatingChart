@@ -5,6 +5,7 @@ import React, {
   createContext,
   useRef,
 } from "react";
+import _ from "lodash";
 
 const tableContext = createContext();
 
@@ -22,8 +23,9 @@ export const useTables = () => {
 function useTableProvider() {
   const [tableMap, setTableMap] = useState(getCachedTables());
   const [tableSize, setTableSize] = useState(getCachedTableSize());
-  const studentsAdded = useRef(getCachedStudentsAdded(false));
-  const totalTables = useRef(getCachedTotalTables(0));
+  const studentsAdded = useRef(getCachedStudentsAdded());
+  const totalTables = useRef(updateTotalTablesCache(getTotalTables(tableMap)));
+  const reassignTables = useRef(false);
 
   const validateTable = (tableInfo) => {
     const { rows, columns } = tableInfo;
@@ -40,9 +42,8 @@ function useTableProvider() {
     }
 
     setTableMap(updateTableCache({ ...tableMap, [id]: tableInfo }));
-    totalTables.current += updateTotalTablesCache(
-      tableInfo.rows * tableInfo.columns
-    );
+    totalTables.current += tableInfo.rows * tableInfo.columns;
+    updateTotalTablesCache(totalTables.current);
   };
 
   const changeTableSize = (size) => {
@@ -54,8 +55,9 @@ function useTableProvider() {
   };
 
   const setTables = (tables) => {
-    setTableMap(updateTableCache(tables));
     studentsAdded.current = updateStudentsAddedCache(true);
+    reassignTables.current = false;
+    setTableMap(updateTableCache(tables));
   };
 
   const clearTableStudents = () => {
@@ -69,29 +71,58 @@ function useTableProvider() {
       clearedTableMap[tableId] = { ...tableMap[tableId], students: [] };
     });
 
-    setTableMap(updateTableCache(clearedTableMap));
     studentsAdded.current = updateStudentsAddedCache(false);
+    setTableMap(updateTableCache(clearedTableMap));
   };
 
   const clearTables = () => {
-    setTableMap(updateTableCache({}));
     studentsAdded.current = updateStudentsAddedCache(false);
+    setTableMap(updateTableCache({}));
   };
 
   const setTablePosition = (id, tableInfo) => {
     setTableMap(updateTableCache({ ...tableMap, [id]: tableInfo }));
   };
 
+  const setReassignTables = (val) => {
+    reassignTables.current = val;
+  };
+
+  const deleteStudentFromTable = (id) => {
+    const updatedTableMap = {};
+
+    Object.keys(tableMap).forEach((tableId) => {
+      const table = tableMap[tableId];
+      const filteredStudents = table.students;
+
+      const removedElementIndex = table.students.indexOf(parseInt(id) - 1);
+      if (removedElementIndex !== -1) {
+        filteredStudents.splice(removedElementIndex, 1, null);
+      }
+
+      updatedTableMap[tableId] = {
+        ...table,
+        students: filteredStudents,
+      };
+    });
+
+    setTableMap(updateTableCache(updatedTableMap));
+  };
+
   return {
     tableMap,
     tableSize,
     totalTables: totalTables.current,
+    studentsAdded: studentsAdded.current,
+    reassignTables: reassignTables.current,
     changeTableSize,
     addTable,
     setTables,
     clearTableStudents,
     clearTables,
     setTablePosition,
+    setReassignTables,
+    deleteStudentFromTable,
   };
 }
 
@@ -156,4 +187,17 @@ const getCachedTotalTables = () => {
       window.localStorage.getItem("seating-chart-generator-total-tables")
     ) || false;
   return res;
+};
+
+const getTotalTables = (tableMap) => {
+  if (!Object.keys(tableMap).length) {
+    return 0;
+  }
+
+  let numTables = 0;
+  Object.values(tableMap).forEach((table) => {
+    numTables += table.rows * table.columns;
+  });
+
+  return numTables;
 };

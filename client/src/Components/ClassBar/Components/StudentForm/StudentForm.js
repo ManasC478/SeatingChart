@@ -59,7 +59,6 @@ const StudentForm = () => {
       duration: 4000,
       isClosable: true,
     });
-    console.log(studentMap);
   };
 
   return (

@@ -27,6 +27,7 @@ module.exports.assignRandomSeats = (req, res) => {
       student.name = student.first_name + " " + student.last_name;
       student.happyWith = "";
       student.sadWith = "";
+      if(student.dismissed == "true") delete student;
     });
     const newStudents = students.map((student) => {
       const { first_name, last_name, vPosition, hPosition, preferredPartners, notPreferredPartners, ...leftOver } = student;

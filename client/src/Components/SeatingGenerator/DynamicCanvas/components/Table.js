@@ -5,6 +5,7 @@ import { CanvasStudentsContext } from "../../../../ContextProviders";
 
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
+
   return (
     <Group>
       <Rect

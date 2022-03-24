@@ -20,7 +20,6 @@ const RandomizeButton = ({ ...rest }) => {
 
       //   call api
       const res = await optimizeSeats(studentMap, tableMap);
-      console.log(res);
 
       if (res.status >= 400) {
         throw { status: 500, message: "Failed to randomize seats" };
@@ -30,7 +29,6 @@ const RandomizeButton = ({ ...rest }) => {
       console.log(
         `/components/SeatingGenerator/DynamicCanvas/DynamicCanvasBar/OptimizeButton: ${error.message}`
       );
-      console.log(error);
       if (error.status >= 500) {
         toast({
           title: "500 server error",

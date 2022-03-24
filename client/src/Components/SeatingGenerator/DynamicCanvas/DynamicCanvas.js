@@ -5,9 +5,10 @@ import { useStudents } from "../../../lib/studentsData";
 import { CanvasStudentsContext } from "../../../ContextProviders";
 
 import TableGroup from "./components/TableGroup";
+import { Text, Flex, Stack } from "@chakra-ui/react";
 
 const DynamicCanvas = () => {
-  const { tableMap, tableSize, setTablePosition } = useTables();
+  const { tableMap, tableSize, setTablePosition, reassignTables } = useTables();
   const { studentMap } = useStudents();
 
   const checkPosition = (third, position) => {
@@ -24,11 +25,15 @@ const DynamicCanvas = () => {
     const canvasContainer = document.querySelector("#canvas-container");
     return parseInt(canvasContainer?.offsetWidth);
   };
+  const getCanvasHeight = () => {
+    const canvasContainer = document.querySelector("#canvas-container");
+    return parseInt(canvasContainer?.offsetHeight);
+  };
 
   return (
     <Stage
       width={getCanvasWidth()}
-      height={600}
+      height={getCanvasHeight()}
       style={{
         borderRadius: "5px",
       }}

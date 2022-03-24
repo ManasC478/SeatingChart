@@ -34,6 +34,7 @@ import {
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { useStudents } from "../../../../lib/studentsData";
+import { useTables } from "../../../../lib/tableData";
 
 // import material ui icons
 import {
@@ -205,10 +206,15 @@ const EditForm = ({ student, id, onClose }) => {
 const DeleteButton = ({ id }) => {
   const toast = useToast();
   const { deleteStudent } = useStudents();
+  const { setReassignTables, clearTableStudents, deleteStudentFromTable } =
+    useTables();
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
   const handleDelete = () => {
+    // setReassignTables(true);
+    // clearTableStudents();
+    deleteStudentFromTable(id);
     deleteStudent(id);
     toast({
       description: "Deleted student.",

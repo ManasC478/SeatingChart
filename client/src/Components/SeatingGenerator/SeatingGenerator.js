@@ -1,5 +1,6 @@
-import { Stack, Box, Heading, Center, Text } from "@chakra-ui/react";
+import { Stack, Box, Flex, Text, Button } from "@chakra-ui/react";
 import Draggable from "react-draggable";
+import { useTables } from "../../lib/tableData";
 
 // import components
 import DynamicCanvas from "./DynamicCanvas/DynamicCanvas";
@@ -16,9 +17,12 @@ const SeatingGenerator = () => {
         id='canvas-container'
         boxShadow={"md"}
         w={"full"}
+        h={"600px"}
         border={"1px solid"}
         borderColor={"gray.100"}
         borderRadius={"5px"}
+        overflow={"hidden"}
+        pos={"relative"}
       >
         <DynamicCanvas />
       </Box>
