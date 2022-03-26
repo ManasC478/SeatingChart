@@ -10,11 +10,16 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   let name, nameLength, fSize = 0;
   if(isFilled){
     let needsLastName = false;
-    for(const student in studentMap){
-      if(student.last_name == studentMap[studentId + 1].last_name && student.first_name == studentMap[studentId + 1].first_name) {
-        needsLastName = true;
+    console.log(studentMap[studentId + 1].first_name == "manas");
+    Object.values(studentMap).forEach((student) => {
+      if(student != undefined) {
+        if(student.last_name !== studentMap[studentId + 1].last_name) {
+          if(student.first_name === studentMap[studentId + 1].first_name) {
+            needsLastName = true;
+          }
+        }
       }
-    }
+    });
     name = studentMap[studentId + 1].first_name + (needsLastName ? " " + studentMap[studentId + 1].last_name.charAt(0) + "." : "");
     let nameElement = document.createElement('span');
     nameElement.innerHTML = name; 
