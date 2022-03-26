@@ -1,5 +1,4 @@
 export const validateRandomization = (studentMap, totalTables) => {
-  console.log(totalTables);
   if (Object.keys(studentMap).length <= 0) {
     throw {
       status: 400,

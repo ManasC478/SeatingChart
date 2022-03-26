@@ -65,7 +65,6 @@ const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
               : coord.y < 0
               ? 0
               : coord.y;
-          console.log(x, y);
           setCoord({ x, y });
           onPositionChange({ ...tableInfo, position: { x, y } });
         }}

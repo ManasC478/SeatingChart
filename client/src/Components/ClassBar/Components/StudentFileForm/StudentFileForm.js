@@ -91,8 +91,6 @@ const StudentFileForm = () => {
       }
     });
 
-    console.log(studentMap);
-
     addStudentWithCSV(studentMap);
     toast({
       title: "Uploaded csv file.",

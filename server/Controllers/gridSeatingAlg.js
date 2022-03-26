@@ -39,19 +39,19 @@ module.exports.assignGridSeats = (req, res) => {
         }
         for (let k = 0; k < student.doNotSitNextTo.length; k++) {
           if (student.doNotSitNextTo[k] != null)
-            student.doNotSitNextTo[k] = students1D[student.doNotSitNextTo[k] - 1].name;
+            student.doNotSitNextTo[k] =
+              students1D[student.doNotSitNextTo[k] - 1].name;
           else student.doNotSitNextTo[k] = "";
         }
       }
     }
-    console.log("-------SET-UP FINISHED---------------");
 
     const newStudentsAndScore = findOptimalSeatingChart(students);
     const bestSeatingChartScore = newStudentsAndScore[0];
     students = newStudentsAndScore[1];
     printStudents(students);
     console.log("-------OPTIMIZATION FINISHED---------------");
-    for(const student in students) console.log(student);
+    for (const student in students) console.log(student);
     students = [].concat.apply([], students);
     res.status(200).json({ studentList: students, bestSeatingChartScore });
   } catch (error) {

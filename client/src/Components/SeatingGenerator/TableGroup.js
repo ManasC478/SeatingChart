@@ -33,12 +33,9 @@ const TableGroup = ({ tableInfo }) => {
     }
   };
 
-  console.log(document.querySelector(".seating-layout"));
-
   return (
     <Box>
       <Draggable
-        //   handle='.drag'
         defaultPosition={{ x: 0, y: 0 }}
         position={null}
         bounds='parent'
@@ -51,7 +48,6 @@ const TableGroup = ({ tableInfo }) => {
       >
         <button
           onClick={() => {
-            console.log("clicked");
             setShowOptions(true);
           }}
         >
@@ -60,24 +56,12 @@ const TableGroup = ({ tableInfo }) => {
             w={`${tableInfo.columns * tableSize}px`}
             bg={"#c39b77"}
           >
-            {/* <button
-          onClick={() => {
-            console.log("clicked");
-            setShowOptions(true);
-          }}
-        > */}
             {[...tables].map((table, index) => {
               const studentName = getStudentName(index);
               return (
-                <Table
-                  //   className='drag'
-                  key={index}
-                  tableSize={tableSize}
-                  name={studentName}
-                />
+                <Table key={index} tableSize={tableSize} name={studentName} />
               );
             })}
-            {/* </button> */}
           </SimpleGrid>
         </button>
       </Draggable>

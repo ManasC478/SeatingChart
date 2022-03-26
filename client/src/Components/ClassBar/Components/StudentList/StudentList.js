@@ -17,6 +17,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useStudents } from "../../../../lib/studentsData";
+import { useTables } from "../../../../lib/tableData";
 import { DeleteIcon } from "../../../../styles/icons";
 
 import StudentItem from "./StudentItem";
@@ -53,11 +54,13 @@ const StudentList = () => {
 
 const DeleteAllButton = () => {
   const toast = useToast();
+  const { clearTableStudents } = useTables();
   const { deleteAllStudents } = useStudents();
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
   const handleDeleteAll = () => {
+    clearTableStudents();
     deleteAllStudents();
     toast({
       description: "Deleted all students.",
