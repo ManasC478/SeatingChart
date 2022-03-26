@@ -15,13 +15,17 @@ module.exports.assignRandomSeats = (req, res) => {
       student.sitNextTo = [];
       student.preferredPartners.forEach((otherIndex) => {
         otherIndex--;
-        student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        if(students[otherIndex] != undefined) {
+          student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        }
       });
 
       student.doNotSitNextTo = [];
       student.notPreferredPartners.forEach((otherIndex) => {
         otherIndex--;
-        student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        if(students[otherIndex] != undefined) {
+          student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
+        }
       }); 
 
       student.name = student.first_name + " " + student.last_name;

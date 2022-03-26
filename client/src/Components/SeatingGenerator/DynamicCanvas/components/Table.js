@@ -9,13 +9,20 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const isFilled = Number.isInteger(studentId);
   let name, nameLength, fSize = 0;
   if(isFilled){
-    name = studentMap[studentId + 1].first_name + " " + studentMap[studentId + 1].last_name.charAt(0) + ".";
+    let needsLastName = false;
+    for(const student in studentMap){
+      if(student.last_name == studentMap[studentId + 1].last_name && student.first_name == studentMap[studentId + 1].first_name) {
+        needsLastName = true;
+      }
+    }
+    name = studentMap[studentId + 1].first_name + (needsLastName ? " " + studentMap[studentId + 1].last_name.charAt(0) + "." : "");
     let nameElement = document.createElement('span');
     nameElement.innerHTML = name; 
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
-    fSize = Number(tableSize)*0.9*12/nameLength;
-  }  
+    nameElement.remove();
+    fSize = Number(tableSize)*0.9*13/nameLength;
+  }
   return (
     <Group>
       <Rect
@@ -29,6 +36,8 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
       <Text
         x={coord.x + tableSize * columnIndex}
         y={coord.y + tableSize * rowIndex}
+        align='center'
+        verticalAlign='middle'
         width={tableSize}
         height={tableSize}
         padding={5}
