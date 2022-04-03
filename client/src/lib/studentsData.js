@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext, useRef } from "react";
 import _ from "lodash";
 
 const studentContext = createContext();
@@ -18,8 +18,10 @@ export const useStudents = () => {
 
 function useStudentProvider() {
   const [studentMap, setStudentMap] = useState(getCachedStudents());
+  const size = useRef(0);
 
   const addStudent = (id, student) => {
+    size.current++;
     setStudentMap(updateStudentCache({ ...studentMap, [id]: student }));
   };
 

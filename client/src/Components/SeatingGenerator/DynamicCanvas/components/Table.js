@@ -8,9 +8,10 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
   const isFilled = Number.isInteger(studentId);
   let name, nameLength, fSize = 0;
+  // if(studentMap[studentId + 1] == undefined || studentMap[studentId + 1] == null) console.log(studentId);
+
   if(isFilled){
     let needsLastName = false;
-    console.log(studentMap[studentId + 1].first_name == "manas");
     Object.values(studentMap).forEach((student) => {
       if(student != undefined) {
         if(student.last_name !== studentMap[studentId + 1].last_name) {
