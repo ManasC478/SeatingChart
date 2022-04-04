@@ -39,8 +39,9 @@ module.exports.assignRandomSeats = (req, res) => {
     students = newStudents;
     let parsedTables = JSON.parse(tableArray), tables = [];
     for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
+    tables.forEach((table) => table.students = []);
     console.log("-------SETUP FINISHED---------------");
-    console.log("-------Optimizing Seating...---------------");
+    console.log("-------Randomizing Seating...---------------");
     const seatingChart = createRandomSeatingChart(students, shuffle1DObjects(tables), IDs);
     const randomSeating = addHappySad(seatingChart, students, IDs);
     const randomSeatingChart = randomSeating[0];
@@ -49,7 +50,7 @@ module.exports.assignRandomSeats = (req, res) => {
     randomSeatingChart.forEach(({id, ...table}) => {
         randomSeatingChartDict[id] = table
     });
-    console.log("-------OPTIMIZATION FINISHED---------------");
+    console.log("-------RANDOMIZATION FINISHED---------------");
     console.log(randomSeatingChartDict);
     const score = 0;
     res.status(200).json({ studentList: randomSeatingChartDict, score });
@@ -59,25 +60,35 @@ module.exports.assignRandomSeats = (req, res) => {
   }
 };
 function createRandomSeatingChart(students, tables, IDs) {
-  let studentsInTables = [];
-  let studentIndex = 0;
   let shuffledIds = shuffle1D([...IDs]);
-  tables.forEach((table) => {
-    let seatingCapacity = table.rows * table.columns;
-    let studentsLeft = students.length - studentIndex;
-    let seatingCount = Math.min(studentsLeft, seatingCapacity);
-    let studentsInTable = Array.from(
-      { length: seatingCount},
-      (_, i) => shuffledIds[i + studentIndex]
-    );
-    for(let i = 0; i < seatingCapacity - seatingCount; i++) {
-        studentsInTable = studentsInTable.concat([null]);
+  let tablesCopy = [];
+  let tablesCopy2 = JSON.parse(JSON.stringify(tables));
+  console.log(tables);
+  shuffledIds.forEach((ID) => { 
+    let openTable = null;
+    let randomTableIndex;
+    while(openTable == null){
+      randomTableIndex = Math.floor(Math.random() * tablesCopy2.length);
+      let table = tablesCopy2[randomTableIndex];
+      if(table.students.length < table.rows * table.columns){
+        openTable = table;
+      }
     }
-    studentIndex += seatingCount;
-    table.students = studentsInTable;
-    studentsInTables.push(table);
+    openTable.students.push(ID);
+    if(openTable.students.length == openTable.rows * openTable.columns){
+      tablesCopy.push(JSON.parse(JSON.stringify(openTable)))
+      tablesCopy2.splice(randomTableIndex, 1);
+    }
   });
-  return studentsInTables;
+  tablesCopy2.forEach((table) => {
+    tablesCopy.push(JSON.parse(JSON.stringify(table)))
+  });
+  tablesCopy.forEach((table) => {
+    let seatingCapacity = table.rows * table.columns;
+    let studentsInTable = table.students.length;
+    for(let i = 0; i < seatingCapacity - studentsInTable; i++) table.students.push(null);
+  });
+  return tablesCopy;
 }
 function addHappySad(seatingChart, students, IDs) {
   let randomSeatingChart = seatingChart.map((x) => x);
@@ -85,7 +96,6 @@ function addHappySad(seatingChart, students, IDs) {
     table.students.forEach((ID) => {
       if(ID != null){
         let index = IDI(IDs, ID);
-        console.log(table.students);
         let closeNames = table.students.map((id) => id == null ? "" : students[IDI(IDs, id)].name);
         closeNames.forEach(closeName => {
           let more = closeName.split(" ")[0] + ", ";
