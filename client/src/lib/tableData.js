@@ -25,7 +25,6 @@ function useTableProvider() {
   const [tableSize, setTableSize] = useState(getCachedTableSize());
   const studentsAdded = useRef(getCachedStudentsAdded());
   const totalTables = useRef(updateTotalTablesCache(getTotalTables(tableMap)));
-  const reassignTables = useRef(false);
 
   const validateTable = (tableInfo) => {
     const { rows, columns } = tableInfo;
@@ -56,7 +55,6 @@ function useTableProvider() {
 
   const setTables = (tables) => {
     studentsAdded.current = updateStudentsAddedCache(true);
-    reassignTables.current = false;
     setTableMap(updateTableCache(tables));
   };
 
@@ -82,10 +80,6 @@ function useTableProvider() {
 
   const setTablePosition = (id, tableInfo) => {
     setTableMap(updateTableCache({ ...tableMap, [id]: tableInfo }));
-  };
-
-  const setReassignTables = (val) => {
-    reassignTables.current = val;
   };
 
   const deleteStudentFromTable = (id) => {
@@ -115,14 +109,12 @@ function useTableProvider() {
     tableSize,
     totalTables: totalTables.current,
     studentsAdded: studentsAdded.current,
-    reassignTables: reassignTables.current,
     changeTableSize,
     addTable,
     setTables,
     clearTableStudents,
     clearTables,
     setTablePosition,
-    setReassignTables,
     deleteStudentFromTable,
   };
 }

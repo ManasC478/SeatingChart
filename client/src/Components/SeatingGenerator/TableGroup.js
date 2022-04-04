@@ -25,7 +25,9 @@ const TableGroup = ({ tableInfo }) => {
     const studentId = tableInfo.students[index];
 
     if (Number.isInteger(studentId)) {
-      return `${studentMap[studentId + 1].first_name} ${studentMap[studentId + 1].last_name.charAt(0)}.`;
+      return `${studentMap[studentId].first_name} ${studentMap[
+        studentId
+      ].last_name.charAt(0)}.`;
     } else return "";
   };
 
@@ -36,11 +38,11 @@ const TableGroup = ({ tableInfo }) => {
         position={null}
         bounds='parent'
         offsetParent={document.querySelector(".seating-layout")}
-      // grid={[25, 25]}
-      // scale={1}
-      // onStart={this.handleStart}
-      // onDrag={this.handleDrag}
-      // onStop={this.handleStop}
+        // grid={[25, 25]}
+        // scale={1}
+        // onStart={this.handleStart}
+        // onDrag={this.handleDrag}
+        // onStop={this.handleStop}
       >
         <button
           onClick={() => {

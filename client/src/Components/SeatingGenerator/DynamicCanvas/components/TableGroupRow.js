@@ -15,7 +15,7 @@ const TableGroupRow = ({ coord, columns, rowIndex, tableSize, students }) => {
           columnIndex={index}
           coord={coord}
           tableSize={tableSize}
-          studentId={students.length > 0 ? students[index] : null}
+          studentId={students[index] || null}
         />
       ))}
     </Group>

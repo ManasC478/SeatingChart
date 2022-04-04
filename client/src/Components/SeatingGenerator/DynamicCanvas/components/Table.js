@@ -6,35 +6,37 @@ import $ from "jquery";
 
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
-  const isFilled = Number.isInteger(studentId);
-  let name,
-    nameLength,
-    fSize = 0;
+  console.log(studentId);
+
+  // const isFilled = Number.isInteger(studentId);
+  // let name,
+  //   nameLength,
+  //   fSize = 0;
   // if(studentMap[studentId + 1] == undefined || studentMap[studentId + 1] == null) console.log(studentId);
 
-  if (isFilled) {
-    let needsLastName = false;
-    Object.values(studentMap).forEach((student) => {
-      if (student != undefined) {
-        if (student.last_name !== studentMap[studentId + 1].last_name) {
-          if (student.first_name === studentMap[studentId + 1].first_name) {
-            needsLastName = true;
-          }
-        }
-      }
-    });
-    name =
-      studentMap[studentId + 1].first_name +
-      (needsLastName
-        ? " " + studentMap[studentId + 1].last_name.charAt(0) + "."
-        : "");
-    let nameElement = document.createElement("span");
-    nameElement.innerHTML = name;
-    $("body").append(nameElement);
-    nameLength = $(nameElement).width();
-    nameElement.remove();
-    fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
-  }
+  // if (isFilled) {
+  //   let needsLastName = false;
+  //   Object.values(studentMap).forEach((student) => {
+  //     if (student != undefined) {
+  //       if (student.last_name !== studentMap[studentId].last_name) {
+  //         if (student.first_name === studentMap[studentId].first_name) {
+  //           needsLastName = true;
+  //         }
+  //       }
+  //     }
+  //   });
+  //   name =
+  //     studentMap[studentId].first_name +
+  //     (needsLastName
+  //       ? " " + studentMap[studentId].last_name.charAt(0) + "."
+  //       : "");
+  //   let nameElement = document.createElement("span");
+  //   nameElement.innerHTML = name;
+  //   $("body").append(nameElement);
+  //   nameLength = $(nameElement).width();
+  //   nameElement.remove();
+  //   fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
+  // }
   return (
     <Group>
       <Rect
@@ -54,8 +56,9 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
         height={tableSize}
         padding={5}
         wrap={"char"}
-        fontSize={fSize}
-        text={isFilled ? name : ""}
+        // fontSize={fSize}
+        // text={isFilled ? name : ""}
+        text={studentId ? studentMap[studentId].first_name : ""}
       />
     </Group>
   );

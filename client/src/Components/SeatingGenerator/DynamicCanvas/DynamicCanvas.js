@@ -8,7 +8,7 @@ import TableGroup from "./components/TableGroup";
 import { Text, Flex, Stack } from "@chakra-ui/react";
 
 const DynamicCanvas = () => {
-  const { tableMap, tableSize, setTablePosition, reassignTables } = useTables();
+  const { tableMap, tableSize, setTablePosition } = useTables();
   const { studentMap } = useStudents();
 
   const checkPosition = (third, position) => {
