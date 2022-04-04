@@ -8,21 +8,33 @@ module.exports.assignTableSeats = (req, res) => {
     Object.values(parsedStudents).forEach((studentObj) =>
       students.push(studentObj)
     );
+    let IDs = Object.keys(parsedStudents);
+    // let IDsMissing = Array.from(Array(students.length).keys());
+    // Object.keys(parsedStudents).forEach((key) => {
+    //   const index = IDsMissing.indexOf(key-1);
+    //   if (index > -1) IDsMissing.splice(index, 1);
+    // });
+
+    // console.log("before shift: " + IDsMissing);
+    // for(let i = 0; i < IDsMissing.length; i++) IDsMissing[i] -= i;
+    // console.log("after shift: " + IDsMissing);
+
     students.forEach((student) => {
       student.frontPreference = student.vPosition;
       student.sidePreference = student.hPosition;
 
       student.sitNextTo = [];
-      student.preferredPartners.forEach((otherIndex) => {
-        otherIndex--;
+      student.preferredPartners.forEach((otherID) => {
+        let otherIndex = IDI(IDs, otherID);
+        console.log(otherIndex);
         if(students[otherIndex] != undefined) {
           student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
         }
       });
 
       student.doNotSitNextTo = [];
-      student.notPreferredPartners.forEach((otherIndex) => {
-        otherIndex--;
+      student.notPreferredPartners.forEach((otherID) => {
+        let otherIndex = IDI(IDs, otherID);
         if(students[otherIndex] != undefined) {
           student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
         }
@@ -39,11 +51,28 @@ module.exports.assignTableSeats = (req, res) => {
     students = newStudents;
     let parsedTables = JSON.parse(tableArray), tables = [];
     for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
+    tables.forEach((table) => table.students = []);
     console.log("-------SETUP FINISHED---------------");
     console.log("-------Optimizing Seating...---------------");
-    const newStudentsAndScore = findOptimalSeatingChart(students, tables);
+    const newStudentsAndScore = findOptimalSeatingChart(students, tables, IDs);
     const bestSeatingChartScore = newStudentsAndScore[0];
     const bestSeatingChart = newStudentsAndScore[1];
+    // //shift IDs of students affected by students removed
+    // bestSeatingChart.forEach((table) => {
+    //   console.log(table.students);
+    //   for(let i = 0; i < table.students.length; i++) {
+    //     if(table.students[i] != null){
+    //       let studentsDeletedBefore = 0;
+    //       IDsMissing.forEach((id) => {
+    //         if(id <= table.students[i]) studentsDeletedBefore++;
+    //       });
+    //       console.log(studentsDeletedBefore);
+    //       table.students[i] += studentsDeletedBefore;
+    //     }
+    //   }
+    //   console.log(table.students);
+    // });
+    console.log(bestSeatingChart);
     students = newStudentsAndScore[2];
     let bestSeatingChartDict = {};
     bestSeatingChart.forEach(({id, ...table}) => {
@@ -58,11 +87,22 @@ module.exports.assignTableSeats = (req, res) => {
     res.status(500).json({ error: "Internal Error" });
   }
 };
-function countSeatingChartScore(students, tables) {
+function IDI(IDs, ID) {
+  return studentIDtoIndex(IDs, ID);
+}
+function studentIDtoIndex(studentIDs, ID){
+  for(let i = 0; i < studentIDs.length; i++){
+    if(studentIDs[i] == ID) return i;
+  }
+  return -1;
+}
+
+
+function countSeatingChartScore(students, tables, IDs) {
   seatingChartScore = 0;
   let studentsInTables = [];
   let studentIndex = 0;
-  let shuffledIds = shuffle1D([...Array(students.length).keys()]);
+  let shuffledIds = shuffle1D([...IDs]);
   tables.forEach((table) => {
     let seatingCapacity = table.rows * table.columns;
     let studentsLeft = students.length - studentIndex;
@@ -73,10 +113,10 @@ function countSeatingChartScore(students, tables) {
     );
     for(let i = 0; i < seatingCapacity - seatingCount; i++) studentsInTable = studentsInTable.concat([null]);
     studentIndex += seatingCount;
-    studentsInTable.forEach((index) => {
-      if(index != null){
-        let student = students[index];
-        let tableGroup = studentsInTable.map((i) => i == null ? "" : students[i].name);
+    studentsInTable.forEach((ID) => {
+      if(ID != null){
+        let student = students[IDI(IDs, ID)];
+        let tableGroup = studentsInTable.map((id) => id == null ? "" : students[IDI(IDs, id)].name);
         for (let k = 0; k < tableGroup.length; k++) {
           let nextTo = tableGroup[k];
           if (student.sitNextTo.includes(nextTo)) {
@@ -94,22 +134,23 @@ function countSeatingChartScore(students, tables) {
   });
   return studentsInTables;
 }
-function findOptimalSeatingChart(students, tables) {
+function findOptimalSeatingChart(students, tables, IDs) {
   const { performance } = require("perf_hooks");
   let start = performance.now();
-  let iterations = 999999;
+  let iterations = 999999/3;
   let bestSeatingChart, bestSeatingChartScore = -10000;
   for (let i = 0; i < iterations; i++) {
-    let seatingChart = countSeatingChartScore(students, shuffle1DObjects(tables));
+    let seatingChart = countSeatingChartScore(students, shuffle1DObjects(tables), IDs);
     if (seatingChartScore > bestSeatingChartScore) {
       bestSeatingChart = seatingChart.map((x) => x);
       bestSeatingChartScore = seatingChartScore;
     }
   }
   bestSeatingChart.forEach((table) => {
-    table.students.forEach((index) => {
-      if(index != null){
-        let closeNames = table.students.map((i) => i == null ? "" : students[i].name);
+    table.students.forEach((ID) => {
+      if(ID != null){
+        let index = IDI(IDs, ID);
+        let closeNames = table.students.map((id) => id == null ? "" : students[IDI(IDs, id)].name);
         closeNames.forEach(closeName => {
           let more = closeName.split(" ")[0] + ", ";
           if (students[index].sitNextTo.includes(closeName)) {

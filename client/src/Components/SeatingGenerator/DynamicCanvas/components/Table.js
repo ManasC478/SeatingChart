@@ -7,22 +7,22 @@ import $ from "jquery";
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
   const isFilled = Number.isInteger(studentId);
-  // if (studentMap[studentId + 1] === undefined) {
-  //   console.log(studentId);
-  // }
   let name,
     nameLength,
     fSize = 0;
+  // if(studentMap[studentId + 1] == undefined || studentMap[studentId + 1] == null) console.log(studentId);
+
   if (isFilled) {
     let needsLastName = false;
-    for (const student in studentMap) {
-      if (
-        student.last_name == studentMap[studentId + 1].last_name &&
-        student.first_name == studentMap[studentId + 1].first_name
-      ) {
-        needsLastName = true;
+    Object.values(studentMap).forEach((student) => {
+      if (student != undefined) {
+        if (student.last_name !== studentMap[studentId + 1].last_name) {
+          if (student.first_name === studentMap[studentId + 1].first_name) {
+            needsLastName = true;
+          }
+        }
       }
-    }
+    });
     name =
       studentMap[studentId + 1].first_name +
       (needsLastName
