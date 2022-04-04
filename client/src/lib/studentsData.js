@@ -40,13 +40,13 @@ function useStudentProvider() {
       const student = studentMap[studentId];
       const filteredPreferred = _.remove(
         student.preferredPartners,
-        (n) => n !== parseInt(id)
+        (n) => n !== id
       );
 
       const filteredNotPreferred = _.remove(
         student.notPreferredPartners,
         (n) => {
-          return n !== parseInt(id);
+          return n !== id;
         }
       );
 

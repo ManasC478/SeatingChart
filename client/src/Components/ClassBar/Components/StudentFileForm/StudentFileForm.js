@@ -176,7 +176,7 @@ const InfoButton = ({ children }) => (
               <Text>Using each student as a row in the CSV file</Text>
               <UnorderedList ml={5}>
                 <ListItem>
-                  Column A: ID, starting from 1 to the number of students
+                  Column A: ID
                 </ListItem>
                 <ListItem>Column B: First name</ListItem>
                 <ListItem>Column C: Last name</ListItem>
@@ -198,6 +198,9 @@ const InfoButton = ({ children }) => (
                   </ListItem>
                 </UnorderedList>
               </UnorderedList>
+            </ListItem>
+            <ListItem>
+              <Text>Example CSV: https://ibb.co/Yy88xTZ</Text>
             </ListItem>
           </OrderedList>
         </Box>

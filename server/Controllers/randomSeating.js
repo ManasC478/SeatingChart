@@ -1,4 +1,3 @@
-let seatingChartScore;
 module.exports.assignRandomSeats = (req, res) => {
   console.log("-------Setting up Students and Tables---------------");
   let studentList = req.query.studentMap;
@@ -8,21 +7,22 @@ module.exports.assignRandomSeats = (req, res) => {
     Object.values(parsedStudents).forEach((studentObj) =>
       students.push(studentObj)
     );
+    let IDs = Object.keys(parsedStudents);
     students.forEach((student) => {
       student.frontPreference = student.vPosition;
       student.sidePreference = student.hPosition;
 
       student.sitNextTo = [];
-      student.preferredPartners.forEach((otherIndex) => {
-        otherIndex--;
+      student.preferredPartners.forEach((otherID) => {
+        let otherIndex = IDI(IDs, otherID);
         if(students[otherIndex] != undefined) {
           student.sitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
         }
       });
 
       student.doNotSitNextTo = [];
-      student.notPreferredPartners.forEach((otherIndex) => {
-        otherIndex--;
+      student.notPreferredPartners.forEach((otherID) => {
+        let otherIndex = IDI(IDs, otherID);
         if(students[otherIndex] != undefined) {
           student.doNotSitNextTo.push(students[otherIndex].first_name + " " + students[otherIndex].last_name)
         }
@@ -31,7 +31,6 @@ module.exports.assignRandomSeats = (req, res) => {
       student.name = student.first_name + " " + student.last_name;
       student.happyWith = "";
       student.sadWith = "";
-      if(student.dismissed == "true") delete student;
     });
     const newStudents = students.map((student) => {
       const { first_name, last_name, vPosition, hPosition, preferredPartners, notPreferredPartners, ...leftOver } = student;
@@ -42,8 +41,8 @@ module.exports.assignRandomSeats = (req, res) => {
     for (const [key, value] of Object.entries(parsedTables)) tables.push({id: key, ...value});
     console.log("-------SETUP FINISHED---------------");
     console.log("-------Optimizing Seating...---------------");
-    const seatingChart = createRandomSeatingChart(students, shuffle1DObjects(tables));
-    const randomSeating = addHappySad(seatingChart, students);
+    const seatingChart = createRandomSeatingChart(students, shuffle1DObjects(tables), IDs);
+    const randomSeating = addHappySad(seatingChart, students, IDs);
     const randomSeatingChart = randomSeating[0];
     students = randomSeating[1];
     let randomSeatingChartDict = {};
@@ -59,11 +58,10 @@ module.exports.assignRandomSeats = (req, res) => {
     res.status(500).json({ error: "Internal Error" });
   }
 };
-function createRandomSeatingChart(students, tables) {
-  seatingChartScore = 0;
+function createRandomSeatingChart(students, tables, IDs) {
   let studentsInTables = [];
   let studentIndex = 0;
-  let shuffledIds = shuffle1D([...Array(students.length).keys()]);
+  let shuffledIds = shuffle1D([...IDs]);
   tables.forEach((table) => {
     let seatingCapacity = table.rows * table.columns;
     let studentsLeft = students.length - studentIndex;
@@ -81,12 +79,14 @@ function createRandomSeatingChart(students, tables) {
   });
   return studentsInTables;
 }
-function addHappySad(seatingChart, students) {
+function addHappySad(seatingChart, students, IDs) {
   let randomSeatingChart = seatingChart.map((x) => x);
   randomSeatingChart.forEach((table) => {
-    table.students.forEach((index) => {
-      if(index != null){
-        let closeNames = table.students.map((i) => i == null ? "" : students[i].name);
+    table.students.forEach((ID) => {
+      if(ID != null){
+        let index = IDI(IDs, ID);
+        console.log(table.students);
+        let closeNames = table.students.map((id) => id == null ? "" : students[IDI(IDs, id)].name);
         closeNames.forEach(closeName => {
           let more = closeName.split(" ")[0] + ", ";
           if (students[index].sitNextTo.includes(closeName)) {
@@ -130,4 +130,13 @@ function shuffle1D(array) {
       array[randomIndex], array[currentIndex]];
   }
   return array;
+}
+function IDI(IDs, ID) {
+  return studentIDtoIndex(IDs, ID);
+}
+function studentIDtoIndex(studentIDs, ID){
+  for(let i = 0; i < studentIDs.length; i++){
+    if(studentIDs[i] == ID) return i;
+  }
+  return -1;
 }

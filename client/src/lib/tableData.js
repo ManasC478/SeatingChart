@@ -89,7 +89,7 @@ function useTableProvider() {
       const table = tableMap[tableId];
       const filteredStudents = table.students;
 
-      const removedElementIndex = table.students.indexOf(parseInt(id) - 1);
+      const removedElementIndex = table.students.indexOf(id);
       if (removedElementIndex !== -1) {
         console.log(tableId);
         filteredStudents.splice(removedElementIndex, 1, null);
