@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useStudents } from "../../../../lib/studentsData";
 import { Heading, Box, Stack, Switch, useToast, Text } from "@chakra-ui/react";
+import uuid from "react-uuid";
 
 // import components
 import RequiredForm from "./Components/RequiredForm";
@@ -30,18 +31,18 @@ const StudentForm = () => {
     e.preventDefault();
 
     // get last student id
-    let studentId = parseInt(
-      Object.keys(studentMap)[Object.keys(studentMap).length - 1]
-    );
+    // let studentId = parseInt(
+    //   Object.keys(studentMap)[Object.keys(studentMap).length - 1]
+    // );
 
-    // check if id is there. if so then add 1 to id, otherwise equal to 1 as first student of class
-    if (isNaN(studentId)) {
-      studentId = 1;
-    } else {
-      studentId = studentId + 1;
-    }
+    // // check if id is there. if so then add 1 to id, otherwise equal to 1 as first student of class
+    // if (isNaN(studentId)) {
+    //   studentId = 1;
+    // } else {
+    //   studentId = studentId + 1;
+    // }
 
-    addStudent(studentId, student);
+    addStudent(uuid(), student);
     setStudent({
       first_name: "",
       last_name: "",

@@ -17,7 +17,7 @@ const RandomizeButton = ({ ...rest }) => {
     try {
       //   validate the api body
       validateRandomization(studentMap, totalTables);
-
+      console.log(studentMap, tableMap);
       //   call api
       const res = await optimizeSeats(studentMap, tableMap);
 

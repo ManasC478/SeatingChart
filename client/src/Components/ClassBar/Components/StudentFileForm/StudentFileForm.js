@@ -62,14 +62,14 @@ const StudentFileForm = () => {
         const preferredPartners = preferred
           .substring(1, preferred.length - 1)
           .split(" ")
-          .map((ele) => parseInt(ele));
+          .map((ele) => ele);
 
         const notPreferredPartners = notPreferred
           .substring(1, notPreferred.length - 1)
           .split(" ")
-          .map((ele) => parseInt(ele));
+          .map((ele) => ele);
 
-        studentMap[parseInt(id)] = {
+        studentMap[id] = {
           first_name,
           last_name,
           vPosition: vPosition || "",
@@ -182,8 +182,12 @@ const InfoButton = ({ children }) => (
                 <ListItem>Column C: Last name</ListItem>
                 <ListItem>Column D: front/middle/back preference</ListItem>
                 <ListItem>Column E: left/middle/right preference</ListItem>
-                <ListItem>Column F*: list of students (using IDs) to sit with</ListItem>
-                <ListItem>Column G*: list of students (using IDs) to not sit with</ListItem>
+                <ListItem>
+                  Column F*: list of students (using IDs) to sit with
+                </ListItem>
+                <ListItem>
+                  Column G*: list of students (using IDs) to not sit with
+                </ListItem>
                 <ListItem>Formatting for * columns:</ListItem>
                 <UnorderedList ml={5}>
                   <ListItem>If no students, state “NA”</ListItem>

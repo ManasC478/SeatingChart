@@ -1,27 +1,39 @@
 import { useContext } from "react";
 import { Rect, Text, Group } from "react-konva";
 import { CanvasStudentsContext } from "../../../../ContextProviders";
-import $ from 'jquery';
+import $ from "jquery";
 // import { useStudents } from "../../../../lib/studentsData";
 
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
   const isFilled = Number.isInteger(studentId);
-  let name, nameLength, fSize = 0;
-  if(isFilled){
+  // if (studentMap[studentId + 1] === undefined) {
+  //   console.log(studentId);
+  // }
+  let name,
+    nameLength,
+    fSize = 0;
+  if (isFilled) {
     let needsLastName = false;
-    for(const student in studentMap){
-      if(student.last_name == studentMap[studentId + 1].last_name && student.first_name == studentMap[studentId + 1].first_name) {
+    for (const student in studentMap) {
+      if (
+        student.last_name == studentMap[studentId + 1].last_name &&
+        student.first_name == studentMap[studentId + 1].first_name
+      ) {
         needsLastName = true;
       }
     }
-    name = studentMap[studentId + 1].first_name + (needsLastName ? " " + studentMap[studentId + 1].last_name.charAt(0) + "." : "");
-    let nameElement = document.createElement('span');
-    nameElement.innerHTML = name; 
+    name =
+      studentMap[studentId + 1].first_name +
+      (needsLastName
+        ? " " + studentMap[studentId + 1].last_name.charAt(0) + "."
+        : "");
+    let nameElement = document.createElement("span");
+    nameElement.innerHTML = name;
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
     nameElement.remove();
-    fSize = Number(tableSize)*0.9*13/nameLength;
+    fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
   }
   return (
     <Group>
