@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTables } from "../../../../lib/tableData";
 import {
   NumberInput,
@@ -20,7 +19,7 @@ const TableInput = ({
   const { tableSize, changeTableSize } = useTables();
 
   return (
-    <Wrap isInline spacing={2}>
+    <Wrap spacing={2}>
       <Stack spacing={0}>
         <Text>Rows</Text>
         <NumberInput

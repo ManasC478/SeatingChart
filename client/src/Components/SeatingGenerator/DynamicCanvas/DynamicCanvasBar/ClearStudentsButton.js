@@ -1,5 +1,4 @@
-import { Button, useToast } from "@chakra-ui/react";
-import { useStudents } from "../../../../lib/studentsData";
+import { Button } from "@chakra-ui/react";
 import { useTables } from "../../../../lib/tableData";
 
 const ClearStudentsButton = ({ ...rest }) => {

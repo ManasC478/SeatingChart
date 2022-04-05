@@ -1,10 +1,9 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Text,
   Flex,
   IconButton,
-  Icon,
   Button,
   ButtonGroup,
   FormControl,
@@ -14,12 +13,8 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
   useDisclosure,
   AlertDialog,
   AlertDialogBody,
@@ -30,27 +25,18 @@ import {
   Stack,
   Select,
   useToast,
-  Tooltip,
+  HStack,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 
 // import material ui icons
-import {
-  MoreVertIcon,
-  EditIcon,
-  DeleteIcon,
-  ClearIcon,
-  DownArrowIcon,
-  DismissIcon,
-} from "../../../../styles/icons";
+import { EditIcon, DeleteIcon, DownArrowIcon } from "../../../../styles/icons";
 
 const StudentItem = ({ id }) => {
   const { studentMap } = useStudents();
   const student = studentMap[id];
-  // const [dismissed, setDismissed] = useState(student.dismissed);
-  // console.log(dismissed);
 
   return (
     <Box>
@@ -58,34 +44,14 @@ const StudentItem = ({ id }) => {
         <Text>
           {student.first_name} {student.last_name}
         </Text>
-        <Stack isInline spacing={0}>
-          {/* <DismissButton setDismiss={() => setDismissed(!dismissed)} /> */}
+        <HStack spacing={0}>
           <EditButton student={student} id={id} />
           <DeleteButton id={id} />
-        </Stack>
+        </HStack>
       </Flex>
-      {/* <Box
-        pos={"absolute"}
-        w={"full"}
-        h={"full"}
-        bg={dismissed && "rgba(0,0,0,0.5"}
-      ></Box> */}
     </Box>
   );
 };
-
-// const DismissButton = ({ setDismiss }) => {
-//   return (
-//     <Tooltip label='Dismiss student. This student will be dismissed from the seating chart.'>
-//       <IconButton
-//         onClick={setDismiss}
-//         variant={"ghost"}
-//         isRound
-//         icon={<DismissIcon fontSize={"xl"} />}
-//       />
-//     </Tooltip>
-//   );
-// };
 
 const EditButton = ({ student, id }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -136,7 +102,7 @@ const EditForm = ({ student, id, onClose }) => {
     <Stack spacing={2}>
       <FormControl>
         <FormLabel fontWeight={"normal"}>First and last name</FormLabel>
-        <Stack isInline spacing={2}>
+        <HStack spacing={2}>
           <Input
             value={editData.first_name}
             onChange={(e) =>
@@ -151,12 +117,12 @@ const EditForm = ({ student, id, onClose }) => {
             }
             placeholder={"Last name..."}
           />
-        </Stack>
+        </HStack>
         <FormErrorMessage>Error message</FormErrorMessage>
       </FormControl>
       <FormControl>
         <FormLabel fontWeight={"normal"}>Location</FormLabel>
-        <Stack isInline spacing={2}>
+        <HStack spacing={2}>
           <Select
             icon={<DownArrowIcon />}
             onChange={(e) =>
@@ -182,7 +148,7 @@ const EditForm = ({ student, id, onClose }) => {
             <option value='middle'>Middle</option>
             <option value='right'>Right</option>
           </Select>
-        </Stack>
+        </HStack>
         <FormErrorMessage>Error message</FormErrorMessage>
       </FormControl>
       <ButtonGroup d='flex' justifyContent='flex-end' mt={5}>
@@ -206,14 +172,11 @@ const EditForm = ({ student, id, onClose }) => {
 const DeleteButton = ({ id }) => {
   const toast = useToast();
   const { deleteStudent } = useStudents();
-  const { setReassignTables, clearTableStudents, deleteStudentFromTable } =
-    useTables();
+  const { deleteStudentFromTable } = useTables();
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
   const handleDelete = () => {
-    // setReassignTables(true);
-    // clearTableStudents();
     deleteStudentFromTable(id);
     deleteStudent(id);
     toast({

@@ -1,12 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Box,
-  SimpleGrid,
-  Text,
-  Button,
-  Flex,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid, Flex, IconButton } from "@chakra-ui/react";
 import Draggable from "react-draggable";
 import { useTables } from "../../lib/tableData";
 import { useStudents } from "../../lib/studentsData";

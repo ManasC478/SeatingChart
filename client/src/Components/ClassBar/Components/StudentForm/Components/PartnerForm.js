@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useStudents } from "../../../../../lib/studentsData";
-import {
-  Text,
-  IconButton,
-  Flex,
-  Stack,
-  useToast,
-  Box,
-  Button,
-} from "@chakra-ui/react";
+import { Text, IconButton, Flex, Stack, useToast, Box } from "@chakra-ui/react";
 
 // import icons
 import {
@@ -19,16 +11,8 @@ import {
   ClearIcon,
 } from "../../../../../styles/icons";
 
-// import components
-// import { NotificationsContext } from "../../../../../ContextProviders";
-
-// import css file
-// import "./style.css";
-
 const PartnerForm = ({ student, setStudent }) => {
   const { studentMap } = useStudents();
-  // const { student, studentMap } = useStudents();
-  //  set state variables
   const [preferredPartnerList, setPreferredPartnerList] = useState({});
   const [notPreferredPartnerList, setNotPreferredPartnerList] = useState({});
   const [studentPartnerResults, setStudentPartnerResults] = useState({});
@@ -145,9 +129,6 @@ const PartnerSearch = ({
   setPartnerList,
 }) => {
   const toast = useToast();
-  // const { student, updatePreferredPartners, updateNotPreferredPartners } = useStudents();
-  const { updatePreferredPartners, updateNotPreferredPartners } = useStudents();
-  // const { setNotifications } = useContext(NotificationsContext);
   const [displayResult, setDisplayResults] = useState(false);
   const maxPartners = 2;
 
@@ -176,28 +157,13 @@ const PartnerSearch = ({
         borderColor={"gray.100"}
         p={1}
         borderRadius={"5px"}
-        // spacing={1}
         d={displayResult ? "block" : "none"}
       >
         {Object.keys(studentPartnerResults).length === 0 ? (
           <Text>No Student Added</Text>
         ) : (
           Object.keys(studentPartnerResults).map((id, index) => {
-            // const resultStudent = studentList[id];
             const { name, checked } = studentPartnerResults[id];
-            // const setStd = isPreferredStudents ? { ...student, preferredPartners: { ...student.preferredPartners, [id]: studentList[id] } } : { ...student, notPreferredPartners: { ...student.notPreferredPartners, [id]: studentList[id] } };
-            // const setStd = isPreferredStudents
-            //   ? [...student.preferredPartners, id]
-            //   : [...student.notPreferredPartners, id];
-            // const setStd = isPreferredStudents
-            //   ? {
-            //       ...student,
-            //       preferredPartners: [...student.preferredPartners, id],
-            //     }
-            //   : {
-            //       ...student,
-            //       notPreferredPartners: [...student.notPreferredPartners, id],
-            //     };
             return (
               <Flex
                 justify={"space-between"}
@@ -220,10 +186,6 @@ const PartnerSearch = ({
                   disabled={!checked ? false : true}
                   onClick={() => {
                     if (Object.keys(partnerList).length >= maxPartners) {
-                      // setNotifications({
-                      //   type: "danger",
-                      //   message: `Max partner preferences is ${maxPartners}`,
-                      // });
                       toast({
                         description: `Max partner preferences is ${maxPartners}.`,
                         status: "error",

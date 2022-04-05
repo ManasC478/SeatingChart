@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-} from "react";
-import _ from "lodash";
+import React, { useState, useContext, createContext, useRef } from "react";
 
 const tableContext = createContext();
 
@@ -75,6 +68,8 @@ function useTableProvider() {
 
   const clearTables = () => {
     studentsAdded.current = updateStudentsAddedCache(false);
+    totalTables.current = 0;
+    updateTotalTablesCache(totalTables.current);
     setTableMap(updateTableCache({}));
   };
 
@@ -91,7 +86,6 @@ function useTableProvider() {
 
       const removedElementIndex = table.students.indexOf(id);
       if (removedElementIndex !== -1) {
-        console.log(tableId);
         filteredStudents.splice(removedElementIndex, 1, null);
       }
 

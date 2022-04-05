@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import { Box, Stack } from "@chakra-ui/react";
-
-// import icons from material-ui
-// import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-// import EditIcon from "@mui/icons-material/Edit";
+import React from "react";
+import { Stack } from "@chakra-ui/react";
 
 // import components
 import StudentList from "./Components/StudentList/StudentList";
@@ -31,20 +27,5 @@ const ClassBar = () => {
     </Stack>
   );
 };
-
-// const StudentItemMoreOptions = () => {
-//   return (
-//     <ul className='student-more-options'>
-//       <li className='student-options-item'>
-//         <EditIcon />
-//         <p>Edit</p>
-//       </li>
-//       <li className='student-options-item'>
-//         <DeleteForeverIcon />
-//         <p>Delete</p>
-//       </li>
-//     </ul>
-//   );
-// };
 
 export default ClassBar;

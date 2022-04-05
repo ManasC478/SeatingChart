@@ -1,4 +1,3 @@
-import Draggable from "react-draggable";
 import { Box } from "@chakra-ui/react";
 import { useTables } from "../../lib/tableData";
 

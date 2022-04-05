@@ -1,4 +1,5 @@
-import { ButtonGroup, Stack, Wrap, WrapItem } from "@chakra-ui/react";
+import { useState } from "react";
+import { ButtonGroup, Stack } from "@chakra-ui/react";
 import RandomizeButton from "./RandomizeButton";
 import OptimizeButton from "./OptimizeButton";
 import ClearStudentsButton from "./ClearStudentsButton";
@@ -6,6 +7,7 @@ import ClearTablesButton from "./ClearTablesButton";
 import AddButton from "./AddButton";
 
 const Buttons = ({ tableRows, tableColumns }) => {
+  const [disableButtons, setDisableButtons] = useState(false);
   return (
     <Stack spacing={2}>
       <ButtonGroup justify={"center"} align={"center"}>
@@ -15,6 +17,7 @@ const Buttons = ({ tableRows, tableColumns }) => {
           py={2}
           px={4}
           wordBreak={"break-all"}
+          isDisabled={disableButtons}
           tableRows={tableRows}
           tableColumns={tableColumns}
         />
@@ -24,6 +27,7 @@ const Buttons = ({ tableRows, tableColumns }) => {
           py={2}
           px={4}
           wordBreak={"break-all"}
+          isDisabled={disableButtons}
         />
         <ClearTablesButton
           w={"full"}
@@ -31,6 +35,7 @@ const Buttons = ({ tableRows, tableColumns }) => {
           py={2}
           px={4}
           wordBreak={"break-all"}
+          isDisabled={disableButtons}
         />
       </ButtonGroup>
       <ButtonGroup>
@@ -40,6 +45,9 @@ const Buttons = ({ tableRows, tableColumns }) => {
           py={2}
           px={4}
           wordBreak={"break-all"}
+          isDisabled={disableButtons}
+          disableButtons={() => setDisableButtons(true)}
+          undisableButtons={() => setDisableButtons(false)}
         />
         <RandomizeButton
           w={"full"}
@@ -47,6 +55,9 @@ const Buttons = ({ tableRows, tableColumns }) => {
           py={2}
           px={4}
           wordBreak={"break-all"}
+          isDisabled={disableButtons}
+          disableButtons={() => setDisableButtons(true)}
+          undisableButtons={() => setDisableButtons(false)}
         />
       </ButtonGroup>
     </Stack>

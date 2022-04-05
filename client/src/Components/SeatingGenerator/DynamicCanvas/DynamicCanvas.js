@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Stage, Layer } from "react-konva";
 import { useTables } from "../../../lib/tableData";
 import { useStudents } from "../../../lib/studentsData";
 import { CanvasStudentsContext } from "../../../ContextProviders";
 
 import TableGroup from "./components/TableGroup";
-import { Text, Flex, Stack } from "@chakra-ui/react";
 
 const DynamicCanvas = () => {
   const { tableMap, tableSize, setTablePosition } = useTables();

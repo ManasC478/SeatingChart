@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { CSVReader } from "react-papaparse";
 import { useStudents } from "../../../../lib/studentsData";
 import {
@@ -9,24 +9,17 @@ import {
   IconButton,
   Stack,
   Center,
-  Icon,
   Flex,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
   ListItem,
-  ListIcon,
   OrderedList,
   UnorderedList,
 } from "@chakra-ui/react";
 
-// material ui icons
 import { InfoIcon, FileUploadIcon } from "../../../../styles/icons";
 
 // import css file
@@ -41,10 +34,12 @@ const StudentFileForm = () => {
     data.forEach(({ data, errors }) => {
       try {
         if (errors.length > 0) {
-          throw errors[0];
+          throw new Error(errors[0]);
         }
         if (isNaN(data[0])) {
-          throw "Invalid CSV file. Please check for unnecessary spaces or values.";
+          throw new Error(
+            "Invalid CSV file. Please check for unnecessary spaces or values."
+          );
         }
 
         const [
@@ -80,14 +75,12 @@ const StudentFileForm = () => {
       } catch (error) {
         toast({
           title: "Error.",
-          description: error,
+          description: error.message,
           status: "error",
           position: "bottom-right",
           duration: 4000,
           isClosable: true,
         });
-
-        return;
       }
     });
 
@@ -175,9 +168,7 @@ const InfoButton = ({ children }) => (
             <ListItem>
               <Text>Using each student as a row in the CSV file</Text>
               <UnorderedList ml={5}>
-                <ListItem>
-                  Column A: ID
-                </ListItem>
+                <ListItem>Column A: ID</ListItem>
                 <ListItem>Column B: First name</ListItem>
                 <ListItem>Column C: Last name</ListItem>
                 <ListItem>Column D: front/middle/back preference</ListItem>

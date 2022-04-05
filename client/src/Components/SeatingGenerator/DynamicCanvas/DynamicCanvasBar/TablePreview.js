@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Stack,
-  Switch,
   Checkbox,
   Text,
   SimpleGrid,
@@ -9,12 +8,8 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
 } from "@chakra-ui/react";
 
 const TablePreview = ({ tableRows, tableColumns }) => {

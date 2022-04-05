@@ -1,4 +1,4 @@
-import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 const Table = ({ tableSize, name }) => {
   return (

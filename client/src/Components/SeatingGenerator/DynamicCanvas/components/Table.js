@@ -7,13 +7,13 @@ import $ from "jquery";
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
   const isFilled = studentId != null;
-  let name, nameLength, fSize = 0;
-  console.log(studentMap);
+  let name,
+    nameLength,
+    fSize = 0;
   if (isFilled) {
     let needsLastName = false;
     Object.values(studentMap).forEach((student) => {
-      console.log(student);
-      if (student != undefined) {
+      if (student !== undefined) {
         if (student.last_name !== studentMap[studentId].last_name) {
           if (student.first_name === studentMap[studentId].first_name) {
             needsLastName = true;

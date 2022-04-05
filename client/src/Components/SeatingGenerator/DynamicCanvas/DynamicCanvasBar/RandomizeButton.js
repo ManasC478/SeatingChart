@@ -5,7 +5,7 @@ import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 import { randomizeSeats } from "../../../../api/algorithm";
 
-const RandomizeButton = ({ ...rest }) => {
+const RandomizeButton = ({ disableButtons, undisableButtons, ...rest }) => {
   const { studentMap } = useStudents();
   const { tableMap, totalTables, setTables } = useTables();
   const toast = useToast();
@@ -14,6 +14,7 @@ const RandomizeButton = ({ ...rest }) => {
   // function calls the api to randomize seats
   const handleRandomizeSeats = async () => {
     setLoading(true);
+    disableButtons();
     try {
       //   validate the api body
       validateRandomization(studentMap, totalTables);
@@ -48,6 +49,7 @@ const RandomizeButton = ({ ...rest }) => {
         });
       }
     }
+    undisableButtons();
     setLoading(false);
   };
   return (

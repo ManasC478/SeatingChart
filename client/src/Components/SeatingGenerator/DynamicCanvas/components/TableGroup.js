@@ -1,11 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Rect, Group } from "react-konva";
-import { useStudents } from "../../../../lib/studentsData";
-import { useTables } from "../../../../lib/tableData";
-import { randomFunc } from "../../../../utils";
 
 import TableGroupRow from "./TableGroupRow";
-import TableMenu from "./TableMenu";
 
 const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
   const [coord, setCoord] = useState({
@@ -39,7 +35,6 @@ const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
           students={getStudents(index)}
         />
       ))}
-      {/* <TableMenu /> */}
       <Rect
         x={coord.x}
         y={coord.y}

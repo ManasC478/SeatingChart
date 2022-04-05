@@ -1,13 +1,8 @@
-import { Stack, Box, Flex, Text, Button } from "@chakra-ui/react";
-import Draggable from "react-draggable";
-import { useTables } from "../../lib/tableData";
+import { Box } from "@chakra-ui/react";
 
 // import components
 import DynamicCanvas from "./DynamicCanvas/DynamicCanvas";
 import DynamicCanvasBar from "./DynamicCanvas/DynamicCanvasBar/DynamicCanvasBar";
-import SeatingLayout from "./SeatingLayout";
-
-// import "./style.css";
 
 const SeatingGenerator = () => {
   return (
@@ -26,8 +21,6 @@ const SeatingGenerator = () => {
       >
         <DynamicCanvas />
       </Box>
-
-      {/* <SeatingLayout /> */}
     </Box>
   );
 };

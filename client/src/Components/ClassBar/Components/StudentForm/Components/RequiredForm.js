@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Input,
-  Button,
-  Stack,
-} from "@chakra-ui/react";
-import { useStudents } from "../../../../../lib/studentsData";
-
-// import css file
-// import "./style.css";
+import { FormControl, Input, Button, Stack } from "@chakra-ui/react";
 
 const RequiredForm = ({ student, setStudent }) => {
-  // const { student, updateFirstName, updateLastName } = useStudents();
   return (
     <Stack spacing={4}>
       <FormControl>
@@ -40,7 +26,6 @@ const RequiredForm = ({ student, setStudent }) => {
             placeholder='Last Name'
             isRequired
           />
-          {/* <FormErrorMessage>Email is required.</FormErrorMessage> */}
         </Stack>
       </FormControl>
       <Button

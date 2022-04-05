@@ -1,6 +1,4 @@
 import { Group } from "react-konva";
-import { useStudents } from "../../../../lib/studentsData";
-import { useTables } from "../../../../lib/tableData";
 
 import Table from "./Table";
 

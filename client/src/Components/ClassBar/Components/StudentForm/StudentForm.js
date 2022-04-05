@@ -1,21 +1,24 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useStudents } from "../../../../lib/studentsData";
-import { Heading, Box, Stack, Switch, useToast, Text } from "@chakra-ui/react";
+import {
+  Heading,
+  Box,
+  Stack,
+  Switch,
+  useToast,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
 import uuid from "react-uuid";
 
 // import components
 import RequiredForm from "./Components/RequiredForm";
 import LocationForm from "./Components/LocationForm";
 import PartnerForm from "./Components/PartnerForm";
-// import { NotificationsContext } from "../../../../ContextProviders";
-
-// import css file
-// import "./style.css";
 
 const StudentForm = () => {
   const toast = useToast();
-  const { studentMap, addStudent } = useStudents();
-  // const { setNotifications } = useContext(NotificationsContext);
+  const { addStudent } = useStudents();
   const [student, setStudent] = useState({
     first_name: "",
     last_name: "",
@@ -30,18 +33,6 @@ const StudentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // get last student id
-    // let studentId = parseInt(
-    //   Object.keys(studentMap)[Object.keys(studentMap).length - 1]
-    // );
-
-    // // check if id is there. if so then add 1 to id, otherwise equal to 1 as first student of class
-    // if (isNaN(studentId)) {
-    //   studentId = 1;
-    // } else {
-    //   studentId = studentId + 1;
-    // }
-
     addStudent(uuid(), student);
     setStudent({
       first_name: "",
@@ -52,7 +43,6 @@ const StudentForm = () => {
       preferredPartners: [],
       notPreferredPartners: [],
     });
-    // setNotifications({ type: "okay", message: "Student added successfully" });
     toast({
       description: "Student added.",
       status: "success",
@@ -78,14 +68,14 @@ const StudentForm = () => {
         <Stack spacing={5}>
           <Stack spacing={4}>
             <RequiredForm student={student} setStudent={setStudent} />
-            <Stack isInline spacing={2} align={"center"}>
+            <HStack spacing={2} align={"center"}>
               <Switch
                 size={"md"}
                 defaultIsChecked={openOptions}
                 onChange={() => setOpenOptions(!openOptions)}
               />
               <Text>More Options</Text>
-            </Stack>
+            </HStack>
           </Stack>
           <Stack
             spacing={5}
