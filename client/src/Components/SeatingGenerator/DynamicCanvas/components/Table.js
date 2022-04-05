@@ -31,7 +31,7 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
     nameElement.remove();
-    fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
+    fSize = Math.min(19 * tableSize/50, (Number(tableSize) * 0.85 * 13) / nameLength);
   }
   return (
     <Group>
