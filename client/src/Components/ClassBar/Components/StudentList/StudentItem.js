@@ -31,7 +31,6 @@ import _ from "lodash";
 import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 
-// import material ui icons
 import { EditIcon, DeleteIcon, DownArrowIcon } from "../../../../styles/icons";
 
 const StudentItem = ({ id }) => {

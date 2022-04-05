@@ -31,11 +31,6 @@ const TableGroup = ({ tableInfo }) => {
         position={null}
         bounds='parent'
         offsetParent={document.querySelector(".seating-layout")}
-        // grid={[25, 25]}
-        // scale={1}
-        // onStart={this.handleStart}
-        // onDrag={this.handleDrag}
-        // onStop={this.handleStop}
       >
         <button
           onClick={() => {
@@ -81,13 +76,7 @@ const OptionsBar = ({ show, onClickOutside }) => {
     };
   }, [onClickOutside]);
   return (
-    <Flex
-      //   d={show ? "flex" : "none"}
-      pos={"absolute"}
-      ref={ref}
-      top={"-50px"}
-      left={0}
-    >
+    <Flex pos={"absolute"} ref={ref} top={"-50px"} left={0}>
       <IconButton icon={<EditIcon />} />
       <IconButton icon={<DeleteIcon />} />
     </Flex>

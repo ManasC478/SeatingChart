@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Rect, Text, Group } from "react-konva";
 import { CanvasStudentsContext } from "../../../../ContextProviders";
 import $ from "jquery";
-// import { useStudents } from "../../../../lib/studentsData";
 
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
@@ -31,7 +30,10 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
     nameElement.remove();
-    fSize = Math.min(19 * tableSize/50, (Number(tableSize) * 0.85 * 13) / nameLength);
+    fSize = Math.min(
+      (19 * tableSize) / 50,
+      (Number(tableSize) * 0.85 * 13) / nameLength
+    );
   }
   return (
     <Group>

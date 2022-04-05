@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import uuid from "react-uuid";
 
-// import components
 import RequiredForm from "./Components/RequiredForm";
 import LocationForm from "./Components/LocationForm";
 import PartnerForm from "./Components/PartnerForm";

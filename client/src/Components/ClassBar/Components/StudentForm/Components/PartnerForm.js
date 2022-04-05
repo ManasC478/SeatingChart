@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useStudents } from "../../../../../lib/studentsData";
 import { Text, IconButton, Flex, Stack, useToast, Box } from "@chakra-ui/react";
 
-// import icons
 import {
   AddIcon,
   DownArrowIcon,

@@ -22,7 +22,6 @@ import {
 
 import { InfoIcon, FileUploadIcon } from "../../../../styles/icons";
 
-// import css file
 import "./style.css";
 
 const StudentFileForm = () => {
@@ -135,7 +134,6 @@ const StudentFileForm = () => {
             onError={handleOnError}
             addRemoveButton
             removeButtonColor='#659cef'
-            // onRemoveFile={handleOnRemoveFile}
           >
             <Stack spacing={1} color={"gray.500"}>
               <Text>Drag and drop or upload</Text>

@@ -1,7 +1,6 @@
 import React from "react";
 import { Stack } from "@chakra-ui/react";
 
-// import components
 import StudentList from "./Components/StudentList/StudentList";
 import StudentForm from "./Components/StudentForm/StudentForm";
 import StudentFileForm from "./Components/StudentFileForm/StudentFileForm";

@@ -23,12 +23,7 @@ const TablePreview = ({ tableRows, tableColumns }) => {
   }
 
   return (
-    <Popover
-      isOpen={showPreview}
-      //   onClose={() => setShowPreview(false)}
-      placement='bottom'
-      closeOnBlur={false}
-    >
+    <Popover isOpen={showPreview} placement='bottom' closeOnBlur={false}>
       <PopoverTrigger>
         <Checkbox
           isChecked={showPreview}
@@ -60,7 +55,6 @@ const TablePreview = ({ tableRows, tableColumns }) => {
         </PopoverBody>
       </PopoverContent>
     </Popover>
-    // </Stack>
   );
 };
 

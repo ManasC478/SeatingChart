@@ -22,9 +22,6 @@ import { DeleteIcon } from "../../../../styles/icons";
 
 import StudentItem from "./StudentItem";
 
-// import css file
-// import "./style.css";
-
 const StudentList = () => {
   const { studentMap } = useStudents();
 
