@@ -33,10 +33,9 @@ const AppInfo = ({ onClose, isOpen }) => {
                     Creating one student at a time with their name, and
                     (optionally) preferences
                   </ListItem>
-                  <Text>or</Text>
+                  <Text style={{textAlign: "center", transform: `translateX(-30px)`}}>OR</Text>
                   <ListItem>
-                    Uploading a CSV (comma-separated value) file of all the
-                    students
+                    Uploading a .csv file (comma-separated value) of all the students
                   </ListItem>
                 </UnorderedList>
               </ListItem>
@@ -51,10 +50,18 @@ const AppInfo = ({ onClose, isOpen }) => {
                 <Text>To create the seating chart</Text>
                 <UnorderedList ml={5}>
                   <ListItem>
-                    For random seating, click the “Randomize” button
+                    For preference-based seating, click the "Optimize" button
                   </ListItem>
                   <ListItem>
-                    For preference-based seating, click the Optimize button
+                    For random seating, click the “Randomize” button
+                  </ListItem>
+                </UnorderedList>
+              </ListItem>
+              <ListItem>
+                <Text>Save the seating chart by</Text>
+                <UnorderedList ml={5}>
+                  <ListItem>
+                    Right clicking the seating chart and selecting “Save image as...”
                   </ListItem>
                 </UnorderedList>
               </ListItem>

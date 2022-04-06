@@ -8,7 +8,7 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const isFilled = studentId != null;
   let name,
     nameLength,
-    fSize = 0;
+    fSize, letters;
   if (isFilled) {
     let needsLastName = false;
     Object.values(studentMap).forEach((student) => {
@@ -20,20 +20,19 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
         }
       }
     });
+    letters = studentMap[studentId].first_name.trim().length;
     name =
-      studentMap[studentId].first_name +
+      studentMap[studentId].first_name.trim() +
       (needsLastName
-        ? " " + studentMap[studentId].last_name.charAt(0) + "."
+        ? " " + studentMap[studentId].last_name.trim().charAt(0) + "."
         : "");
     let nameElement = document.createElement("span");
     nameElement.innerHTML = name;
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
-    nameElement.remove();
-    fSize = Math.min(
-      (19 * tableSize) / 50,
-      (Number(tableSize) * 0.85 * 13) / nameLength
-    );
+    nameElement.remove(); 
+    if(letters <= 4) fSize = 15;
+    else fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
   }
   return (
     <Group>

@@ -81,13 +81,15 @@ function App() {
       <Tooltip label='Open directions'>
         <IconButton
           aria-label='Open directions'
+          width='75px'
+          height='75px'
           variant='outline'
           bg={"yellow.600"}
           color={"white"}
           pos={"fixed"}
           bottom={5}
           right={5}
-          icon={<OpenDirectionsIcon />}
+          icon={<OpenDirectionsIcon boxSize='9'/>}
           isRound
           onClick={onOpen}
           _hover={{ bg: "yellow.700" }}
