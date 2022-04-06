@@ -1,30 +1,30 @@
-"1"," Tiffiany"," Stockman"," back"," left"," [14]"," [20]"
-"2"," Tillie"," Roehm"," back"," left"," [11 21 19]"," [21 30 30]"
-"3"," Rodell"," Trimble"," middle"," right"," [27 3]"," [28 14]"
-"4"," Corydon"," Kollen"," middle"," left"," [4]"," [29 29 27]"
-"5"," Ambra"," Lipsky"," back"," right"," [10 22 3]"," [17 19]"
-"6"," Tawney"," Cooley"," middle"," right"," [4]"," [22]"
-"7"," Vonn"," Gobbi"," front"," right"," [5]"," [9]"
-"8"," Lauretta"," Porteus"," front"," left"," [13]"," [11]"
-"9"," Anish"," Sharpnack"," back"," right"," [17 26 28]"," [24 9]"
-"10"," Shalisha"," Forsyth"," front"," left"," [19 11 25]"," [14 14]"
-"11"," Konstantinos"," Gronberg"," front"," right"," [8 21]"," [12 29]"
-"12"," Lachrista"," Conditt"," middle"," right"," [20]"," [7 29 8]"
-"13"," Ason"," Tyrol"," back"," left"," [18 22 26]"," [22 12 23]"
-"14"," Mecaela"," Burnison"," middle"," middle"," [7]"," [23]"
-"15"," Chue"," Pujia"," back"," right"," [30]"," [27 1 5]"
-"16"," Guy"," Poelman"," middle"," middle"," [25]"," [27 30 30]"
-"17"," Saulo"," Gauthreaux"," middle"," right"," [20]"," [15 18]"
-"18"," Gisel"," Stierwalt"," middle"," right"," [12 28]"," [3]"
-"19"," Vivienne"," Turntine"," front"," right"," [19]"," [2 20 29]"
-"20"," Danen"," Juneau"," front"," middle"," [28]"," [11]"
-"21"," Maricia"," Hammerschmidt"," middle"," left"," [17]"," [21]"
-"22"," Kendria"," Aplington"," back"," middle"," [10 30 4]"," [21]"
-"23"," Teonna"," Rothery"," front"," right"," [30 11 26]"," [16 18 16]"
-"24"," Ursula"," Ohlrich"," back"," middle"," [4]"," [7 6 25]"
-"25"," Vivianna"," Sobba"," back"," middle"," [14 17]"," [24]"
-"26"," Anni"," Velaquez"," middle"," left"," [19]"," [1 19]"
-"27"," Kala"," Leitem"," middle"," right"," [27 30]"," [8]"
-"28"," Areli"," Clougher"," middle"," left"," [4 13]"," [5]"
-"29"," Robbyn"," Herrington"," front"," left"," [20 14]"," [3 21 16]"
-"30"," Lakeitha"," Hartsook"," middle"," middle"," [17 3]"," [29]"
+1,Tiffiany,Stockman,back,left,[14],[20]
+2,Tillie,Roehm,back,left,[11 21 19],[21 30 30]
+3,Rodell,Trimble,middle,right,[27 3],[28 14]
+4,Corydon,Kollen,middle,left,[4],[29 29 27]
+5,Ambra,Lipsky,back,right,[10 22 3],[17 19]
+6,Tawney,Cooley,middle,right,[4],[22]
+7,Vonn,Gobbi,front,right,[5],[9]
+8,Lauretta,Porteus,front,left,[13],[11]
+9,Anish,Sharpnack,back,right,[17 26 28],[24 9]
+10,Shalisha,Forsyth,front,left,[19 11 25],[14 14]
+11,Konstantinos,Gronberg,front,right,[8 21],[12 29]
+12,Lachrista,Conditt,middle,right,[20],[7 29 8]
+13,Ason,Tyrol,back,left,[18 22 26],[22 12 23]
+14,Mecaela,Burnison,middle,middle,[7],[23]
+15,Chue,Pujia,back,right,[30],[27 1 5]
+16,Guy,Poelman,middle,middle,[25],[27 30 30]
+17,Saulo,Gauthreaux,middle,right,[20],[15 18]
+18,Gisel,Stierwalt,middle,right,[12 28],[3]
+19,Vivienne,Turntine,front,right,[19],[2 20 29]
+20,Danen,Juneau,front,middle,[28],[11]
+21,Maricia,Hammerschmidt,middle,left,[17],[21]
+22,Kendria,Aplington,back,middle,[10 30 4],[21]
+23,Teonna,Rothery,front,right,[30 11 26],[16 18 16]
+24,Ursula,Ohlrich,back,middle,[4],[7 6 25]
+25,Vivianna,Sobba,back,middle,[14 17],[24]
+26,Anni,Velaquez,middle,left,[19],[1 19]
+27,Kala,Leitem,middle,right,[27 30],[8]
+28,Areli,Clougher,middle,left,[4 13],[5]
+29,Robbyn,Herrington,front,left,[20 14],[3 21 16]
+30,Lakeitha,Hartsook,middle,middle,[17 3],[29]

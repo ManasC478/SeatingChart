@@ -23,7 +23,7 @@ const StudentForm = () => {
     last_name: "",
     vPosition: null,
     hPosition: null,
-    dismissed: false,
+    // dismissed: false,
     preferredPartners: [],
     notPreferredPartners: [],
   });

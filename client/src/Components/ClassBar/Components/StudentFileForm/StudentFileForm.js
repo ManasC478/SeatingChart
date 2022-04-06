@@ -18,6 +18,7 @@ import {
   ListItem,
   OrderedList,
   UnorderedList,
+  Link,
 } from "@chakra-ui/react";
 
 import { InfoIcon, FileUploadIcon } from "../../../../styles/icons";
@@ -82,6 +83,8 @@ const StudentFileForm = () => {
         });
       }
     });
+
+    console.log(studentMap);
 
     addStudentWithCSV(studentMap);
     toast({
@@ -189,7 +192,9 @@ const InfoButton = ({ children }) => (
               </UnorderedList>
             </ListItem>
             <ListItem>
-              <Text>Example CSV: https://ibb.co/Yy88xTZ</Text>
+              <Link color={"blue.400"} isExternal href='https://ibb.co/Yy88xTZ'>
+                Example CSV
+              </Link>
             </ListItem>
           </OrderedList>
         </Box>

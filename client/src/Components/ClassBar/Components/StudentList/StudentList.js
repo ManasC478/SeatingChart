@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Stack,
@@ -19,11 +19,31 @@ import {
 import { useStudents } from "../../../../lib/studentsData";
 import { useTables } from "../../../../lib/tableData";
 import { DeleteIcon } from "../../../../styles/icons";
+import { students } from "../../../../public/initialData";
 
 import StudentItem from "./StudentItem";
 
 const StudentList = () => {
-  const { studentMap } = useStudents();
+  const toast = useToast();
+  const { studentMap, addStudentWithCSV } = useStudents();
+
+  useEffect(() => {
+    let addstudents;
+    if (Object.keys(studentMap).length === 0) {
+      toast({
+        description: "Loading test students...",
+        status: "info",
+        position: "bottom-right",
+        duration: 4000,
+        isClosable: true,
+      });
+      addstudents = setTimeout(() => {
+        addStudentWithCSV(students);
+      }, 2000);
+    }
+
+    return () => clearTimeout(addstudents);
+  }, []);
 
   return (
     <Box
@@ -40,7 +60,7 @@ const StudentList = () => {
         <DeleteAllButton />
       </Flex>
       <Divider mb={5} />
-      <Stack>
+      <Stack h={"500px"} overflow={"scroll"}>
         {Object.keys(studentMap).map((id, index) => (
           <StudentItem key={index} id={id} />
         ))}
