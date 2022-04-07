@@ -161,13 +161,13 @@ const InfoButton = ({ children }) => (
           <OrderedList spacing={3}>
             <ListItem>
               <Text>
-                To create a CSV file, simply use Excel, Google Spreadsheets, or
-                some other spreadsheet software. Then, add only the required
+                To create a .csv file, use Excel, Google Spreadsheets, or
+                some other spreadsheet software. Add only the required
                 information in each cell (ID, name, position, etc).
               </Text>
             </ListItem>
             <ListItem>
-              <Text>Using each student as a row in the CSV file</Text>
+              <Text>Using each student as a row in the .csv file</Text>
               <UnorderedList ml={5}>
                 <ListItem>Column A: ID</ListItem>
                 <ListItem>Column B: First name</ListItem>
@@ -192,7 +192,13 @@ const InfoButton = ({ children }) => (
               </UnorderedList>
             </ListItem>
             <ListItem>
-              <Link color={"blue.400"} isExternal href='https://ibb.co/Yy88xTZ'>
+              <Text>
+                On start, a premade .csv file will be loaded for testing if necessary. 
+                To replace the premade file, simply upload a new .csv file or delete all the current students.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Link color={"blue.400"} isExternal href='https://ibb.co/ct3jYh0'>
                 Example CSV
               </Link>
             </ListItem>

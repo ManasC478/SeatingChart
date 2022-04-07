@@ -78,9 +78,9 @@ function App() {
         </TableProvider>
         <AppInfo isOpen={isOpen} onClose={onClose} />
       </Grid>
-      <Tooltip label='Open directions'>
+      <Tooltip label='Open Instructions'>
         <IconButton
-          aria-label='Open directions'
+          aria-label='Open Instructions'
           width='75px'
           height='75px'
           variant='outline'
