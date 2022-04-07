@@ -20,6 +20,10 @@ app.use(cors(corsOption));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the seating chart optimizer API");
+});
+
 app.use("", algorithmRouter);
 
 const PORT = process.env.PORT || 5000;
