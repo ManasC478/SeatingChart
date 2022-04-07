@@ -60,7 +60,18 @@ const StudentList = () => {
         <DeleteAllButton />
       </Flex>
       <Divider mb={5} />
-      <Stack h={"500px"} overflow={"scroll"}>
+      <Stack
+        h={"500px"}
+        overflow={"scroll"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "0px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "0px",
+          },
+        }}
+      >
         {Object.keys(studentMap).map((id, index) => (
           <StudentItem key={index} id={id} />
         ))}

@@ -157,6 +157,16 @@ const PartnerSearch = ({
         p={1}
         borderRadius={"5px"}
         d={displayResult ? "block" : "none"}
+        h={"300px"}
+        overflow={"scroll"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "0px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "0px",
+          },
+        }}
       >
         {Object.keys(studentPartnerResults).length === 0 ? (
           <Text>No Student Added</Text>
