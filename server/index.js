@@ -8,6 +8,7 @@ const app = express();
 const corsOption = {
   origin: [
     process.env.APP_URL,
+    "https://seatingchartoptimizer.netlify.app",
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",

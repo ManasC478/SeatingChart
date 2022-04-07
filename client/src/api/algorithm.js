@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+const BASE_URL =
+  process.env.REACT_APP_BACKEND_BASE_URL || "http://localhost:5000";
 
 export const randomizeSeats = (studentMap, tableMap) =>
   axios.get(`${BASE_URL}/randomize`, {
