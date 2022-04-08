@@ -6,9 +6,7 @@ import $ from "jquery";
 const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
   const studentMap = useContext(CanvasStudentsContext);
   const isFilled = studentId != null;
-  let name,
-    nameLength,
-    fSize, letters;
+  let name, nameLength, fSize, letters;
   if (isFilled) {
     let needsLastName = false;
     Object.values(studentMap).forEach((student) => {
@@ -30,8 +28,8 @@ const Table = ({ coord, rowIndex, columnIndex, tableSize, studentId }) => {
     nameElement.innerHTML = name;
     $("body").append(nameElement);
     nameLength = $(nameElement).width();
-    nameElement.remove(); 
-    if(letters <= 4) fSize = 15;
+    nameElement.remove();
+    if (letters <= 4) fSize = 15;
     else fSize = (Number(tableSize) * 0.9 * 13) / nameLength;
   }
   return (

@@ -9,7 +9,7 @@ const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
     y: tableInfo.position.y,
   });
 
-  const tableRows = new Array(tableInfo.rows);
+  const tableRows = [...Array(tableInfo.rows).keys()];
 
   const changeTableCoord = (e) => {
     setCoord({ x: e.target.x(), y: e.target.y() });
@@ -23,18 +23,24 @@ const TableGroup = ({ tableInfo, tableSize, onPositionChange }) => {
     return tableInfo.students.slice(row, row + tableInfo.columns);
   };
 
+  const groupRowArr = [];
+  for (let i = 0; i < tableRows.length; i++) {
+    groupRowArr.push(
+      <TableGroupRow
+        key={i}
+        coord={coord}
+        rowIndex={i}
+        columns={tableInfo.columns}
+        tableSize={tableSize}
+        students={getStudents(i)}
+      />
+    );
+  }
+
   return (
     <Group>
-      {[...tableRows].map((row, index) => (
-        <TableGroupRow
-          key={index}
-          coord={coord}
-          rowIndex={index}
-          columns={tableInfo.columns}
-          tableSize={tableSize}
-          students={getStudents(index)}
-        />
-      ))}
+      {groupRowArr}
+
       <Rect
         x={coord.x}
         y={coord.y}
