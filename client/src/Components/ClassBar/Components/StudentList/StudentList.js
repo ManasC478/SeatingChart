@@ -25,11 +25,11 @@ import StudentItem from "./StudentItem";
 
 const StudentList = () => {
   const toast = useToast();
-  const { studentMap, addStudentWithCSV } = useStudents();
+  const { studentMap, size, addStudentWithCSV } = useStudents();
 
   useEffect(() => {
     let addstudents;
-    if (Object.keys(studentMap).length === 0) {
+    if (size.current === 0) {
       toast({
         description: "Loading test students...",
         status: "info",
@@ -55,7 +55,7 @@ const StudentList = () => {
     >
       <Flex justify={"space-between"} align={"center"}>
         <Text as={"h2"} fontWeight={"thin"} fontSize={"xl"}>
-          Students
+          Students ({size.current})
         </Text>
         <DeleteAllButton />
       </Flex>
@@ -65,10 +65,14 @@ const StudentList = () => {
         overflow={"scroll"}
         css={{
           "&::-webkit-scrollbar": {
-            width: "0px",
+            width: "2px",
           },
           "&::-webkit-scrollbar-track": {
-            width: "0px",
+            width: "2px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "gray",
+            borderRadius: "24px",
           },
         }}
       >

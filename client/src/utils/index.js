@@ -1,10 +1,10 @@
-export const validateRandomization = (studentMap, totalTables) => {
-  if (Object.keys(studentMap).length <= 0) {
+export const validateRandomization = (totalStudents, totalTables) => {
+  if (totalStudents <= 0) {
     throw {
       status: 400,
       message: "Please add students before generating the seating chart.",
     };
-  } else if (Object.keys(studentMap).length > totalTables) {
+  } else if (totalStudents > totalTables) {
     throw {
       status: 400,
       message:

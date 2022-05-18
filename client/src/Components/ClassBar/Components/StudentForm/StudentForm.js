@@ -27,7 +27,7 @@ const StudentForm = () => {
     preferredPartners: [],
     notPreferredPartners: [],
   });
-  const [openOptions, setOpenOptions] = useState(false);
+  const [openOptions, setOpenOptions] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ const StudentForm = () => {
                 defaultIsChecked={openOptions}
                 onChange={() => setOpenOptions(!openOptions)}
               />
-              <Text>More Options</Text>
+              <Text>Preferences</Text>
             </HStack>
           </Stack>
           <Stack

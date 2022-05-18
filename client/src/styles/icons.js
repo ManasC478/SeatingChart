@@ -10,7 +10,7 @@ import {
   MdOutlineNoAccounts,
   MdOutlineFileUpload,
   MdOutlineAdd,
-  MdOutlineStickyNote2,
+  MdOutlineHelpOutline,
 } from "react-icons/md";
 import { Icon } from "@chakra-ui/icons";
 
@@ -40,5 +40,5 @@ export const FileUploadIcon = (props) => (
   <Icon {...props} as={MdOutlineFileUpload} />
 );
 export const OpenDirectionsIcon = (props) => (
-  <Icon {...props} as={MdOutlineStickyNote2} />
+  <Icon {...props} as={MdOutlineHelpOutline} />
 );

@@ -6,7 +6,7 @@ import { useTables } from "../../../../lib/tableData";
 import { optimizeSeats } from "../../../../api/algorithm";
 
 const RandomizeButton = ({ disableButtons, undisableButtons, ...rest }) => {
-  const { studentMap } = useStudents();
+  const { studentMap, size } = useStudents();
   const { tableMap, totalTables, setTables } = useTables();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const RandomizeButton = ({ disableButtons, undisableButtons, ...rest }) => {
     disableButtons();
     try {
       //   validate the api body
-      validateRandomization(studentMap, totalTables);
+      validateRandomization(size, totalTables);
       //   call api
       const res = await optimizeSeats(studentMap, tableMap);
 

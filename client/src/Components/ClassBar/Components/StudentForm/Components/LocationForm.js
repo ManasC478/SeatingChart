@@ -11,7 +11,7 @@ import {
 const LocationForm = ({ student, setStudent }) => {
   return (
     <Stack>
-      <Text as={"h3"}>Location Preference</Text>
+      <Text as={"h3"}>Preferred Location</Text>
       <Stack spacing={2}>
         <Stack>
           <RadioGroup

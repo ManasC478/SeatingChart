@@ -18,14 +18,17 @@ export const useStudents = () => {
 
 function useStudentProvider() {
   const [studentMap, setStudentMap] = useState(getCachedStudents());
-  const size = useRef(0);
+  const size = useRef(updateTotalStudentsCache(getTotalStudents(studentMap)));
 
   const addStudent = (id, student) => {
     size.current++;
+    updateTotalStudentsCache(size.current);
     setStudentMap(updateStudentCache({ ...studentMap, [id]: student }));
   };
 
   const addStudentWithCSV = (map) => {
+    size.current = Object.keys(map).length;
+    updateTotalStudentsCache(size.current);
     setStudentMap(updateStudentCache(map));
   };
 
@@ -57,10 +60,14 @@ function useStudentProvider() {
       };
     });
 
+    size.current--;
+    updateTotalStudentsCache(size.current);
     setStudentMap(updateStudentCache(updatedStudentMap));
   };
 
   const deleteAllStudents = () => {
+    size.current = 0;
+    updateTotalStudentsCache(size.current);
     setStudentMap(updateStudentCache({}));
   };
 
@@ -71,6 +78,7 @@ function useStudentProvider() {
   };
 
   return {
+    size,
     studentMap,
     addStudent,
     addStudentWithCSV,
@@ -95,4 +103,24 @@ const getCachedStudents = () => {
       window.localStorage.getItem("seating-chart-generator-students")
     ) || {};
   return res;
+};
+
+const updateTotalStudentsCache = (added) => {
+  window.localStorage.setItem(
+    "seating-chart-generator-total-students",
+    JSON.stringify(added)
+  );
+  return getCachedTotalStudents();
+};
+
+const getCachedTotalStudents = () => {
+  const res =
+    JSON.parse(
+      window.localStorage.getItem("seating-chart-generator-total-students")
+    ) || false;
+  return res;
+};
+
+const getTotalStudents = (studentMap) => {
+  return Object.keys(studentMap).length;
 };
